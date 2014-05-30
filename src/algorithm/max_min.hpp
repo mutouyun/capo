@@ -25,9 +25,9 @@ inline const T& max(const T& x, const T& y)
 }
 
 template <typename T, typename... P>
-inline const T& max(const T& x, const P&... args)
+inline const T& max(const T& x, const T& y, const P&... args)
 {
-    return capo::max(x, capo::max(args...));
+    return capo::max(x, capo::max(y, args...));
 }
 
 /*
@@ -41,9 +41,9 @@ inline const T& min(const T& x, const T& y)
 }
 
 template <typename T, typename... P>
-inline const T& min(const T& x, const P&... args)
+inline const T& min(const T& x, const T& y, const P&... args)
 {
-    return capo::min(x, capo::min(args...));
+    return capo::min(x, capo::min(y, args...));
 }
 
 ////////////////////////////////////////////////////////////////

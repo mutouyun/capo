@@ -31,7 +31,7 @@ namespace np_test_range
         Foo(void)     : x_(0) {}
         Foo(double x) : x_(x) {}
 
-        explicit operator int(void) const { return x_; }
+        explicit operator int(void) const { return static_cast<int>(x_); }
 
         bool operator==(const Foo& y) const { return (x_ == y.x_); }
         bool operator <(const Foo& y) const { return (x_  < y.x_); }

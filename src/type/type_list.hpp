@@ -174,13 +174,6 @@ struct types_link<TypesT<T...>, TypesU<U...>>
     using type = TypesT<T..., U...>;
 };
 
-template <typename... T, typename... U,
-          template <typename...> class TypesT>
-struct types_link<TypesT<T...>, TypesT<U...>>
-{
-    using type = TypesT<T..., U...>;
-};
-
 template <typename... T, typename U,
           template <typename...> class TypesT>
 struct types_link<TypesT<T...>, U>
@@ -248,7 +241,7 @@ template <typename T1, typename... T, int N, typename U,
 struct types_insert<TypesT<T1, T...>, N, U>
 {
 private:
-    using tail = typename types_insert<types<T...>, N - 1, U>::type;
+    using tail = typename types_insert<TypesT<T...>, N - 1, U>::type;
 public:
     using type = typename types_link<T1, tail>::type;
 };
@@ -260,12 +253,26 @@ struct types_insert<TypesT<T1, T...>, 0, U>
     using type = typename types_link<U, TypesT<T1, T...>>::type;
 };
 
+#if defined(_MSC_VER) && (_MSC_VER <= 1800)
+/*
+    <MSVC 2013 CTP> error C2338: Index is out of range!
+    Cause:
+        'capo::types_insert<capo::type_list<>, 0, U>' will matching
+        'capo::types_insert<TypesT, 0, U>'
+*/
+template <typename U>
+struct types_insert<types<>, 0, U>
+{
+    using type = typename types_link<U, types<>>::type;
+};
+#else /*_MSC_VER*/
 template <typename U,
           template <typename...> class TypesT>
 struct types_insert<TypesT<>, 0, U>
 {
     using type = typename types_link<U, TypesT<>>::type;
 };
+#endif/*_MSC_VER*/
 
 template <typename TypesT, int IndexN, typename T>
 using types_insert_t = typename types_insert<TypesT, IndexN, T>::type;

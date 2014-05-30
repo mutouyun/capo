@@ -10,8 +10,8 @@ void test_countof(void)
     TEST_CASE();
 
     void* p[100];
-    int arr[capo::countof(p)];
-    std::cout << capo::countof(arr) << std::endl;
+    //int arr[capo::countof(p)];
+    std::cout << capo::countof(p) << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -29,9 +29,8 @@ namespace np_test_operator
         Foo(void) {}
         Foo(int)  {}
 
-        Foo& operator+=(int)        { return (*this); }
         Foo& operator+=(const Foo&) { return (*this); }
-        Foo& operator-=(int)        { return (*this); }
+        Foo& operator-=(const Foo&) { return (*this); }
 
         Foo& operator*=(const Foo&) { return (*this); }
         Foo& operator/=(const Foo&) { return (*this); }

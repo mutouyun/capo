@@ -18,7 +18,8 @@
 #include <cstdint>      // intmax_t, uintmax_t
 #include <cstddef>      // size_t, ptrdiff_t
 #include <cwchar>       // wint_t
-#include <cstdio>       // snprintf
+#include <cstdio>       // vsnprintf
+#include <cstdarg>      // va_list, va_start, va_end
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || \
     defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
@@ -206,6 +207,23 @@ namespace detail_printf
         }
         enforce("Too few format specifiers");
     }
+
+    template <class PolicyT>
+    int output(const char* fmt, ...)
+    {
+        va_list args;
+        va_start(args, fmt);
+        std::string buf;
+        int n = ::vsnprintf(NULL, 0, fmt, args);
+        if (n <= 0) goto exit_printf;
+        buf.resize(n);
+        n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
+        if (n <= 0) goto exit_printf;
+        PolicyT::out(buf);
+    exit_printf:
+        va_end(args);
+        return n;
+    }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -217,13 +235,7 @@ int printf(const char* fmt, T&&... args)
 {
     if (!fmt) return 0;
     detail_printf::check(fmt, std::forward<T>(args)...);
-    int n = ::snprintf(NULL, 0, fmt, std::forward<T>(args)...);
-    if (n <= 0) return n;
-    std::string buf; buf.resize(n);
-    n = ::snprintf(const_cast<char*>(buf.data()), n + 1, fmt, std::forward<T>(args)...);
-    if (n <= 0) return n;
-    PolicyT::out(buf);
-    return n;
+    return detail_printf::output<PolicyT>(fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo

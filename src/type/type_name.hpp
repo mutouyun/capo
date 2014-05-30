@@ -17,7 +17,7 @@
 #if defined(__GNUC__)
 #include <memory>       // std::unique_ptr
 #include <cxxabi.h>     // abi::__cxa_demangle
-#endif
+#endif/*__GNUC__*/
 
 namespace capo {
 namespace detail_type_name {
@@ -168,9 +168,9 @@ struct check
             if (real_name) free(real_name);
         };
         out_(real_name ? real_name : typeid_name);
-#   else
+#   else /*__GNUC__*/
         out_(typeid(T).name());
-#   endif
+#   endif/*__GNUC__*/
     }
 };
 
@@ -219,7 +219,7 @@ CAPO_CHECK_TYPE__(*)
 CAPO_CHECK_TYPE_ARRAY_CV__(CAPO_CHECK_TYPE_PLACEHOLDER__)
 #if defined(__GNUC__)
 CAPO_CHECK_TYPE_ARRAY_CV__(0)
-#endif
+#endif/*__GNUC__*/
 CAPO_CHECK_TYPE_ARRAY_CV__(N, size_t N)
 
 #undef CAPO_CHECK_TYPE_PLACEHOLDER__
