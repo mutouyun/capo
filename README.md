@@ -7,6 +7,8 @@ C++标准库的轻量级拓展
 * src  - 代码目录
   test - 测试目录, 包含: msvc项目文件(test.sln), qtcreator项目文件(test.pro)
 
+##
+
     > algorithm            ...working     - 算法
     > finalizer            ...working     - 资源管理
     > macro                ...working     - 预处理宏定义
