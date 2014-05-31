@@ -15,7 +15,6 @@
 #include <type_traits>  // std::is_array
 #include <utility>      // std::move
 #if defined(__GNUC__)
-#include <memory>       // std::unique_ptr
 #include <cxxabi.h>     // abi::__cxa_demangle
 #endif/*__GNUC__*/
 

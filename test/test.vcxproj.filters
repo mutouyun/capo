@@ -9,6 +9,27 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="capo">
+      <UniqueIdentifier>{b494e9d1-dd4e-468a-b732-4cf5204e0592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\algorithm">
+      <UniqueIdentifier>{91d943ac-0f62-45e2-ae4d-73b67a4f782a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\finalizer">
+      <UniqueIdentifier>{1b670c30-9f42-42f4-bfc6-8b0c286dec96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\macro">
+      <UniqueIdentifier>{11e1388f-1242-4a03-b151-c7c8bf0b7e88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\proofing">
+      <UniqueIdentifier>{ff39978d-cfbb-469f-8b2c-408c9331c81a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\type">
+      <UniqueIdentifier>{6dbfcb42-9308-4988-8aad-2a8f70c90877}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\utility">
+      <UniqueIdentifier>{fdafdcc4-d45b-4ea6-b109-666f5bdf7fbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,6 +48,48 @@
     </ClInclude>
     <ClInclude Include="test_utility.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algorithm\max_min.hpp">
+      <Filter>capo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algorithm\range.hpp">
+      <Filter>capo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\finalizer\scope_guard.hpp">
+      <Filter>capo\finalizer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\macro\macro_func.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\macro\macro_pp.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\macro\macro_unused.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\type\type_list.hpp">
+      <Filter>capo\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\type\type_name.hpp">
+      <Filter>capo\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proofing\assert.hpp">
+      <Filter>capo\proofing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proofing\printf.hpp">
+      <Filter>capo\proofing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\countof.hpp">
+      <Filter>capo\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\inherit.hpp">
+      <Filter>capo\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\noncopyable.hpp">
+      <Filter>capo\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\operator.hpp">
+      <Filter>capo\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -52,16 +52,16 @@ template <class T, typename BaseT>
 struct incrementable : capo::inherit<BaseT>
 {
     // Need operator+=
-    friend T& operator++(T& x)                      { return x += 1; }
-    friend T  operator++(T& x, int)                 { T nrv(x); ++x; return std::move(nrv); }
+    friend T& operator++(T& x)                     { return x += 1; }
+    friend T  operator++(T& x, int)                { T nrv(x); ++x; return std::move(nrv); }
 };
 
 template <class T, typename BaseT>
 struct decrementable : capo::inherit<BaseT>
 {
     // Need operator-=
-    friend T& operator--(T& x)                      { return x -= 1; }
-    friend T  operator--(T& x, int)                 { T nrv(x); --x; return std::move(nrv); }
+    friend T& operator--(T& x)                     { return x -= 1; }
+    friend T  operator--(T& x, int)                { T nrv(x); --x; return std::move(nrv); }
 };
 
 namespace detail_operator
