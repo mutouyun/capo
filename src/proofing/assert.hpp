@@ -89,11 +89,14 @@ struct context : std::exception
             stream_type ss;
             ss << "Failed in \"" << file_ << "\" ->: " << line_ << std::endl;
             ss << "Expression: \"" << expr_ << "\"" << std::endl;
-            ss << "Context Variables: " << std::endl;
-            context_vals_type::iterator cc = context_vals_.begin();
-            for(; cc != context_vals_.end(); ++cc)
+            if (!context_vals_.empty())
             {
-                ss << "\t" << cc->first << " = " << cc->second << std::endl;
+                ss << "Context Variables: " << std::endl;
+                context_vals_type::iterator cc = context_vals_.begin();
+                for (; cc != context_vals_.end(); ++cc)
+                {
+                    ss << "\t" << cc->first << " = " << cc->second << std::endl;
+                }
             }
             if (message_)
             {

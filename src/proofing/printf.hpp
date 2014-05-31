@@ -12,7 +12,7 @@
 
 #include <iostream>     // std::cout, std::cerr, std::clog
 #include <string>       // std::string
-#include <stdexcept>    // std::invalid_argument, std::logic_error
+#include <stdexcept>    // std::invalid_argument
 #include <type_traits>  // std::is_convertible, std::decay
 #include <utility>      // std::forward, std::move
 #include <cstdint>      // intmax_t, uintmax_t

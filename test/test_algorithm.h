@@ -31,7 +31,7 @@ namespace np_test_range
         Foo(void)     : x_(0) {}
         Foo(double x) : x_(x) {}
 
-        explicit operator int(void) const { return static_cast<int>(x_); }
+        explicit operator size_t(void) const { return static_cast<size_t>(x_); }
 
         bool operator==(const Foo& y) const { return (x_ == y.x_); }
         bool operator <(const Foo& y) const { return (x_  < y.x_); }
@@ -55,8 +55,11 @@ void test_range(void)
     }
     std::cout << std::endl;
 
+    auto r = range(1, 2, 3);
+    int a = 15;
+    r = range(a);
     std::cout << "range(15):";
-    for (int i : range(15))
+    for (int i : r)
     {
         std::cout << " " << i;
     }
@@ -69,8 +72,9 @@ void test_range(void)
     }
     std::cout << std::endl;
 
+    const int x = 2, y = 6, z = 3;
     std::cout << "range(2, 6, 3):";
-    for (auto i : range(2, 6, 3))
+    for (auto i : range(x, y, z))
     {
         std::cout << " " << i;
     }
