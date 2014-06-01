@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="capo">
       <UniqueIdentifier>{b494e9d1-dd4e-468a-b732-4cf5204e0592}</UniqueIdentifier>
     </Filter>
@@ -30,33 +22,44 @@
     <Filter Include="capo\utility">
       <UniqueIdentifier>{fdafdcc4-d45b-4ea6-b109-666f5bdf7fbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="thread">
-      <UniqueIdentifier>{1ceb9782-caef-43db-8c4a-fcde6380f641}</UniqueIdentifier>
-    </Filter>
     <Filter Include="capo\chrono">
       <UniqueIdentifier>{1697469c-69dc-4adc-abb5-85e69fcc1a1d}</UniqueIdentifier>
     </Filter>
     <Filter Include="capo\random">
       <UniqueIdentifier>{239184e7-514c-48f5-9fff-d5de8ba249c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="capo\thread">
+      <UniqueIdentifier>{1ceb9782-caef-43db-8c4a-fcde6380f641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{c6b0b496-7fc5-4f7d-9a15-4f553fe8bd63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="test\源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
+      <Filter>test\源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_algorithm.h">
-      <Filter>头文件</Filter>
+      <Filter>test\头文件</Filter>
     </ClInclude>
     <ClInclude Include="test_proofing.h">
-      <Filter>头文件</Filter>
+      <Filter>test\头文件</Filter>
     </ClInclude>
     <ClInclude Include="test_type.h">
-      <Filter>头文件</Filter>
+      <Filter>test\头文件</Filter>
     </ClInclude>
     <ClInclude Include="test_utility.h">
-      <Filter>头文件</Filter>
+      <Filter>test\头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\algorithm\max_min.hpp">
       <Filter>capo\algorithm</Filter>
@@ -101,16 +104,16 @@
       <Filter>capo\utility</Filter>
     </ClInclude>
     <ClInclude Include="test_thread.h">
-      <Filter>头文件</Filter>
+      <Filter>test\头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\thread\spin_lock.hpp">
-      <Filter>thread</Filter>
+      <Filter>capo\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\src\thread\semaphore.hpp">
-      <Filter>thread</Filter>
+      <Filter>capo\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\src\thread\waiter.hpp">
-      <Filter>thread</Filter>
+      <Filter>capo\thread</Filter>
     </ClInclude>
     <ClInclude Include="..\src\random\random.hpp">
       <Filter>capo\random</Filter>

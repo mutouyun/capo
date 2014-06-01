@@ -15,16 +15,16 @@
 */
 
 #define CAPO_PP_SOL(...)                  #__VA_ARGS__
-#define CAPO_PP_STR_(...)                 CAPO_PP_SOL(__VA_ARGS__)
-#define CAPO_PP_STR(...)                  CAPO_PP_STR_(__VA_ARGS__)
+#define CAPO_PP_STR___(...)               CAPO_PP_SOL(__VA_ARGS__)
+#define CAPO_PP_STR(...)                  CAPO_PP_STR___(__VA_ARGS__)
 
 /*
     Connect two args together
 */
 
 #define CAPO_PP_CAT(X, ...)               X##__VA_ARGS__
-#define CAPO_PP_JOIN_(X, ...)             CAPO_PP_CAT(X, __VA_ARGS__)
-#define CAPO_PP_JOIN(X, ...)              CAPO_PP_JOIN_(X, __VA_ARGS__)
+#define CAPO_PP_JOIN___(X, ...)           CAPO_PP_CAT(X, __VA_ARGS__)
+#define CAPO_PP_JOIN(X, ...)              CAPO_PP_JOIN___(X, __VA_ARGS__)
 
 ////////////////////////////////////////////////////////////////
 

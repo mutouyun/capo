@@ -121,9 +121,9 @@ struct context : std::exception
 /// Define assert impl
 ////////////////////////////////////////////////////////////////
 
-#ifndef CAPO_ASSERT_HANDLER
-#define CAPO_ASSERT_HANDLER &capo::assert::impl::assert_handler
-#endif
+#ifndef CAPO_ASSERT_HANDLER_
+#define CAPO_ASSERT_HANDLER_ &capo::assert::impl::assert_handler
+#endif/*CAPO_ASSERT_HANDLER_*/
 
 class impl
 {
@@ -146,7 +146,7 @@ private:
 public:
     impl(const char* expr) noexcept
         : context_(expr)
-        , handler_(CAPO_ASSERT_HANDLER)
+        , handler_(CAPO_ASSERT_HANDLER_)
     {}
 
     ~impl(void) noexcept

@@ -16,7 +16,7 @@
 #endif/*_MSC_VER*/
 
 namespace capo {
-namespace detail_spinlock {
+namespace detail_spin_lock {
 
 ////////////////////////////////////////////////////////////////
 /// Gives hint to processor that improves performance of spin-wait loops.
@@ -27,7 +27,7 @@ namespace detail_spinlock {
     See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms687419(v=vs.85).aspx
     Not for intel c++ compiler, so ignore http://software.intel.com/en-us/forums/topic/296168
 */
-#   define CAPO_THREADOPS_PAUSE__() YieldProcessor()
+#   define CAPO_SPIN_LOCK_PAUSE() YieldProcessor()
 #elif defined(__GNUC__)
 #if defined(__i386__) || defined(__x86_64__)
 /*
@@ -35,29 +35,29 @@ namespace detail_spinlock {
          PAUSE-Spin Loop Hint, 4-57
          http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-instruction-set-reference-manual-325383.html?wapkw=instruction+set+reference
 */
-#   define CAPO_THREADOPS_PAUSE__() __asm__ __volatile__("pause")
+#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__("pause")
 #elif defined(__ia64__) || defined(__ia64)
 /*
     See: Intel(R) Itanium(R) Architecture Developer's Manual, Vol.3
          hint - Performance Hint, 3:145
          http://www.intel.com/content/www/us/en/processors/itanium/itanium-architecture-vol-3-manual.html
 */
-#   define CAPO_THREADOPS_PAUSE__() __asm__ __volatile__ ("hint @pause")
+#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__ ("hint @pause")
 #elif defined(__arm__)
 /*
     See: ARM Architecture Reference Manuals (YIELD)
          http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.subset.architecture.reference/index.html
 */
-#   define CAPO_THREADOPS_PAUSE__() __asm__ __volatile__ ("yield")
+#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__ ("yield")
 #endif
 #endif/*compilers*/
 
-#if !defined(CAPO_THREADOPS_PAUSE__)
+#if !defined(CAPO_SPIN_LOCK_PAUSE)
 /*
     Just use a compiler fence, prevent compiler from optimizing loop
 */
-#   define CAPO_THREADOPS_PAUSE__() std::atomic_signal_fence(std::memory_order_seq_cst)
-#endif/*!defined(CAPO_THREADOPS_PAUSE__)*/
+#   define CAPO_SPIN_LOCK_PAUSE() std::atomic_signal_fence(std::memory_order_seq_cst)
+#endif/*!defined(CAPO_SPIN_LOCK_PAUSE)*/
 
 ////////////////////////////////////////////////////////////////
 /// Yield to other threads
@@ -66,19 +66,15 @@ namespace detail_spinlock {
 inline void yield(unsigned k)
 {
     if (k < 4)  { /* Do nothing */ }
-#ifdef CAPO_THREADOPS_PAUSE__
     else
-    if (k < 16) { CAPO_THREADOPS_PAUSE__(); }
-#endif/*CAPO_THREADOPS_PAUSE__*/
+    if (k < 16) { CAPO_SPIN_LOCK_PAUSE(); }
     else
     if (k < 32) { std::this_thread::yield(); }
     else
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
+    { std::this_thread::sleep_for(std::chrono::milliseconds(1)); }
 }
 
-} // namespace detail_spinlock
+} // namespace detail_spin_lock
 
 ////////////////////////////////////////////////////////////////
 /// Spinlock
@@ -107,7 +103,7 @@ public:
     void lock(void)
     {
         for (unsigned k = 0; lc_.test_and_set(std::memory_order_acquire); ++k)
-            detail_spinlock::yield(k);
+            detail_spin_lock::yield(k);
     }
 
     void unlock(void)
