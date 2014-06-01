@@ -117,12 +117,16 @@ struct context : std::exception
     }
 };
 
+} // namespace assert
+
+namespace detail_assert {
+
 ////////////////////////////////////////////////////////////////
 /// Define assert impl
 ////////////////////////////////////////////////////////////////
 
 #ifndef CAPO_ASSERT_HANDLER_
-#define CAPO_ASSERT_HANDLER_ &capo::assert::impl::assert_handler
+#define CAPO_ASSERT_HANDLER_ &capo::detail_assert::impl::assert_handler
 #endif/*CAPO_ASSERT_HANDLER_*/
 
 class impl
@@ -273,7 +277,7 @@ public:
     wrapper& add(const char* /*str*/, const T& /*val*/) { return (*this); }
 };
 
-} // namespace assert
+} // namespace detail_assert
 
 ////////////////////////////////////////////////////////////////
 /// Evaluate assertion
@@ -285,8 +289,8 @@ public:
         CAPO_ASSERT_1___.add(#x, (x)).CAPO_ASSERT_##next
 
 #define CAPO_ENSURE_IMPL___(COND, ...) \
-        const capo::assert::impl& CAPO_UNUSED_ dummy_ = \
-        capo::assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1___
+        const capo::detail_assert::impl& CAPO_UNUSED_ dummy_ = \
+        capo::detail_assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1___
 
 #define capo_ensure(...) \
         if (!!(__VA_ARGS__)) ; \
