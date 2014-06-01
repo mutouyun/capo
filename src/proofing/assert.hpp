@@ -240,8 +240,8 @@ public:
     using impl::handler_t;
     using impl::impl;
 
-    wrapper& CAPO_ASSERT_1__ = (*this);
-    wrapper& CAPO_ASSERT_2__ = (*this);
+    wrapper& CAPO_ASSERT_1___ = (*this);
+    wrapper& CAPO_ASSERT_2___ = (*this);
 
     wrapper& context(const char* file, unsigned line)
     {
@@ -262,8 +262,8 @@ public:
     using impl::handler_t;
     using impl::impl;
 
-    wrapper& CAPO_ASSERT_1__ = (*this);
-    wrapper& CAPO_ASSERT_2__ = (*this);
+    wrapper& CAPO_ASSERT_1___ = (*this);
+    wrapper& CAPO_ASSERT_2___ = (*this);
 
     // Let the compiler can automatically make wrapper<false> invalid
 
@@ -279,23 +279,23 @@ public:
 /// Evaluate assertion
 ////////////////////////////////////////////////////////////////
 
-#define CAPO_ASSERT_1__(x)  CAPO_ASSERT_OP__(x, 2__)
-#define CAPO_ASSERT_2__(x)  CAPO_ASSERT_OP__(x, 1__)
-#define CAPO_ASSERT_OP__(x, next) \
-        CAPO_ASSERT_1__.add(#x, (x)).CAPO_ASSERT_##next
+#define CAPO_ASSERT_1___(x)  CAPO_ASSERT_OP___(x, 2___)
+#define CAPO_ASSERT_2___(x)  CAPO_ASSERT_OP___(x, 1___)
+#define CAPO_ASSERT_OP___(x, next) \
+        CAPO_ASSERT_1___.add(#x, (x)).CAPO_ASSERT_##next
 
-#define CAPO_ENSURE_IMPL__(COND, ...) \
+#define CAPO_ENSURE_IMPL___(COND, ...) \
         const capo::assert::impl& CAPO_UNUSED_ dummy_ = \
-        capo::assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1__
+        capo::assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1___
 
 #define capo_ensure(...) \
         if (!!(__VA_ARGS__)) ; \
-        else CAPO_ENSURE_IMPL__(true, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL___(true, __VA_ARGS__)
 
 #ifdef NDEBUG
 #define capo_assert(...) \
         if (true) ; \
-        else CAPO_ENSURE_IMPL__(false, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL___(false, __VA_ARGS__)
 #else /*NDEBUG*/
 #define capo_assert(...) capo_ensure(__VA_ARGS__)
 #endif/*NDEBUG*/
@@ -303,7 +303,7 @@ public:
 #ifdef NDEBUG
 #define capo_verify(...) \
         if (!!(__VA_ARGS__) || true) ; \
-        else CAPO_ENSURE_IMPL__(false, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL___(false, __VA_ARGS__)
 #else
 #define capo_verify(...) capo_assert(__VA_ARGS__)
 #endif/*NDEBUG*/
