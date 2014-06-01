@@ -30,6 +30,15 @@
     <Filter Include="capo\utility">
       <UniqueIdentifier>{fdafdcc4-d45b-4ea6-b109-666f5bdf7fbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{1ceb9782-caef-43db-8c4a-fcde6380f641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\chrono">
+      <UniqueIdentifier>{1697469c-69dc-4adc-abb5-85e69fcc1a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\random">
+      <UniqueIdentifier>{239184e7-514c-48f5-9fff-d5de8ba249c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +99,21 @@
     </ClInclude>
     <ClInclude Include="..\src\utility\operator.hpp">
       <Filter>capo\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="test_thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thread\spin_lock.hpp">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thread\semaphore.hpp">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thread\waiter.hpp">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\random\random.hpp">
+      <Filter>capo\random</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

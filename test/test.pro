@@ -25,4 +25,9 @@ HEADERS += \
     test_proofing.h \
     ../src/finalizer/scope_guard.hpp \
     ../src/proofing/assert.hpp \
-    ../src/macro/macro_unused.hpp
+    ../src/macro/macro_unused.hpp \
+    ../src/thread/spin_lock.hpp \
+    test_thread.h \
+    ../src/thread/semaphore.hpp \
+    ../src/thread/waiter.hpp \
+    ../src/random/random.hpp

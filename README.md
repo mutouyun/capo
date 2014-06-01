@@ -13,8 +13,11 @@ C++标准库的轻量级拓展
 ##
 
     > algorithm            ...working     - 算法
+    > chrono               ...working     - 时间操作【暂无】
     > finalizer            ...working     - 资源管理
     > macro                ...working     - 预处理宏定义
     > proofing             ...working     - 代码防呆（错误预防）
+    > random               ...working     - 便捷的随机数工具
+    > thread               ...working     - 多线程（spin_lock、semaphore、thread_pool、etc...）
     > type                 ...working     - 类型操作
     > utility              ...working     - 实用小工具

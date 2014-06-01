@@ -75,6 +75,10 @@
     <ClInclude Include="..\src\macro\macro_unused.hpp" />
     <ClInclude Include="..\src\proofing\assert.hpp" />
     <ClInclude Include="..\src\proofing\printf.hpp" />
+    <ClInclude Include="..\src\random\random.hpp" />
+    <ClInclude Include="..\src\thread\semaphore.hpp" />
+    <ClInclude Include="..\src\thread\spin_lock.hpp" />
+    <ClInclude Include="..\src\thread\waiter.hpp" />
     <ClInclude Include="..\src\type\type_list.hpp" />
     <ClInclude Include="..\src\type\type_name.hpp" />
     <ClInclude Include="..\src\utility\countof.hpp" />
@@ -83,6 +87,7 @@
     <ClInclude Include="..\src\utility\operator.hpp" />
     <ClInclude Include="test_algorithm.h" />
     <ClInclude Include="test_proofing.h" />
+    <ClInclude Include="test_thread.h" />
     <ClInclude Include="test_type.h" />
     <ClInclude Include="test_utility.h" />
   </ItemGroup>

@@ -20,14 +20,17 @@
 #include "test_utility.h"
 #include "test_algorithm.h"
 #include "test_proofing.h"
+#include "test_thread.h"
 
 ////////////////////////////////////////////////////////////////
 
 int main(void)
 {
-    test_type();
-    test_utility();
-    test_algorithm();
-    test_proofing();
+    //test_type();
+    //test_utility();
+    //test_algorithm();
+    //test_proofing();
+    test_thread();
+    system("pause");
     return 0;
 }
