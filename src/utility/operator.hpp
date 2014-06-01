@@ -28,11 +28,10 @@ struct unequal : capo::inherit<BaseT>
 };
 
 template <class T, typename BaseT = void>
-struct alike : capo::inherit<BaseT>
+struct alike : capo::unequal<T, BaseT>
 {
     // Need operator<
-    friend bool operator!=(const T& x, const T& y) { return (static_cast<bool>(x < y) && static_cast<bool>(y < x)); }
-    friend bool operator==(const T& x, const T& y) { return !(x != y); }
+    friend bool operator==(const T& x, const T& y) { return (!static_cast<bool>(x < y) && !static_cast<bool>(y < x)); }
 };
 
 template <class T, typename BaseT = void>
