@@ -255,7 +255,7 @@ struct types_insert<TypesT<T1, T...>, 0, U>
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1800)
 /*
-    <MSVC 2013 CTP> error C2338: Index is out of range!
+    <MSVC 2013> error C2338: Index is out of range!
     Cause:
         'capo::types_insert<capo::type_list<>, 0, U>' will matching
         'capo::types_insert<TypesT, 0, U>'
