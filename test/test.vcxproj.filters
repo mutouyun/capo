@@ -118,5 +118,8 @@
     <ClInclude Include="..\src\random\random.hpp">
       <Filter>capo\random</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\type\type_concept.hpp">
+      <Filter>capo\type</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

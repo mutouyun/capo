@@ -341,10 +341,43 @@ void test_type_list(void)
 
 ////////////////////////////////////////////////////////////////
 
+#include "../src/type/type_concept.hpp"
+
+namespace np_test_type_concept
+{
+    class Foo
+    {
+    public:
+        using foo_type = void;
+    };
+
+    CAPO_CONCEPT_INNER_TYPE(foo_type);
+
+    class Bar
+    {
+    public:
+        void bar_func(int) const;
+    };
+
+    CAPO_CONCEPT_MEMBER_FUNCTION(bar_func, void (C::*)(int) const);
+}
+
+void test_type_concept(void)
+{
+    using namespace np_test_type_concept;
+    std::cout << "has_foo_type<Foo> ->: " << has_foo_type<Foo>::value << std::endl;
+    std::cout << "has_foo_type<Bar> ->: " << has_foo_type<Bar>::value << std::endl;
+    std::cout << "has_bar_func<Foo> ->: " << has_bar_func<Foo>::value << std::endl;
+    std::cout << "has_bar_func<Bar> ->: " << has_bar_func<Bar>::value << std::endl;
+}
+
+////////////////////////////////////////////////////////////////
+
 void test_type(void)
 {
-    test_type_name();
-    test_type_list();
+    //test_type_name();
+    //test_type_list();
+    test_type_concept();
 }
 
 ////////////////////////////////////////////////////////////////

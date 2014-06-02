@@ -8,7 +8,7 @@
 #ifndef CAPO_TYPE_LIST_HPP___
 #define CAPO_TYPE_LIST_HPP___
 
-#include <type_traits>
+#include <type_traits> // std::integral_constant
 
 namespace capo {
 
