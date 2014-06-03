@@ -6,18 +6,19 @@
 #include "../src/utility/countof.hpp"
 #include "../src/thread/spin_lock.hpp"
 #include "../src/algorithm/range.hpp"
+#include "../src/pattern/singleton.hpp"
 #include <thread>
 #include <mutex>
 
 namespace np_test_spin_lock
 {
-    capo::spin_lock lc;
+    using namespace capo;
 
     void thread_proc(int id)
     {
-        for (auto i : capo::range(10))
+        for (auto i : range(10))
         {
-            std::lock_guard<capo::spin_lock> lc_scope(lc);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "thread #" << id << " - " << i << std::endl;
         }
     }
@@ -29,7 +30,7 @@ void test_spin_lock(void)
     using namespace np_test_spin_lock;
 
     std::thread threads[10];
-    for (auto i : capo::range(capo::countof(threads)))
+    for (auto i : range(countof(threads)))
     {
         threads[i] = std::thread(thread_proc, i + 1);
     }
@@ -49,7 +50,7 @@ namespace np_test_semaphore
     random<>  rdm(100, 2000);
     bool      warehouse[10] = { false };
     int       counter = 0;
-    spin_lock warehouse_lock, cout_lock, random_lock;
+    spin_lock warehouse_lock, random_lock;
     semaphore producer_sema(countof(warehouse));
     semaphore consumer_sema;
     bool      is_done = false;
@@ -60,7 +61,7 @@ namespace np_test_semaphore
 
         // print a starting message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[producer " << id_c << "]\trunning..." << std::endl;
         }
 
@@ -76,7 +77,7 @@ namespace np_test_semaphore
             // put the product into warehouse
             std::lock_guard<spin_lock> lc_scope(warehouse_lock);
             {
-                std::lock_guard<spin_lock> lc_scope(cout_lock);
+                std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
                 std::cout << "[producer " << id_c << "]\tputting product No." << counter << std::endl;
             }
             warehouse[counter++] = true;
@@ -85,7 +86,7 @@ namespace np_test_semaphore
 
         // print a ending message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[producer " << id_c << "]\tfinish..." << std::endl;
         }
     }
@@ -96,7 +97,7 @@ namespace np_test_semaphore
 
         // print a starting message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[consumer-" << id << "]\trunning..." << std::endl;
         }
 
@@ -117,7 +118,7 @@ namespace np_test_semaphore
             std::lock_guard<spin_lock> lc_scope(warehouse_lock);
             warehouse[--counter] = false;
             {
-                std::lock_guard<spin_lock> lc_scope(cout_lock);
+                std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
                 std::cout << "[consumer-" << id << "]\tget product No." << counter << std::endl;
             }
             producer_sema.post();
@@ -125,7 +126,7 @@ namespace np_test_semaphore
 
         // print a ending message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[consumer-" << id << "]\tfinish..." << std::endl;
         }
     }
@@ -154,7 +155,7 @@ void test_semaphore(void)
 
     // notify the producers and consumers to finish and wait for it
     {
-        std::lock_guard<spin_lock> lc_scope(cout_lock);
+        std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
         std::cout << "Works are over..." << std::endl;
     }
     is_done = true;
@@ -173,13 +174,12 @@ namespace np_test_waiter
     using namespace capo;
 
     waiter consumer_waiter;
-    spin_lock cout_lock;
 
     void test_proc(unsigned id)
     {
         // print a starting message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[tester " << id << "]\tis waiting..." << std::endl;
         }
 
@@ -187,7 +187,7 @@ namespace np_test_waiter
 
         // print a ending message
         {
-            std::lock_guard<spin_lock> lc_scope(cout_lock);
+            std::lock_guard<spin_lock> lc_scope(singleton<spin_lock>());
             std::cout << "[tester " << id << "]\tis ending..." << std::endl;
         }
     }

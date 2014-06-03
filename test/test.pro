@@ -30,4 +30,8 @@ HEADERS += \
     test_thread.h \
     ../src/thread/semaphore.hpp \
     ../src/thread/waiter.hpp \
-    ../src/random/random.hpp
+    ../src/random/random.hpp \
+    ../src/utility/make.hpp \
+    ../src/pattern/singleton.hpp \
+    ../src/chrono/stopwatch.hpp \
+    test_chrono.h

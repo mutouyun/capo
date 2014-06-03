@@ -69,10 +69,12 @@
   <ItemGroup>
     <ClInclude Include="..\src\algorithm\max_min.hpp" />
     <ClInclude Include="..\src\algorithm\range.hpp" />
+    <ClInclude Include="..\src\chrono\stopwatch.hpp" />
     <ClInclude Include="..\src\finalizer\scope_guard.hpp" />
     <ClInclude Include="..\src\macro\macro_func.hpp" />
     <ClInclude Include="..\src\macro\macro_pp.hpp" />
     <ClInclude Include="..\src\macro\macro_unused.hpp" />
+    <ClInclude Include="..\src\pattern\singleton.hpp" />
     <ClInclude Include="..\src\proofing\assert.hpp" />
     <ClInclude Include="..\src\proofing\printf.hpp" />
     <ClInclude Include="..\src\random\random.hpp" />
@@ -84,9 +86,11 @@
     <ClInclude Include="..\src\type\type_name.hpp" />
     <ClInclude Include="..\src\utility\countof.hpp" />
     <ClInclude Include="..\src\utility\inherit.hpp" />
+    <ClInclude Include="..\src\utility\make.hpp" />
     <ClInclude Include="..\src\utility\noncopyable.hpp" />
     <ClInclude Include="..\src\utility\operator.hpp" />
     <ClInclude Include="test_algorithm.h" />
+    <ClInclude Include="test_chrono.h" />
     <ClInclude Include="test_proofing.h" />
     <ClInclude Include="test_thread.h" />
     <ClInclude Include="test_type.h" />

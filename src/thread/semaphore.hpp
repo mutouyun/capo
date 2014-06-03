@@ -8,6 +8,8 @@
 #ifndef CAPO_THREAD_SEMAPHORE_HPP___
 #define CAPO_THREAD_SEMAPHORE_HPP___
 
+#include "../utility/make.hpp"
+
 #include <mutex>                // std::mutex, std::unique_lock
 #include <condition_variable>   // std::condition_variable
 #include <chrono>               // std::chrono
@@ -32,24 +34,24 @@ public:
 public:
     long count(void) const
     {
-        std::unique_lock<std::mutex> lc_scope(lock_);
+        auto lc = capo::make<std::unique_lock>(lock_);
         return counter_;
     }
 
     void wait(void)
     {
-        std::unique_lock<std::mutex> lc_scope(lock_);
-        cond_.wait(lc_scope, [this]{ return (counter_ > 0); });
+        auto lc = capo::make<std::unique_lock>(lock_);
+        cond_.wait(lc, [this]{ return (counter_ > 0); });
         -- counter_;
     }
 
     template <typename Rep, typename Period>
     std::cv_status wait_until(const std::chrono::duration<Rep, Period>& abs_time)
     {
-        std::unique_lock<std::mutex> lc_scope(lock_);
+        auto lc = capo::make<std::unique_lock>(lock_);
         while (counter_ <= 0)
         {
-            if (cond_.wait_until(lc_scope, abs_time) == std::cv_status::timeout)
+            if (cond_.wait_until(lc, abs_time) == std::cv_status::timeout)
                 return std::cv_status::timeout;
         }
         -- counter_;
@@ -64,7 +66,7 @@ public:
 
     void post(long count = 1)
     {
-        std::unique_lock<std::mutex> lc_scope(lock_);
+        auto lc = capo::make<std::unique_lock>(lock_);
         counter_ += count;
         cond_.notify_all();
     }

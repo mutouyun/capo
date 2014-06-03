@@ -21,16 +21,18 @@
 #include "test_algorithm.h"
 #include "test_proofing.h"
 #include "test_thread.h"
+#include "test_chrono.h"
 
 ////////////////////////////////////////////////////////////////
 
 int main(void)
 {
     test_type();
-    //test_utility();
-    //test_algorithm();
-    //test_proofing();
-    //test_thread();
+    test_utility();
+    test_algorithm();
+    test_proofing();
+    test_thread();
+    test_chrono();
     system("pause");
     return 0;
 }

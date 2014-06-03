@@ -375,8 +375,8 @@ void test_type_concept(void)
 
 void test_type(void)
 {
-    //test_type_name();
-    //test_type_list();
+    test_type_name();
+    test_type_list();
     test_type_concept();
 }
 

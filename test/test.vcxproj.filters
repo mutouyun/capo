@@ -42,6 +42,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="capo\pattern">
+      <UniqueIdentifier>{d2537319-d0bb-483c-a60f-e1ef1b18f41f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -120,6 +123,18 @@
     </ClInclude>
     <ClInclude Include="..\src\type\type_concept.hpp">
       <Filter>capo\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\chrono\stopwatch.hpp">
+      <Filter>capo\chrono</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pattern\singleton.hpp">
+      <Filter>capo\pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\make.hpp">
+      <Filter>capo\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="test_chrono.h">
+      <Filter>test\头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,7 +2,11 @@
     The Capo Library
     Code covered by the MIT License
 
-    Author: mutouyun (http://darkc.at)
+    Modified from <<Enhancing Assertions>>
+    (http://www.drdobbs.com/cpp/enhancing-assertions/184403745)
+    Modified by : mutouyun (http://darkc.at)
+
+    Copyright by Andrei Alexandrescu and John Torjo, August 01, 2003
 */
 
 #ifndef CAPO_PROOFING_ASSERT_HPP___
