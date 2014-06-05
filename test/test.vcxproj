@@ -69,6 +69,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\algorithm\max_min.hpp" />
     <ClInclude Include="..\src\algorithm\range.hpp" />
+    <ClInclude Include="..\src\algorithm\sequence.hpp" />
     <ClInclude Include="..\src\chrono\stopwatch.hpp" />
     <ClInclude Include="..\src\finalizer\scope_guard.hpp" />
     <ClInclude Include="..\src\macro\macro_func.hpp" />

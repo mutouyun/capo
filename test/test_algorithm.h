@@ -125,10 +125,62 @@ void test_range(void)
 
 ////////////////////////////////////////////////////////////////
 
+#include "../src/algorithm/sequence.hpp"
+#include "../src/macro/macro_unused.hpp"
+
+void test_geometric(void)
+{
+    TEST_CASE();
+
+    capo::use::geometric<int> seq(0, 2, 4);
+    std::cout << "seq(0, 2, 4) ->:";
+    for(int CAPO_UNUSED_ i : capo::range(10))
+    {
+        std::cout << " " << seq.value();
+        seq.next();
+    }
+    std::cout << std::endl;
+    std::cout << "power(3, 5) ->: " << seq.power(3, 5) << std::endl;
+}
+
+void test_fibonacci(void)
+{
+    TEST_CASE();
+
+    capo::use::fibonacci<unsigned long long> seq(4);
+    std::cout << "seq(4) ->:";
+    for(int CAPO_UNUSED_ i : capo::range(10))
+    {
+        std::cout << " " << seq.value();
+        seq.next();
+    }
+    std::cout << std::endl;
+    int i = 0;
+    for(auto n : capo::sequence<decltype(seq)>(0, 20))
+    {
+        std::cout << "fibonacci(" << i++ << ") ->: " << n << std::endl;
+    }
+}
+
+void test_sequence(void)
+{
+    TEST_CASE();
+    test_geometric();
+    test_fibonacci();
+
+    auto xx = capo::sequence<capo::use::arithmetic<int>>(0, 20);
+    decltype(xx)::iterator it = xx.begin();
+    xx = capo::sequence<capo::use::arithmetic<int>>(0, 10);
+    it = xx.begin();
+}
+
+////////////////////////////////////////////////////////////////
+
 void test_algorithm(void)
 {
-    test_max_min();
+//    test_max_min();
     test_range();
+    test_sequence();
 }
 
 ////////////////////////////////////////////////////////////////

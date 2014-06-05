@@ -33,7 +33,7 @@ public:
     using time_point = typename ClockT::time_point;
 
 private:
-    using pair_t = std::pair<time_point, time_point>;
+    using pair_t = std::pair<time_point/*start*/, time_point/*paused*/>;
 
     std::array<pair_t, CountN> points_;
     bool is_stopped_ = true;

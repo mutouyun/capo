@@ -136,5 +136,8 @@
     <ClInclude Include="test_chrono.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\algorithm\sequence.hpp">
+      <Filter>capo\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

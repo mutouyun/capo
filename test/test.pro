@@ -34,4 +34,6 @@ HEADERS += \
     ../src/utility/make.hpp \
     ../src/pattern/singleton.hpp \
     ../src/chrono/stopwatch.hpp \
-    test_chrono.h
+    test_chrono.h \
+    ../src/type/type_concept.hpp \
+    ../src/algorithm/sequence.hpp

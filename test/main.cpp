@@ -27,12 +27,12 @@
 
 int main(void)
 {
-    test_type();
-    test_utility();
+//    test_type();
+//    test_utility();
     test_algorithm();
-    test_proofing();
-    test_thread();
-    test_chrono();
+//    test_proofing();
+//    test_thread();
+//    test_chrono();
     system("pause");
     return 0;
 }

@@ -351,29 +351,44 @@ template <typename TypesT, typename T>
 using types_exist = std::integral_constant<bool, (types_find<TypesT, T>::value != -1)>;
 
 /*
-    Do something if the conditional is true
+    For each one in the types, do something
 */
 
 template <typename TypesT,
-          template <typename, typename> class If_, typename V,
-          template <bool, typename, typename> class Do_, typename U>
-struct types_do_if : check_is_types<TypesT>
+          template <typename> class Do_>
+struct types_foreach : check_is_types<TypesT>
 {
     using type = TypesT;
 };
 
 template <typename T1, typename... T,
-          template <typename, typename> class If_, typename V,
-          template <bool, typename, typename> class Do_, typename U,
+          template <typename> class Do_,
           template <typename...> class TypesT>
-struct types_do_if<TypesT<T1, T...>, If_, V, Do_, U>
+struct types_foreach<TypesT<T1, T...>, Do_>
 {
 private:
-    using tail = typename types_do_if<TypesT<T...>, If_, V, Do_, U>::type;
-    using done = typename Do_<If_<T1, V>::value, U, T1>::type;
+    using tail = typename types_foreach<TypesT<T...>, Do_>::type;
+    using done = typename Do_<T1>::type;
 public:
     using type = typename types_link<done, tail>::type;
 };
+
+/*
+    For each one in the types, do something if the conditional is true
+*/
+
+template <template <typename, typename> class If_, typename V,
+          template <bool, typename, typename> class Do_, typename U>
+struct do_if
+{
+    template <typename T>
+    using type = Do_<If_<T, V>::value, U, T>;
+};
+
+template <typename TypesT,
+          template <typename, typename> class If_, typename V,
+          template <bool, typename, typename> class Do_, typename U>
+using types_do_if = types_foreach<TypesT, do_if<If_, V, Do_, U>::template type>;
 
 /*
     Completely replace a type from the types to another type

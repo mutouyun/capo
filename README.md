@@ -25,7 +25,6 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    algorithm.series                - 序列生成（可和algorithm.range搭配使用）
     memory                          - capo的自定义allocator
     container                       - 默认使用capo.memory.allocator的std容器
     pattern.trackable               - 遍历出所有该类型尚未销毁的对象实例
