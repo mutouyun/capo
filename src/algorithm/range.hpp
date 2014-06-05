@@ -28,12 +28,7 @@ class impl : public decltype(capo::sequence<capo::use::arithmetic<T>>(0, 0))
     using base_t = decltype(capo::sequence<capo::use::arithmetic<T>>(0, 0));
 
 public:
-    using value_type      = typename base_t::value_type;
-    using reference       = typename base_t::reference;
-    using const_reference = typename base_t::const_reference;
-    using iterator        = typename base_t::iterator;
-    using const_iterator  = typename base_t::const_iterator;
-    using size_type       = typename base_t::size_type;
+    using size_type = typename base_t::size_type;
 
 private:
     template <typename U1, typename U2>
