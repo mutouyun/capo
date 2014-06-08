@@ -25,8 +25,7 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    memory                          - capo的自定义allocator
-    container                       - 默认使用capo.memory.allocator的std容器
+    memory.alloc_pool               - 基于内存池的内存分配器
     pattern.trackable               - 遍历出所有该类型尚未销毁的对象实例
     utility.optional                - Just like boost::optional
     utility.any                     - Just like boost::any
@@ -34,7 +33,6 @@ C++标准库的轻量级拓展
     stream                          - 流对象
     proofing.trace                  - 调试输出
     thread.blocking_queue           - 这个没有什么好说明的。。
-    delegate.function               - 默认使用capo.memory.allocator的std::function
     thread.thread_pool              - 线程池
     delegate.signal                 - 线程安全、支持多线程异步模式的信号/槽[(?)use message loop]
     finalizer.ref_counter           - 基于引用计数的资源管理基类

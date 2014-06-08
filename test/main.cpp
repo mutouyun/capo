@@ -22,17 +22,19 @@
 #include "test_proofing.h"
 #include "test_thread.h"
 #include "test_chrono.h"
+#include "test_memory.h"
 
 ////////////////////////////////////////////////////////////////
 
 int main(void)
 {
-//    test_type();
-//    test_utility();
-    test_algorithm();
-//    test_proofing();
-//    test_thread();
-//    test_chrono();
+    //test_type();
+    //test_utility();
+    //test_algorithm();
+    //test_proofing();
+    //test_thread();
+    //test_chrono();
+    test_memory();
     system("pause");
     return 0;
 }

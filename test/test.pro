@@ -36,4 +36,19 @@ HEADERS += \
     ../src/chrono/stopwatch.hpp \
     test_chrono.h \
     ../src/type/type_concept.hpp \
-    ../src/algorithm/sequence.hpp
+    ../src/algorithm/sequence.hpp \
+    ../src/memory/construct.hpp \
+    test_memory.h \
+    ../src/memory/allocator.hpp \
+    ../src/memory/alloc.hpp \
+    ../src/memory/alloc_malloc.hpp \
+    ../src/container/deque.hpp \
+    ../src/container/forward_list.hpp \
+    ../src/container/hash_map.hpp \
+    ../src/container/hash_set.hpp \
+    ../src/container/list.hpp \
+    ../src/container/map.hpp \
+    ../src/container/queue.hpp \
+    ../src/container/set.hpp \
+    ../src/container/stack.hpp \
+    ../src/container/vector.hpp

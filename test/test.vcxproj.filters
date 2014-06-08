@@ -45,6 +45,12 @@
     <Filter Include="capo\pattern">
       <UniqueIdentifier>{d2537319-d0bb-483c-a60f-e1ef1b18f41f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="capo\memory">
+      <UniqueIdentifier>{5452b4b9-eca7-40e2-b028-08cc103a864c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="capo\container">
+      <UniqueIdentifier>{9f3cabc0-b836-4e1f-8f48-6df0abd61d2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,6 +144,51 @@
     </ClInclude>
     <ClInclude Include="..\src\algorithm\sequence.hpp">
       <Filter>capo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\memory\construct.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="test_memory.h">
+      <Filter>test\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\memory\alloc.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\memory\alloc_malloc.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\memory\allocator.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\deque.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\forward_list.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\hash_map.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\hash_set.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\list.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\map.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\queue.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\set.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\stack.hpp">
+      <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\container\vector.hpp">
+      <Filter>capo\container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
