@@ -21,7 +21,7 @@ namespace capo
 
     template <typename T, typename SeqT = capo::vector<T>,
               typename CompT = std::less<typename SeqT::value_type>>
-    using priority = std::priority_queue<T, SeqT, CompT>;
+    using priority_queue = std::priority_queue<T, SeqT, CompT>;
 }
 
 #endif // CAPO_CONTAINER_QUEUE_HPP___
