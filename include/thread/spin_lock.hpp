@@ -82,7 +82,7 @@ inline void yield(unsigned k)
 
 class spin_lock
 {
-#if defined(_MSC_VER) && (_MSC_VER <= 1800)
+#if defined(_MSC_VER) && (_MSC_VER <= 1900)
     /*
         <MSVC 2013> Atomic flag cannot be initialized in a constructor initializer.
         See: http://connect.microsoft.com/VisualStudio/feedback/details/800243/
@@ -90,9 +90,9 @@ class spin_lock
     std::atomic_flag lc_;
 public:
     spin_lock(void) { lc_.clear(std::memory_order_relaxed); }
-#else /*_MSC_VER*/
+#else /*!_MSC_VER*/
     std::atomic_flag lc_ = ATOMIC_FLAG_INIT;
-#endif/*_MSC_VER*/
+#endif/*!_MSC_VER*/
 
 public:
     bool try_lock(void)
