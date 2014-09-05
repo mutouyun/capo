@@ -24,7 +24,7 @@ namespace detail_construct
     struct impl
     {
         template <typename... P>
-        static T* construct(void* p, P&&... args)
+        static T* construct(T* p, P&&... args)
         {
             return ::new (p) T(std::forward<P>(args)...);
         }
@@ -35,20 +35,25 @@ namespace detail_construct
     {
         using type = T[N];
         template <typename... P>
-        static type* construct(void* p, P&&... args)
+        static type* construct(type* p, P&&... args)
         {
-            type* r = reinterpret_cast<type*>(p);
             for (size_t i = 0; i < N; ++i)
-                impl<T>::construct((*r) + i, std::forward<P>(args)...);
-            return r;
+                impl<T>::construct((*p) + i, std::forward<P>(args)...);
+            return p;
         }
     };
 }
 
 template <typename T, typename... P>
-T* construct(void* p, P&&... args)
+T* construct(T* p, P&&... args)
 {
     return detail_construct::impl<T>::construct(p, std::forward<P>(args)...);
+}
+
+template <typename T, typename... P>
+T* construct(void* p, P&&... args)
+{
+    return construct(static_cast<T*>(p), std::forward<P>(args)...);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -60,7 +65,7 @@ namespace detail_destruct
     template <typename T>
     struct impl
     {
-        static void destruct(void* p)
+        static void destruct(T* p)
         {
             reinterpret_cast<T*>(p)->~T();
         }
@@ -70,19 +75,24 @@ namespace detail_destruct
     struct impl<T[N]>
     {
         using type = T[N];
-        static void destruct(void* p)
+        static void destruct(type* p)
         {
-            type* r = reinterpret_cast<type*>(p);
             for (size_t i = 0; i < N; ++i)
-                impl<T>::destruct((*r) + i);
+                impl<T>::destruct((*p) + i);
         }
     };
 }
 
 template <typename T>
-void destruct(void* p)
+void destruct(T* p)
 {
     return detail_destruct::impl<T>::destruct(p);
+}
+
+template <typename T>
+void destruct(void* p)
+{
+    destruct(static_cast<T*>(p));
 }
 
 } // namespace capo
