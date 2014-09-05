@@ -9,9 +9,9 @@
 #define CAPO_FINALIZER_SCOPE_GUARD_HPP___
 
 #include "../utility/noncopyable.hpp"
-#include "../macro/macro_unused.hpp"
+#include "../macro/unused.hpp"
 
-#include <utility>      // std::forward
+#include <utility>      // std::forward, std::move
 #include <algorithm>    // std::swap
 #include <functional>   // std::function
 
