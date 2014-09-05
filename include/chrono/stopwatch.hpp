@@ -10,7 +10,7 @@
 
 #include <chrono>   // std::chrono
 #include <array>    // std::array
-#include <utility>  // std::pair
+#include <utility>  // std::pair, std::declval
 #include <cstddef>  // size_t
 
 namespace capo {
@@ -66,6 +66,12 @@ public:
             return (points_[N].second - points_[N].first);
         else
             return ClockT::now() - points_[N].first;
+    }
+
+    template <typename ToDur, size_t N = 0>
+    auto elapsed(void) -> decltype(std::declval<ToDur>().count())
+    {
+        return std::chrono::duration_cast<ToDur>(elapsed<N>()).count();
     }
 
     template <size_t N = 0>
