@@ -11,28 +11,41 @@
 #include "../algorithm/sequence.hpp"
 #include "../proofing/assert.hpp"
 
-#include <type_traits>  // std::decay
+#include <type_traits>  // std::common_type
 #include <stdexcept>    // std::logic_error
 #include <utility>      // std::forward
 
 namespace capo {
 namespace detail_range {
 
+struct arithmetic_range
+{
+    enum { StateSize = 2 };
+
+    template <typename T> static void next(T& a, T& d) { a += d; }
+    template <typename T> static void prev(T& a, T& d) { a -= d; }
+
+    template <typename T> static void at(T& a, T& d, size_t n)
+    {
+        a += static_cast<T>(d * n);
+    }
+};
+
 ////////////////////////////////////////////////////////////////
 /// The impl class
 ////////////////////////////////////////////////////////////////
 
 template <typename T>
-class impl : public decltype(capo::sequence<capo::use::arithmetic<T>>(0, 0))
+class impl : public decltype(capo::sequence<arithmetic_range, T>(0, 0))
 {
-    using base_t = decltype(capo::sequence<capo::use::arithmetic<T>>(0, 0));
+    using base_t = decltype(capo::sequence<arithmetic_range, T>(0, 0));
 
 public:
     using size_type = typename base_t::size_type;
 
 private:
-    template <typename U1, typename U2>
-    size_type get_adjusted_count(U1&& begin_val, U1&& end_val, U2&& step_val) const
+    template <typename T, typename U>
+    size_type get_adjusted_count(T&& begin_val, T&& end_val, U&& step_val) const
     {
         if (step_val > 0)
         {
@@ -52,13 +65,13 @@ private:
     }
 
 public:
-    template <typename U1, typename U2>
-    impl(U1&& begin_val, U1&& end_val, U2&& step_val)
-        : base_t(0, get_adjusted_count(std::forward<U1>(begin_val),
-                                       std::forward<U1>(end_val),
-                                       std::forward<U2>(step_val)),
-                 std::forward<U1>(begin_val),
-                 std::forward<U2>(step_val))
+    template <typename T, typename U>
+    impl(T&& begin_val, T&& end_val, U&& step_val)
+        : base_t(0, get_adjusted_count(std::forward<T>(begin_val),
+                                       std::forward<T>(end_val),
+                                       std::forward<U>(step_val)),
+                 std::forward<T>(begin_val),
+                 std::forward<U>(step_val))
     {}
 };
 
@@ -70,22 +83,22 @@ public:
 
 template <typename T>
 auto range(T&& end)
-    -> detail_range::impl<typename std::decay<T>::type>
+    -> detail_range::impl<typename std::common_type<T>::type>
 {
-    typename std::decay<T>::type t {};
+    typename std::common_type<T>::type t {};
     return { static_cast<T&&>(t), std::forward<T>(end), 1 };
 }
 
 template <typename T>
 auto range(T&& begin, T&& end)
-    -> detail_range::impl<typename std::decay<T>::type>
+    -> detail_range::impl<typename std::common_type<T>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), 1 };
 }
 
 template <typename T, typename U>
 auto range(T&& begin, T&& end, U&& step)
-    -> detail_range::impl<typename std::decay<decltype(begin + step)>::type>
+    -> detail_range::impl<typename std::common_type<T, U>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), std::forward<U>(step) };
 }
