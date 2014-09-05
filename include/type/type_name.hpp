@@ -164,7 +164,7 @@ struct check
         char* real_name = abi::__cxa_demangle(typeid_name, nullptr, nullptr, nullptr);
         capo_scope_exit = [real_name]
         {
-            if (real_name) free(real_name);
+            if (real_name) ::free(real_name);
         };
         out_(real_name ? real_name : typeid_name);
 #   else /*__GNUC__*/
