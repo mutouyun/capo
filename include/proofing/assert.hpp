@@ -13,7 +13,7 @@
 #define CAPO_PROOFING_ASSERT_HPP___
 
 #include "../proofing/printf.hpp"
-#include "../macro/macro_unused.hpp"
+#include "../macro/unused.hpp"
 
 #include <map>          // std::map
 #include <string>       // std::string
@@ -304,9 +304,9 @@ public:
 #define capo_assert(...) \
         if (true) ; \
         else CAPO_ENSURE_IMPL___(false, __VA_ARGS__)
-#else /*NDEBUG*/
+#else /*!NDEBUG*/
 #define capo_assert(...) capo_ensure(__VA_ARGS__)
-#endif/*NDEBUG*/
+#endif/*!NDEBUG*/
 
 #ifdef NDEBUG
 #define capo_verify(...) \

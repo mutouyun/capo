@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/chrono/stopwatch.hpp"
+#include "../include/chrono/stopwatch.hpp"
 #include <thread>
 #include <iomanip>
 
@@ -15,11 +15,11 @@
     { \
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); \
         std::cout << "stopwatch ->: " \
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(sw.elapsed()).count() / 1000.0 \
+                  << sw.elapsed<std::chrono::milliseconds>() / 1000.0 \
                   << "  " \
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(sw.elapsed<1>()).count() / 1000.0 \
+                  << sw.elapsed<std::chrono::milliseconds, 1>() / 1000.0 \
                   << "  " \
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(sw.elapsed<2>()).count() / 1000.0 \
+                  << sw.elapsed<std::chrono::milliseconds, 2>() / 1000.0 \
                   << std::endl; \
     }
 #endif/*STOPWATCH_CHECKER__*/

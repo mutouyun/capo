@@ -5,7 +5,12 @@ CONFIG -= qt
 
 QMAKE_CXXFLAGS += -std=c++11
 
-SOURCES += main.cpp
+CONFIG(release, debug|release){
+    DEFINES += NDEBUG
+}
+
+SOURCES += main.cpp \
+    ../src/thread_local_ptr.cpp
 
 HEADERS += \
     test_type.h \
@@ -39,9 +44,6 @@ HEADERS += \
     ../include/algorithm/sequence.hpp \
     ../include/memory/construct.hpp \
     test_memory.h \
-    ../include/memory/allocator.hpp \
-    ../include/memory/alloc.hpp \
-    ../include/memory/alloc_malloc.hpp \
     ../include/container/deque.hpp \
     ../include/container/forward_list.hpp \
     ../include/container/hash_map.hpp \
@@ -51,4 +53,15 @@ HEADERS += \
     ../include/container/queue.hpp \
     ../include/container/set.hpp \
     ../include/container/stack.hpp \
-    ../include/container/vector.hpp
+    ../include/container/vector.hpp \
+    ../include/memory/allocator_wrapper.hpp \
+    ../include/memory/alloc_standard.hpp \
+    ../include/memory/chunk.hpp \
+    ../include/memory/fixed_pool.hpp \
+    ../include/type/constant_array.hpp \
+    ../include/memory/variable_pool.hpp \
+    ../include/memory/alloc_thread_cache.hpp \
+    ../include/memory/cache_pool.hpp \
+    ../include/thread/thread_wrapper.hpp \
+    ../include/memory/allocator.hpp \
+    ../include/thread/thread_local_ptr.hpp

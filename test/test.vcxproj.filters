@@ -56,6 +56,9 @@
     <ClCompile Include="main.cpp">
       <Filter>test\源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\thread_local_ptr.cpp">
+      <Filter>capo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test_algorithm.h">
@@ -79,13 +82,7 @@
     <ClInclude Include="..\include\finalizer\scope_guard.hpp">
       <Filter>capo\finalizer</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\macro\macro_func.hpp">
-      <Filter>capo\macro</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\macro\macro_pp.hpp">
-      <Filter>capo\macro</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\macro\macro_unused.hpp">
       <Filter>capo\macro</Filter>
     </ClInclude>
     <ClInclude Include="..\include\type\type_list.hpp">
@@ -151,15 +148,6 @@
     <ClInclude Include="test_memory.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\memory\alloc.hpp">
-      <Filter>capo\memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\memory\alloc_malloc.hpp">
-      <Filter>capo\memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\memory\allocator.hpp">
-      <Filter>capo\memory</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\container\deque.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
@@ -189,6 +177,45 @@
     </ClInclude>
     <ClInclude Include="..\include\container\vector.hpp">
       <Filter>capo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\type\constant_array.hpp">
+      <Filter>capo\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory\allocator_wrapper.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory\variable_pool.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\thread\thread_wrapper.hpp">
+      <Filter>capo\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\thread\thread_local_ptr.hpp">
+      <Filter>capo\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pattern\iterator.hpp">
+      <Filter>capo\pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\type\types_to_seq.hpp">
+      <Filter>capo\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\macro\force_inline.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\macro\unused.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\macro\func.hpp">
+      <Filter>capo\macro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory\alloc_concept.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory\standard_alloc.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory\scope_alloc.hpp">
+      <Filter>capo\memory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

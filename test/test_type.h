@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/type/type_name.hpp"
+#include "../include/type/type_name.hpp"
 
 namespace np_test_type_name
 {
@@ -53,7 +53,7 @@ void test_type_name(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/type/type_list.hpp"
+#include "../include/type/type_list.hpp"
 #include <tuple>
 
 namespace np_test_type_list
@@ -341,7 +341,7 @@ void test_type_list(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/type/type_concept.hpp"
+#include "../include/type/type_concept.hpp"
 
 namespace np_test_type_concept
 {
@@ -364,6 +364,7 @@ namespace np_test_type_concept
 
 void test_type_concept(void)
 {
+    TEST_CASE();
     using namespace np_test_type_concept;
     std::cout << "has_foo_type<Foo> ->: " << has_foo_type<Foo>::value << std::endl;
     std::cout << "has_foo_type<Bar> ->: " << has_foo_type<Bar>::value << std::endl;
@@ -373,11 +374,59 @@ void test_type_concept(void)
 
 ////////////////////////////////////////////////////////////////
 
+#include "../include/type/constant_array.hpp"
+
+namespace np_test_constant_array
+{
+    template <int N>
+    struct make_bigger
+         : std::integral_constant<int, (N + 1)>
+    {};
+}
+
+void test_constant_array(void)
+{
+    TEST_CASE();
+    using namespace np_test_constant_array;
+
+    using constant_array = capo::constant_array<int>;
+    using arr1 = constant_array::type<1, 2, 3, 4>;
+    using arr2 = constant_array::assign<4, 0>;
+    using arr3 = constant_array::insert<arr2, 0, -1>;
+    using arr4 = constant_array::foreach<arr3, make_bigger>;
+    using arr5 = constant_array::replace<arr4, 1, 2>;
+    using arr6 = constant_array::remove<arr5, 0>;
+    using arr7 = constant_array::compact<arr6>;
+    using arr8 = constant_array::link<arr1, arr7>;
+    using arr9 = constant_array::reverse<arr8>;
+    auto& xx = constant_array::sort_less<arr9>::value;
+    for (auto i : xx)
+    {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+}
+
+////////////////////////////////////////////////////////////////
+
+#include "../include/type/types_to_seq.hpp"
+
+void test_types_to_seq(void)
+{
+    TEST_CASE();
+
+    std::cout << capo::type_name<capo::types_to_seq<int, long, double>>() << std::endl;
+}
+
+////////////////////////////////////////////////////////////////
+
 void test_type(void)
 {
-    test_type_name();
-    test_type_list();
-    test_type_concept();
+    //test_type_name();
+    //test_type_list();
+    //test_type_concept();
+    //test_constant_array();
+    test_types_to_seq();
 }
 
 ////////////////////////////////////////////////////////////////

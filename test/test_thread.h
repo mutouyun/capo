@@ -3,10 +3,10 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/utility/countof.hpp"
-#include "../src/thread/spin_lock.hpp"
-#include "../src/algorithm/range.hpp"
-#include "../src/pattern/singleton.hpp"
+#include "../include/utility/countof.hpp"
+#include "../include/thread/spin_lock.hpp"
+#include "../include/algorithm/range.hpp"
+#include "../include/pattern/singleton.hpp"
 #include <thread>
 #include <mutex>
 
@@ -39,15 +39,15 @@ void test_spin_lock(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/thread/semaphore.hpp"
-#include "../src/random/random.hpp"
+#include "../include/thread/semaphore.hpp"
+#include "../include/random/random.hpp"
 #include <atomic>
 
 namespace np_test_semaphore
 {
     using namespace capo;
 
-    random<>  rdm(100, 2000);
+    capo::random<> rdm(100, 2000);
     bool      warehouse[10] = { false };
     int       counter = 0;
     spin_lock warehouse_lock, random_lock;
@@ -167,7 +167,7 @@ void test_semaphore(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/thread/waiter.hpp"
+#include "../include/thread/waiter.hpp"
 
 namespace np_test_waiter
 {

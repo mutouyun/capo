@@ -6,7 +6,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/macro/macro_func.hpp"
+#include "../include/macro/func.hpp"
 
 #define TEST_CASE() \
     std::cout << std::endl \
@@ -16,12 +16,12 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "test_type.h"
-#include "test_utility.h"
-#include "test_algorithm.h"
-#include "test_proofing.h"
-#include "test_thread.h"
-#include "test_chrono.h"
+//#include "test_type.h"
+//#include "test_utility.h"
+//#include "test_algorithm.h"
+//#include "test_proofing.h"
+//#include "test_thread.h"
+//#include "test_chrono.h"
 #include "test_memory.h"
 
 ////////////////////////////////////////////////////////////////

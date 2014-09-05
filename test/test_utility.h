@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/utility/countof.hpp"
+#include "../include/utility/countof.hpp"
 
 void test_countof(void)
 {
@@ -16,7 +16,7 @@ void test_countof(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/utility/operator.hpp"
+#include "../include/utility/operator.hpp"
 
 namespace np_test_operator
 {

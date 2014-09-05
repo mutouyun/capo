@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/proofing/printf.hpp"
+#include "../include/proofing/printf.hpp"
 
 void test_printf(void)
 {
@@ -15,7 +15,7 @@ void test_printf(void)
 
 ////////////////////////////////////////////////////////////////
 
-#include "../src/proofing/assert.hpp"
+#include "../include/proofing/assert.hpp"
 
 void test_assert(void)
 {
@@ -48,7 +48,7 @@ void test_assert(void)
 
 void test_proofing(void)
 {
-    test_printf();
+    //test_printf();
     test_assert();
 }
 

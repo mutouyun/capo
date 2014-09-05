@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,14 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>CTP_Nov2013</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>CTP_Nov2013</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -44,9 +44,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4425;4647;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -55,15 +58,18 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <DisableSpecificWarnings>4425;4647;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\thread_local_ptr.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -82,23 +88,31 @@
     <ClInclude Include="..\include\container\stack.hpp" />
     <ClInclude Include="..\include\container\vector.hpp" />
     <ClInclude Include="..\include\finalizer\scope_guard.hpp" />
-    <ClInclude Include="..\include\macro\macro_func.hpp" />
+    <ClInclude Include="..\include\macro\force_inline.hpp" />
+    <ClInclude Include="..\include\macro\func.hpp" />
     <ClInclude Include="..\include\macro\macro_pp.hpp" />
-    <ClInclude Include="..\include\macro\macro_unused.hpp" />
-    <ClInclude Include="..\include\memory\alloc.hpp" />
-    <ClInclude Include="..\include\memory\allocator.hpp" />
-    <ClInclude Include="..\include\memory\alloc_malloc.hpp" />
+    <ClInclude Include="..\include\macro\unused.hpp" />
+    <ClInclude Include="..\include\memory\allocator_wrapper.hpp" />
+    <ClInclude Include="..\include\memory\alloc_concept.hpp" />
+    <ClInclude Include="..\include\memory\scope_alloc.hpp" />
+    <ClInclude Include="..\include\memory\standard_alloc.hpp" />
     <ClInclude Include="..\include\memory\construct.hpp" />
+    <ClInclude Include="..\include\memory\variable_pool.hpp" />
+    <ClInclude Include="..\include\pattern\iterator.hpp" />
     <ClInclude Include="..\include\pattern\singleton.hpp" />
     <ClInclude Include="..\include\proofing\assert.hpp" />
     <ClInclude Include="..\include\proofing\printf.hpp" />
     <ClInclude Include="..\include\random\random.hpp" />
     <ClInclude Include="..\include\thread\semaphore.hpp" />
     <ClInclude Include="..\include\thread\spin_lock.hpp" />
+    <ClInclude Include="..\include\thread\thread_local_ptr.hpp" />
+    <ClInclude Include="..\include\thread\thread_wrapper.hpp" />
     <ClInclude Include="..\include\thread\waiter.hpp" />
+    <ClInclude Include="..\include\type\constant_array.hpp" />
     <ClInclude Include="..\include\type\type_concept.hpp" />
     <ClInclude Include="..\include\type\type_list.hpp" />
     <ClInclude Include="..\include\type\type_name.hpp" />
+    <ClInclude Include="..\include\type\types_to_seq.hpp" />
     <ClInclude Include="..\include\utility\countof.hpp" />
     <ClInclude Include="..\include\utility\inherit.hpp" />
     <ClInclude Include="..\include\utility\make.hpp" />
