@@ -11,44 +11,44 @@ HEADERS += \
     test_type.h \
     test_utility.h \
     test_algorithm.h \
-    ../src/algorithm/max_min.hpp \
-    ../src/macro/macro_func.hpp \
-    ../src/type/type_list.hpp \
-    ../src/type/type_name.hpp \
-    ../src/utility/countof.hpp \
-    ../src/utility/operator.hpp \
-    ../src/macro/macro_pp.hpp \
-    ../src/utility/inherit.hpp \
-    ../src/utility/noncopyable.hpp \
-    ../src/algorithm/range.hpp \
-    ../src/proofing/printf.hpp \
+    ../include/algorithm/max_min.hpp \
+    ../include/macro/macro_func.hpp \
+    ../include/type/type_list.hpp \
+    ../include/type/type_name.hpp \
+    ../include/utility/countof.hpp \
+    ../include/utility/operator.hpp \
+    ../include/macro/macro_pp.hpp \
+    ../include/utility/inherit.hpp \
+    ../include/utility/noncopyable.hpp \
+    ../include/algorithm/range.hpp \
+    ../include/proofing/printf.hpp \
     test_proofing.h \
-    ../src/finalizer/scope_guard.hpp \
-    ../src/proofing/assert.hpp \
-    ../src/macro/macro_unused.hpp \
-    ../src/thread/spin_lock.hpp \
+    ../include/finalizer/scope_guard.hpp \
+    ../include/proofing/assert.hpp \
+    ../include/macro/macro_unused.hpp \
+    ../include/thread/spin_lock.hpp \
     test_thread.h \
-    ../src/thread/semaphore.hpp \
-    ../src/thread/waiter.hpp \
-    ../src/random/random.hpp \
-    ../src/utility/make.hpp \
-    ../src/pattern/singleton.hpp \
-    ../src/chrono/stopwatch.hpp \
+    ../include/thread/semaphore.hpp \
+    ../include/thread/waiter.hpp \
+    ../include/random/random.hpp \
+    ../include/utility/make.hpp \
+    ../include/pattern/singleton.hpp \
+    ../include/chrono/stopwatch.hpp \
     test_chrono.h \
-    ../src/type/type_concept.hpp \
-    ../src/algorithm/sequence.hpp \
-    ../src/memory/construct.hpp \
+    ../include/type/type_concept.hpp \
+    ../include/algorithm/sequence.hpp \
+    ../include/memory/construct.hpp \
     test_memory.h \
-    ../src/memory/allocator.hpp \
-    ../src/memory/alloc.hpp \
-    ../src/memory/alloc_malloc.hpp \
-    ../src/container/deque.hpp \
-    ../src/container/forward_list.hpp \
-    ../src/container/hash_map.hpp \
-    ../src/container/hash_set.hpp \
-    ../src/container/list.hpp \
-    ../src/container/map.hpp \
-    ../src/container/queue.hpp \
-    ../src/container/set.hpp \
-    ../src/container/stack.hpp \
-    ../src/container/vector.hpp
+    ../include/memory/allocator.hpp \
+    ../include/memory/alloc.hpp \
+    ../include/memory/alloc_malloc.hpp \
+    ../include/container/deque.hpp \
+    ../include/container/forward_list.hpp \
+    ../include/container/hash_map.hpp \
+    ../include/container/hash_set.hpp \
+    ../include/container/list.hpp \
+    ../include/container/map.hpp \
+    ../include/container/queue.hpp \
+    ../include/container/set.hpp \
+    ../include/container/stack.hpp \
+    ../include/container/vector.hpp

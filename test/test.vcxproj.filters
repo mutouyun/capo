@@ -70,124 +70,124 @@
     <ClInclude Include="test_utility.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algorithm\max_min.hpp">
+    <ClInclude Include="..\include\algorithm\max_min.hpp">
       <Filter>capo\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algorithm\range.hpp">
+    <ClInclude Include="..\include\algorithm\range.hpp">
       <Filter>capo\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\finalizer\scope_guard.hpp">
+    <ClInclude Include="..\include\finalizer\scope_guard.hpp">
       <Filter>capo\finalizer</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\macro\macro_func.hpp">
+    <ClInclude Include="..\include\macro\macro_func.hpp">
       <Filter>capo\macro</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\macro\macro_pp.hpp">
+    <ClInclude Include="..\include\macro\macro_pp.hpp">
       <Filter>capo\macro</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\macro\macro_unused.hpp">
+    <ClInclude Include="..\include\macro\macro_unused.hpp">
       <Filter>capo\macro</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\type\type_list.hpp">
+    <ClInclude Include="..\include\type\type_list.hpp">
       <Filter>capo\type</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\type\type_name.hpp">
+    <ClInclude Include="..\include\type\type_name.hpp">
       <Filter>capo\type</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\proofing\assert.hpp">
+    <ClInclude Include="..\include\proofing\assert.hpp">
       <Filter>capo\proofing</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\proofing\printf.hpp">
+    <ClInclude Include="..\include\proofing\printf.hpp">
       <Filter>capo\proofing</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utility\countof.hpp">
+    <ClInclude Include="..\include\utility\countof.hpp">
       <Filter>capo\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utility\inherit.hpp">
+    <ClInclude Include="..\include\utility\inherit.hpp">
       <Filter>capo\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utility\noncopyable.hpp">
+    <ClInclude Include="..\include\utility\noncopyable.hpp">
       <Filter>capo\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utility\operator.hpp">
+    <ClInclude Include="..\include\utility\operator.hpp">
       <Filter>capo\utility</Filter>
     </ClInclude>
     <ClInclude Include="test_thread.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\thread\spin_lock.hpp">
+    <ClInclude Include="..\include\thread\spin_lock.hpp">
       <Filter>capo\thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\thread\semaphore.hpp">
+    <ClInclude Include="..\include\thread\semaphore.hpp">
       <Filter>capo\thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\thread\waiter.hpp">
+    <ClInclude Include="..\include\thread\waiter.hpp">
       <Filter>capo\thread</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\random\random.hpp">
+    <ClInclude Include="..\include\random\random.hpp">
       <Filter>capo\random</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\type\type_concept.hpp">
+    <ClInclude Include="..\include\type\type_concept.hpp">
       <Filter>capo\type</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\chrono\stopwatch.hpp">
+    <ClInclude Include="..\include\chrono\stopwatch.hpp">
       <Filter>capo\chrono</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\pattern\singleton.hpp">
+    <ClInclude Include="..\include\pattern\singleton.hpp">
       <Filter>capo\pattern</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\utility\make.hpp">
+    <ClInclude Include="..\include\utility\make.hpp">
       <Filter>capo\utility</Filter>
     </ClInclude>
     <ClInclude Include="test_chrono.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algorithm\sequence.hpp">
+    <ClInclude Include="..\include\algorithm\sequence.hpp">
       <Filter>capo\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\memory\construct.hpp">
+    <ClInclude Include="..\include\memory\construct.hpp">
       <Filter>capo\memory</Filter>
     </ClInclude>
     <ClInclude Include="test_memory.h">
       <Filter>test\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\memory\alloc.hpp">
+    <ClInclude Include="..\include\memory\alloc.hpp">
       <Filter>capo\memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\memory\alloc_malloc.hpp">
+    <ClInclude Include="..\include\memory\alloc_malloc.hpp">
       <Filter>capo\memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\memory\allocator.hpp">
+    <ClInclude Include="..\include\memory\allocator.hpp">
       <Filter>capo\memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\deque.hpp">
+    <ClInclude Include="..\include\container\deque.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\forward_list.hpp">
+    <ClInclude Include="..\include\container\forward_list.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\hash_map.hpp">
+    <ClInclude Include="..\include\container\hash_map.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\hash_set.hpp">
+    <ClInclude Include="..\include\container\hash_set.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\list.hpp">
+    <ClInclude Include="..\include\container\list.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\map.hpp">
+    <ClInclude Include="..\include\container\map.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\queue.hpp">
+    <ClInclude Include="..\include\container\queue.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\set.hpp">
+    <ClInclude Include="..\include\container\set.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\stack.hpp">
+    <ClInclude Include="..\include\container\stack.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\container\vector.hpp">
+    <ClInclude Include="..\include\container\vector.hpp">
       <Filter>capo\container</Filter>
     </ClInclude>
   </ItemGroup>
