@@ -7,21 +7,9 @@ C++标准库的轻量级拓展
 
 ##
 
-    - src  -> 代码目录
-    - test -> 测试目录, 包含: msvc项目文件(test.sln), qtcreator项目文件(test.pro)
-
-##
-
-    > algorithm     ...working      - 算法
-    > chrono        ...working      - 时间操作
-    > finalizer     ...working      - 资源管理
-    > macro         ...working      - 预处理宏定义
-    > pattern       ...working      - 一些通用的模式
-    > proofing      ...working      - 代码防呆（错误预防）
-    > random        ...working      - 便捷的随机数工具
-    > thread        ...working      - 多线程（spin_lock、semaphore、thread_pool、etc...）
-    > type          ...working      - 类型操作
-    > utility       ...working      - 实用小工具
+    - capo -> 所有的公开接口及实现
+    - src  -> 需要编译的代码，及私有接口和实现
+    - test -> 测试用例
 
 ### ToDoList
 
@@ -32,8 +20,9 @@ C++标准库的轻量级拓展
     string.string                   - std::string的功能拓展
     stream                          - 流对象
     proofing.trace                  - 调试输出
-    thread.blocking_queue           - 这个没有什么好说明的。。
+    thread.blocking_queue           - 多线程下的blocking_queue
     thread.thread_pool              - 线程池
     delegate.signal                 - 线程安全、支持多线程异步模式的信号/槽[(?)use message loop]
     finalizer.ref_counter           - 基于引用计数的资源管理基类
     coroutine                       - 协程库
+    ......
