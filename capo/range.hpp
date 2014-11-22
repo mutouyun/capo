@@ -5,11 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_ALGORITHM_RANGE_HPP___
-#define CAPO_ALGORITHM_RANGE_HPP___
+#pragma once
 
-#include "../algorithm/sequence.hpp"
-#include "../proofing/assert.hpp"
+#include "capo/sequence.hpp"
+#include "capo/assert.hpp"
 
 #include <type_traits>  // std::common_type
 #include <stdexcept>    // std::logic_error
@@ -104,5 +103,3 @@ auto range(T&& begin, T&& end, U&& step)
 }
 
 } // namespace capo
-
-#endif // CAPO_ALGORITHM_RANGE_HPP___

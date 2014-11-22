@@ -5,17 +5,14 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_CONTAINER_VECTOR_HPP___
-#define CAPO_CONTAINER_VECTOR_HPP___
+#pragma once
 
-#include "../memory/allocator.hpp"
+#include "capo/alloc.hpp"
 
 #include <vector> // std::vector
 
 namespace capo
 {
-    template <typename T, class AllocatorT = capo::allocator<T>>
+    template <typename T, class AllocatorT = CAPO_ALLOCATOR_<T>>
     using vector = std::vector<T, AllocatorT>;
 }
-
-#endif // CAPO_CONTAINER_VECTOR_HPP___

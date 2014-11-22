@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MEMORY_STANDARD_ALLOC_HPP___
-#define CAPO_MEMORY_STANDARD_ALLOC_HPP___
+#pragma once
 
-#include "../memory/alloc_concept.hpp"
+#include "capo/alloc_concept.hpp"
 
 #include <cstdlib>  // malloc, free, realloc
 #include <new>      // placement new
@@ -29,10 +28,11 @@ struct alloc_malloc
     {
         return (size ? ::malloc(size) : nullptr);
     }
-    static void free(void* p, size_t /*size*/)
+    static void free(void* p)
     {
         if (p != nullptr) ::free(p);
     }
+    static void free(void* p, size_t /*size*/) { free(p); }
 };
 
 struct alloc_new
@@ -46,10 +46,11 @@ struct alloc_new
     {
         return (size ? ::operator new(size, std::nothrow) : nullptr);
     }
-    static void free(void* p, size_t /*size*/)
+    static void free(void* p)
     {
         ::operator delete(p, std::nothrow);
     }
+    static void free(void* p, size_t /*size*/) { free(p); }
 };
 
 struct alloc_std
@@ -85,5 +86,3 @@ struct alloc_std
 
 } // namespace use
 } // namespace capo
-
-#endif // CAPO_MEMORY_STANDARD_ALLOC_HPP___

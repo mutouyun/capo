@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MEMORY_ALLOC_CONCEPT_HPP___
-#define CAPO_MEMORY_ALLOC_CONCEPT_HPP___
+#pragma once
 
 namespace capo {
 
@@ -21,5 +20,3 @@ namespace alloc_concept
 }
 
 } // namespace capo
-
-#endif // CAPO_MEMORY_ALLOC_CONCEPT_HPP___

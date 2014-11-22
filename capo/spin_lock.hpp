@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_THREAD_SPIN_LOCK_HPP___
-#define CAPO_THREAD_SPIN_LOCK_HPP___
+#pragma once
 
 #include <atomic>       // std::atomic_flag, std::atomic_signal_fence
 #include <thread>       // std::this_thread
@@ -113,5 +112,3 @@ public:
 };
 
 } // namespace capo
-
-#endif // CAPO_THREAD_SPIN_LOCK_HPP___

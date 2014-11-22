@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_UTILITY_MAKE_HPP___
-#define CAPO_UTILITY_MAKE_HPP___
+#pragma once
 
 #include <type_traits>  // std::decay
 #include <utility>      // std::forward
@@ -22,5 +21,3 @@ namespace capo
         return return_t<Ret, T...>(std::forward<T>(args)...);
     }
 }
-
-#endif // CAPO_UTILITY_MAKE_HPP___

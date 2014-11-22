@@ -9,11 +9,10 @@
     Copyright by Andrei Alexandrescu and John Torjo, August 01, 2003
 */
 
-#ifndef CAPO_PROOFING_ASSERT_HPP___
-#define CAPO_PROOFING_ASSERT_HPP___
+#pragma once
 
-#include "../proofing/printf.hpp"
-#include "../macro/unused.hpp"
+#include "capo/printf.hpp"
+#include "capo/unused.hpp"
 
 #include <map>          // std::map
 #include <string>       // std::string
@@ -248,8 +247,8 @@ public:
     using impl::handler_t;
     using impl::impl;
 
-    wrapper& CAPO_ASSERT_1___ = (*this);
-    wrapper& CAPO_ASSERT_2___ = (*this);
+    wrapper& CAPO_ASSERT_1__ = (*this);
+    wrapper& CAPO_ASSERT_2__ = (*this);
 
     wrapper& context(const char* file, unsigned line)
     {
@@ -270,8 +269,8 @@ public:
     using impl::handler_t;
     using impl::impl;
 
-    wrapper& CAPO_ASSERT_1___ = (*this);
-    wrapper& CAPO_ASSERT_2___ = (*this);
+    wrapper& CAPO_ASSERT_1__ = (*this);
+    wrapper& CAPO_ASSERT_2__ = (*this);
 
     // Let the compiler can automatically make wrapper<false> invalid
 
@@ -287,35 +286,33 @@ public:
 /// Evaluate assertion
 ////////////////////////////////////////////////////////////////
 
-#define CAPO_ASSERT_1___(x)  CAPO_ASSERT_OP___(x, 2___)
-#define CAPO_ASSERT_2___(x)  CAPO_ASSERT_OP___(x, 1___)
-#define CAPO_ASSERT_OP___(x, next) \
-        CAPO_ASSERT_1___.add(#x, (x)).CAPO_ASSERT_##next
+#define CAPO_ASSERT_1__(X)  CAPO_ASSERT_OP__(X, 2__)
+#define CAPO_ASSERT_2__(X)  CAPO_ASSERT_OP__(X, 1__)
+#define CAPO_ASSERT_OP__(X, next) \
+        CAPO_ASSERT_1__.add(#X, (X)).CAPO_ASSERT_##next
 
-#define CAPO_ENSURE_IMPL___(COND, ...) \
+#define CAPO_ENSURE_IMPL__(COND, ...) \
         const capo::detail_assert::impl& CAPO_UNUSED_ dummy_ = \
-        capo::detail_assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1___
+        capo::detail_assert::wrapper<COND>(#__VA_ARGS__).context(__FILE__, __LINE__).CAPO_ASSERT_1__
 
-#define capo_ensure(...) \
+#define CAPO_ENSURE_(...) \
         if (!!(__VA_ARGS__)) ; \
-        else CAPO_ENSURE_IMPL___(true, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL__(true, __VA_ARGS__)
 
 #ifdef NDEBUG
-#define capo_assert(...) \
+#define CAPO_ASSERT_(...) \
         if (true) ; \
-        else CAPO_ENSURE_IMPL___(false, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL__(false, __VA_ARGS__)
 #else /*!NDEBUG*/
-#define capo_assert(...) capo_ensure(__VA_ARGS__)
+#define CAPO_ASSERT_(...) CAPO_ENSURE_(__VA_ARGS__)
 #endif/*!NDEBUG*/
 
 #ifdef NDEBUG
-#define capo_verify(...) \
+#define CAPO_VERIFY_(...) \
         if (!!(__VA_ARGS__) || true) ; \
-        else CAPO_ENSURE_IMPL___(false, __VA_ARGS__)
+        else CAPO_ENSURE_IMPL__(false, __VA_ARGS__)
 #else
-#define capo_verify(...) capo_assert(__VA_ARGS__)
+#define CAPO_VERIFY_(...) CAPO_ASSERT_(__VA_ARGS__)
 #endif/*NDEBUG*/
 
 } // namespace capo
-
-#endif // CAPO_PROOFING_ASSERT_HPP___

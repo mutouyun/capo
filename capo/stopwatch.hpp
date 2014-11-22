@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_CHRONO_STOPWATCH_HPP___
-#define CAPO_CHRONO_STOPWATCH_HPP___
+#pragma once
 
 #include <chrono>   // std::chrono
 #include <array>    // std::array
@@ -108,5 +107,3 @@ public:
 };
 
 } // namespace capo
-
-#endif // CAPO_CHRONO_STOPWATCH_HPP___

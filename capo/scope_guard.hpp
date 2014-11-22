@@ -5,11 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_FINALIZER_SCOPE_GUARD_HPP___
-#define CAPO_FINALIZER_SCOPE_GUARD_HPP___
+#pragma once
 
-#include "../utility/noncopyable.hpp"
-#include "../macro/unused.hpp"
+#include "capo/noncopyable.hpp"
+#include "capo/unused.hpp"
 
 #include <utility>      // std::forward, std::move
 #include <algorithm>    // std::swap
@@ -63,22 +62,20 @@ public:
     }
 };
 
-#define CAPO_SCOPE_GUARD_VAR__(L) CAPO_UNUSED_ scope_guard_##L##___
-#define CAPO_SCOPE_GUARD__(L)     scope_guard<> CAPO_SCOPE_GUARD_VAR__(L)
+#define CAPO_SCOPE_GUARD_V_(L)  CAPO_UNUSED_ scope_guard_##L##__
+#define CAPO_SCOPE_GUARD_L_(L)  capo::scope_guard<> CAPO_SCOPE_GUARD_V_(L)
 
 /*
     Do things like this:
     -->
-    capo_scope_exit = [ptr]
+    CAPO_SCOPE_GUARD_ = [ptr]
     {
         if (ptr) free(ptr);
     };
 */
 
-#define capo_scope_exit CAPO_SCOPE_GUARD__(__LINE__)
+#define CAPO_SCOPE_GUARD_ CAPO_SCOPE_GUARD_L_(__LINE__)
 
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_FINALIZER_SCOPE_GUARD_HPP___

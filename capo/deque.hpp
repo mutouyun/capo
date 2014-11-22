@@ -5,17 +5,14 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_CONTAINER_DEQUE_HPP___
-#define CAPO_CONTAINER_DEQUE_HPP___
+#pragma once
 
-#include "../memory/allocator.hpp"
+#include "capo/alloc.hpp"
 
 #include <deque> // std::deque
 
 namespace capo
 {
-    template <typename T, class AllocatorT = capo::allocator<T>>
+    template <typename T, class AllocatorT = CAPO_ALLOCATOR_<T>>
     using deque = std::deque<T, AllocatorT>;
 }
-
-#endif // CAPO_CONTAINER_DEQUE_HPP___

@@ -5,17 +5,17 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_TYPE_NAME_HPP___
-#define CAPO_TYPE_NAME_HPP___
+#pragma once
 
-#include "../finalizer/scope_guard.hpp"
+#include "capo/scope_guard.hpp"
 
 #include <typeinfo>     // typeid
 #include <sstream>      // std::ostringstream, std::string
 #include <type_traits>  // std::is_array
 #include <utility>      // std::move
+
 #if defined(__GNUC__)
-#include <cxxabi.h>     // abi::__cxa_demangle
+#   include <cxxabi.h>  // abi::__cxa_demangle
 #endif/*__GNUC__*/
 
 namespace capo {
@@ -162,7 +162,7 @@ struct check
 #   if defined(__GNUC__)
         const char* typeid_name = typeid(T).name();
         char* real_name = abi::__cxa_demangle(typeid_name, nullptr, nullptr, nullptr);
-        capo_scope_exit = [real_name]
+        CAPO_SCOPE_GUARD_ = [real_name]
         {
             if (real_name) ::free(real_name);
         };
@@ -173,12 +173,12 @@ struct check
     }
 };
 
-#define CAPO_CHECK_TYPE__(OPT) \
-    template <typename T, bool IsBase> \
-    struct check<T OPT, IsBase> : check<T, true> \
-    { \
-        using base_t = check<T, true>; \
-        using base_t::out_; \
+#define CAPO_CHECK_TYPE__(OPT)                                 \
+    template <typename T, bool IsBase>                         \
+    struct check<T OPT, IsBase> : check<T, true>               \
+    {                                                          \
+        using base_t = check<T, true>;                         \
+        using base_t::out_;                                    \
         check(const output& out) : base_t(out) { out_(#OPT); } \
     };
 
@@ -195,22 +195,22 @@ CAPO_CHECK_TYPE__(*)
     Arrays
 */
 
-#define CAPO_CHECK_TYPE_ARRAY__(CV_OPT, BOUND_OPT, ...) \
-    template <typename T, bool IsBase __VA_ARGS__> \
+#define CAPO_CHECK_TYPE_ARRAY__(CV_OPT, BOUND_OPT, ...)                                    \
+    template <typename T, bool IsBase __VA_ARGS__>                                         \
     struct check<T CV_OPT [BOUND_OPT], IsBase> : check<T CV_OPT, !std::is_array<T>::value> \
-    { \
-        using base_t = check<T CV_OPT, !std::is_array<T>::value>; \
-        using base_t::out_; \
-    \
-        bound<BOUND_OPT> bound_   = out_; \
-        bracket<IsBase>  bracket_ = out_; \
-    \
-        check(const output& out) : base_t(out) {} \
+    {                                                                                      \
+        using base_t = check<T CV_OPT, !std::is_array<T>::value>;                          \
+        using base_t::out_;                                                                \
+                                                                                           \
+        bound<BOUND_OPT> bound_   = out_;                                                  \
+        bracket<IsBase>  bracket_ = out_;                                                  \
+                                                                                           \
+        check(const output& out) : base_t(out) {}                                          \
     };
 
-#define CAPO_CHECK_TYPE_ARRAY_CV__(BOUND_OPT, ...) \
-    CAPO_CHECK_TYPE_ARRAY__(, BOUND_OPT, ,##__VA_ARGS__) \
-    CAPO_CHECK_TYPE_ARRAY__(const, BOUND_OPT, ,##__VA_ARGS__) \
+#define CAPO_CHECK_TYPE_ARRAY_CV__(BOUND_OPT, ...)               \
+    CAPO_CHECK_TYPE_ARRAY__(, BOUND_OPT, ,##__VA_ARGS__)         \
+    CAPO_CHECK_TYPE_ARRAY__(const, BOUND_OPT, ,##__VA_ARGS__)    \
     CAPO_CHECK_TYPE_ARRAY__(volatile, BOUND_OPT, ,##__VA_ARGS__) \
     CAPO_CHECK_TYPE_ARRAY__(const volatile, BOUND_OPT, ,##__VA_ARGS__)
 
@@ -262,21 +262,21 @@ struct check<T C::*, IsBase> : check<T, true>
     Pointers to member functions
 */
 
-#define CAPO_CHECK_TYPE_MEM_FUNC__(...) \
+#define CAPO_CHECK_TYPE_MEM_FUNC__(...)                           \
     template <typename T, bool IsBase, typename C, typename... P> \
-    struct check<T(C::*)(P...) __VA_ARGS__, IsBase> \
-    { \
-        scope_guard<> at_destruct_cv_; \
-        check<T(P...), true> base_; \
-        output& out_ = base_.out_; \
-    \
-        check(const output& out) \
-            : at_destruct_cv_([this]{ out_(#__VA_ARGS__); }) \
-            , base_(out) \
-        { \
-            check<C> { out_ }; \
-            out_.compact()("::*"); \
-        } \
+    struct check<T(C::*)(P...) __VA_ARGS__, IsBase>               \
+    {                                                             \
+        scope_guard<> at_destruct_cv_;                            \
+        check<T(P...), true> base_;                               \
+        output& out_ = base_.out_;                                \
+                                                                  \
+        check(const output& out)                                  \
+            : at_destruct_cv_([this]{ out_(#__VA_ARGS__); })      \
+            , base_(out)                                          \
+        {                                                         \
+            check<C> { out_ };                                    \
+            out_.compact()("::*");                                \
+        }                                                         \
     };
 
 CAPO_CHECK_TYPE_MEM_FUNC__()
@@ -307,5 +307,3 @@ inline std::string type_name(void)
 }
 
 } // namespace capo
-
-#endif // CAPO_TYPE_NAME_HPP___

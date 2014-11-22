@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MEMORY_SCOPE_ALLOC_HPP___
-#define CAPO_MEMORY_SCOPE_ALLOC_HPP___
+#pragma once
 
-#include "../memory/alloc_concept.hpp"
+#include "capo/alloc_concept.hpp"
 
 #include <cstddef>  // size_t
 
@@ -78,11 +77,10 @@ public:
         return (void*)((void**)(list_ = curr) + 1);
     }
 
+    void free(void* /*p*/) {}
     void free(void* /*p*/, size_t /*size*/) {}
 };
 
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_MEMORY_SCOPE_ALLOC_HPP___

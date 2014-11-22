@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MACRO_UNUSED_HPP___
-#define CAPO_MACRO_UNUSED_HPP___
+#pragma once
 
 ////////////////////////////////////////////////////////////////
 
@@ -23,5 +22,3 @@
 #endif
 
 ////////////////////////////////////////////////////////////////
-
-#endif // CAPO_MACRO_UNUSED_HPP___

@@ -5,20 +5,22 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_UTILITY_NONCOPYABLE_HPP___
-#define CAPO_UTILITY_NONCOPYABLE_HPP___
+#pragma once
 
-namespace capo
+namespace capo {
+
+////////////////////////////////////////////////////////////////
+
+class noncopyable
 {
-    class noncopyable
-    {
-    protected:
-        noncopyable(void) = default;
-       ~noncopyable(void) = default;
-    public:
-        noncopyable(const noncopyable&) = delete;
-        noncopyable& operator=(const noncopyable&) = delete;
-    };
-}
+protected:
+    noncopyable(void) = default;
+    ~noncopyable(void) = default;
+public:
+    noncopyable(const noncopyable&) = delete;
+    noncopyable& operator=(const noncopyable&) = delete;
+};
 
-#endif // CAPO_UTILITY_NONCOPYABLE_HPP___
+////////////////////////////////////////////////////////////////
+
+} // namespace capo

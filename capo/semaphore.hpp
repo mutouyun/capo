@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_THREAD_SEMAPHORE_HPP___
-#define CAPO_THREAD_SEMAPHORE_HPP___
+#pragma once
 
-#include "../utility/make.hpp"
+#include "capo/make.hpp"
 
 #include <mutex>                // std::mutex, std::unique_lock
 #include <condition_variable>   // std::condition_variable
@@ -73,5 +72,3 @@ public:
 };
 
 } // namespace capo
-
-#endif // CAPO_THREAD_SEMAPHORE_HPP___

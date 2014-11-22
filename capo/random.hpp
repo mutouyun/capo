@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_RANDOM_HPP___
-#define CAPO_RANDOM_HPP___
+#pragma once
 
 #include <random>   // std::default_random_engine, std::uniform_int_distribution
 #include <utility>  // std::forward
@@ -51,5 +50,3 @@ public:
 };
 
 } // namespace capo
-
-#endif // CAPO_RANDOM_HPP___

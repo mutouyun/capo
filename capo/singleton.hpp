@@ -5,11 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_PATTERN_SINGLETON_HPP___
-#define CAPO_PATTERN_SINGLETON_HPP___
+#pragma once
 
-#include "../thread/thread_local_ptr.hpp"
-#include "../proofing/assert.hpp"
+#include "capo/thread_local_ptr.hpp"
+#include "capo/assert.hpp"
 
 #include <utility>  // std::forward
 
@@ -77,5 +76,3 @@ inline T& singleton(P&&... args)
 }
 
 } // namespace capo
-
-#endif // CAPO_PATTERN_SINGLETON_HPP___

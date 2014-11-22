@@ -5,23 +5,18 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_THREAD_LOCAL_PTR_HPP___
-#define CAPO_THREAD_LOCAL_PTR_HPP___
+#pragma once
+
+#include "capo/detect_plat.hpp"
 
 #include <utility>      // std::forward
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || \
-    defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || \
-    defined(WINCE) || defined(_WIN32_WCE)
-
-#include <map>          // std::map
-#include <windows.h>    // Tls...
-
-#define CAPO_WIN__
-
-#else /*!WIN*/
-#include <pthread.h>    // pthread_...
-#endif/*!WIN*/
+#if defined(CAPO_OS_WIN_)
+#   include <map>       // std::map
+#   include <windows.h> // Tls...
+#else /*!CAPO_OS_WIN_*/
+#   include <pthread.h> // pthread_...
+#endif/*!CAPO_OS_WIN_*/
 
 #if defined(_MSC_VER)
 #   define CAPO_THREAD_LOCAL_POD_ __declspec(thread)
@@ -31,7 +26,7 @@
 
 namespace capo {
 
-#if defined(CAPO_WIN__)
+#if defined(CAPO_OS_WIN_)
 
 #define CAPO_THREAD_LOCAL_KEY_          DWORD
 #define CAPO_THREAD_LOCAL_CREATE()      TlsAlloc()
@@ -112,7 +107,7 @@ namespace detail_thread_local_ptr
         TlsFree(KEY); \
     } while(false)
 
-#else /*!CAPO_WIN__*/
+#else /*!CAPO_OS_WIN_*/
 
 #define CAPO_THREAD_LOCAL_KEY_                    pthread_key_t
 #define CAPO_THREAD_LOCAL_CREATE(KEY, DESTRUCTOR) pthread_key_create(&KEY, DESTRUCTOR)
@@ -120,7 +115,7 @@ namespace detail_thread_local_ptr
 #define CAPO_THREAD_LOCAL_SET(KEY, PTR)           (pthread_setspecific(KEY, (void*)PTR) == 0)
 #define CAPO_THREAD_LOCAL_GET(KEY)                pthread_getspecific(KEY)
 
-#endif/*!CAPO_WIN__*/
+#endif/*!CAPO_OS_WIN_*/
 
 ////////////////////////////////////////////////////////////////
 /// Thread-local pointer
@@ -183,6 +178,3 @@ public:
 };
 
 } // namespace capo
-
-#undef CAPO_WIN__
-#endif // CAPO_THREAD_LOCAL_PTR_HPP___

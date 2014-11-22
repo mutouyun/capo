@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_TYPE_CONSTANT_ARRAY_HPP___
-#define CAPO_TYPE_CONSTANT_ARRAY_HPP___
+#pragma once
 
-#include "../type/type_list.hpp"
+#include "capo/type_list.hpp"
 
 #include <type_traits> // std::integral_constant
 
@@ -122,5 +121,3 @@ const T constant_array<T>::type_list_<std::integral_constant<T, N>...>::value[si
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_TYPE_CONSTANT_ARRAY_HPP___

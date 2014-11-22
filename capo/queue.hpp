@@ -5,12 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_CONTAINER_QUEUE_HPP___
-#define CAPO_CONTAINER_QUEUE_HPP___
+#pragma once
 
-#include "../memory/allocator.hpp"
-#include "../container/deque.hpp"
-#include "../container/vector.hpp"
+#include "capo/deque.hpp"
+#include "capo/vector.hpp"
 
 #include <queue> // std::queue
 
@@ -23,5 +21,3 @@ namespace capo
               typename CompT = std::less<typename SeqT::value_type>>
     using priority_queue = std::priority_queue<T, SeqT, CompT>;
 }
-
-#endif // CAPO_CONTAINER_QUEUE_HPP___

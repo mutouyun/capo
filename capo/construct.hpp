@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MEMORY_CONSTRUCT_HPP___
-#define CAPO_MEMORY_CONSTRUCT_HPP___
+#pragma once
 
 #include <new>      // placement new
 #include <utility>  // std::forward
@@ -96,5 +95,3 @@ void destruct(void* p)
 }
 
 } // namespace capo
-
-#endif // CAPO_MEMORY_CONSTRUCT_HPP___

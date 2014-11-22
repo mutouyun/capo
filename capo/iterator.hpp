@@ -5,11 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_PATTERN_ITERATOR_HPP___
-#define CAPO_PATTERN_ITERATOR_HPP___
+#pragma once
 
-#include "../type/type_list.hpp"
-#include "../type/types_to_seq.hpp"
+#include "capo/type_list.hpp"
+#include "capo/types_to_seq.hpp"
 
 #include <tuple>    // std::tuple, std::get
 #include <utility>  // std::move
@@ -98,5 +97,3 @@ public:
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_PATTERN_ITERATOR_HPP___

@@ -5,22 +5,19 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_CONTAINER_SET_HPP___
-#define CAPO_CONTAINER_SET_HPP___
+#pragma once
 
-#include "../memory/allocator.hpp"
+#include "capo/alloc.hpp"
 
 #include <set> // std::set
 
 namespace capo
 {
     template <typename T, class CompT = std::less<T>
-                        , class AllocatorT = capo::allocator<T>>
+                        , class AllocatorT = CAPO_ALLOCATOR_<T>>
     using set = std::set<T, CompT, AllocatorT>;
 
     template <typename T, class CompT = std::less<T>
-                        , class AllocatorT = capo::allocator<T>>
+                        , class AllocatorT = CAPO_ALLOCATOR_<T>>
     using multiset = std::multiset<T, CompT, AllocatorT>;
 }
-
-#endif // CAPO_CONTAINER_SET_HPP___

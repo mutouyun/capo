@@ -5,10 +5,11 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_TYPES_TO_SEQ_HPP___
-#define CAPO_TYPES_TO_SEQ_HPP___
+#pragma once
 
 namespace capo {
+
+////////////////////////////////////////////////////////////////
 
 template <int... N>
 struct constant_seq
@@ -53,6 +54,6 @@ namespace detail_list_to_seq
 template <typename TypesT>
 using list_to_seq = typename detail_list_to_seq::impl<TypesT>::type;
 
-} // namespace capo
+////////////////////////////////////////////////////////////////
 
-#endif // CAPO_TYPES_TO_SEQ_HPP___
+} // namespace capo

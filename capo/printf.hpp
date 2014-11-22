@@ -5,10 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_PROOFING_PRINTF_HPP___
-#define CAPO_PROOFING_PRINTF_HPP___
+#pragma once
 
-#include "../type/type_name.hpp"
+#include "capo/detect_plat.hpp"
+#include "capo/type_name.hpp"
 
 #include <iostream>     // std::cout, std::cerr, std::clog
 #include <string>       // std::string
@@ -21,10 +21,8 @@
 #include <cstdio>       // vsnprintf
 #include <cstdarg>      // va_list, va_start, va_end
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || \
-    defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
-#include <windows.h>    // ::OutputDebugStringA
-#define CAPO_OS_WIN__
+#if defined(CAPO_OS_WIN_)
+#   include <windows.h> // ::OutputDebugStringA
 #endif
 
 namespace capo {
@@ -47,9 +45,8 @@ namespace use
     {
         static void out(const std::string& str)
         {
-#       if defined(CAPO_OS_WIN__)
+#       if defined(CAPO_OS_WIN_)
             ::OutputDebugStringA(str.c_str());
-#       undef CAPO_OS_WIN__
 #       endif
             std::cerr << str;
         }
@@ -239,5 +236,3 @@ int printf(const char* fmt, T&&... args)
 }
 
 } // namespace capo
-
-#endif // CAPO_PROOFING_PRINTF_HPP___

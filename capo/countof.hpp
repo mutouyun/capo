@@ -5,15 +5,17 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_UTILITY_COUNTOF_HPP___
-#define CAPO_UTILITY_COUNTOF_HPP___
+#pragma once
 
-#include <cstddef>  // size_t
+#include <cstddef>  // std::size_t
 
-namespace capo
-{
-    template <typename T, size_t N>
-    constexpr size_t countof(const T(&)[N]) { return N; }
-}
+namespace capo {
 
-#endif // CAPO_UTILITY_COUNTOF_HPP___
+////////////////////////////////////////////////////////////////
+
+template <typename T, std::size_t N>
+constexpr std::size_t countof(const T(&)[N]) { return N; }
+
+////////////////////////////////////////////////////////////////
+
+} // namespace capo

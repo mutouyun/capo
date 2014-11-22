@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_MEMORY_ALLOCATOR_WRAPPER_HPP___
-#define CAPO_MEMORY_ALLOCATOR_WRAPPER_HPP___
+#pragma once
 
-#include "../memory/construct.hpp"
+#include "capo/construct.hpp"
 
 #include <utility>  // std::move, std::forward
 #include <new>      // std::bad_alloc
@@ -21,10 +20,10 @@ namespace capo {
 ////////////////////////////////////////////////////////////////
 
 template <typename T, class AllocT>
-class allocator_wrapper
+class allocator
 {
     template <typename U, class AllocU>
-    friend class allocator_wrapper;
+    friend class allocator;
 
     AllocT alloc_;
 
@@ -39,35 +38,35 @@ public:
     typedef AllocT            alloc_type;
 
 public:
-    allocator_wrapper(void) noexcept {}
+    allocator(void) noexcept {}
 
-    allocator_wrapper(const allocator_wrapper<T, AllocT>& rhs) noexcept
+    allocator(const allocator<T, AllocT>& rhs) noexcept
         : alloc_(rhs.alloc_)
     {}
     template <typename U>
-    allocator_wrapper(const allocator_wrapper<U, AllocT>& rhs) noexcept
+    allocator(const allocator<U, AllocT>& rhs) noexcept
         : alloc_(rhs.alloc_)
     {}
 
-    allocator_wrapper(allocator_wrapper<T, AllocT>&& rhs) noexcept
+    allocator(allocator<T, AllocT>&& rhs) noexcept
         : alloc_(std::move(rhs.alloc_))
     {}
     template <typename U>
-    allocator_wrapper(allocator_wrapper<U, AllocT>&& rhs) noexcept
+    allocator(allocator<U, AllocT>&& rhs) noexcept
         : alloc_(std::move(rhs.alloc_))
     {}
 
-    allocator_wrapper(const AllocT& rhs) noexcept
+    allocator(const AllocT& rhs) noexcept
         : alloc_(rhs)
     {}
-    allocator_wrapper(AllocT&& rhs) noexcept
+    allocator(AllocT&& rhs) noexcept
         : alloc_(std::move(rhs))
     {}
 
 public:
     // the other type of std_allocator
     template <typename U>
-    struct rebind { typedef allocator_wrapper<U, AllocT> other; };
+    struct rebind { typedef allocator<U, AllocT> other; };
 
     size_type max_size(void) const noexcept
     { return (static_cast<size_type>(-1) / sizeof(T)); }
@@ -101,7 +100,7 @@ public:
 };
 
 template <class AllocT>
-class allocator_wrapper<void, AllocT>
+class allocator<void, AllocT>
 {
 public:
     typedef void    value_type;
@@ -111,23 +110,21 @@ public:
 #if defined(_MSC_VER) && (_MSC_VER <= 1900)
 /*
     <MSVC 2013> compile error C3757
-    'const capo::allocator_wrapper<T, AllocT> &': type not allowed for 'constexpr' function.
+    'const capo::allocator<T, AllocT> &': type not allowed for 'constexpr' function.
 */
 template <typename T, typename U, class AllocT>
-inline bool operator==(const allocator_wrapper<T, AllocT>&, const allocator_wrapper<U, AllocT>&) noexcept
+inline bool operator==(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
 { return true; }
 template <typename T, typename U, class AllocT>
-inline bool operator!=(const allocator_wrapper<T, AllocT>&, const allocator_wrapper<U, AllocT>&) noexcept
+inline bool operator!=(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
 { return false; }
 #else /*!_MSC_VER*/
 template <typename T, typename U, class AllocT>
-constexpr bool operator==(const allocator_wrapper<T, AllocT>&, const allocator_wrapper<U, AllocT>&) noexcept
+constexpr bool operator==(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
 { return true; }
 template <typename T, typename U, class AllocT>
-constexpr bool operator!=(const allocator_wrapper<T, AllocT>&, const allocator_wrapper<U, AllocT>&) noexcept
+constexpr bool operator!=(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
 { return false; }
 #endif/*!_MSC_VER*/
 
 } // namespace capo
-
-#endif // CAPO_MEMORY_ALLOCATOR_WRAPPER_HPP___

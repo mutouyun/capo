@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="capo">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\thread_local_ptr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="capo\alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\alloc_concept.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\assert.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\constant_array.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\construct.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\countof.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\deque.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\detect_plat.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\file.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\force_inline.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\forward_list.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\func.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\hash_map.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\hash_set.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\inherit.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\iterator.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\list.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\macro_pp.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\make.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\map.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\max_min.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\noncopyable.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\operator.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\pp_func.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\pp_macro.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\printf.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\queue.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\random.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\range.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\scope_alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\scope_guard.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\semaphore.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\sequence.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\set.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\singleton.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\spin_lock.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\stack.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\standard_alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\stopwatch.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\thread_local_ptr.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\thread_wrapper.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\type_concept.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\type_list.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\type_name.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\types_to_seq.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\unused.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\variable_pool.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\vector.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\waiter.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="capo\allocator.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

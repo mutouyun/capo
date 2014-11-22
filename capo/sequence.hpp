@@ -5,11 +5,10 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_ALGORITHM_SEQUENCE_HPP___
-#define CAPO_ALGORITHM_SEQUENCE_HPP___
+#pragma once
 
-#include "../proofing/assert.hpp"
-#include "../pattern/iterator.hpp"
+#include "capo/assert.hpp"
+#include "capo/iterator.hpp"
 
 #include <type_traits>  // std::add_const, std::add_lvalue_reference
 #include <tuple>        // std::tuple, std::tie
@@ -193,5 +192,3 @@ auto sequence(size_t begin, size_t end, U&&... args)
 }
 
 } // namespace capo
-
-#endif // CAPO_ALGORITHM_SEQUENCE_HPP___

@@ -5,10 +5,9 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_THREAD_WRAPPER_HPP___
-#define CAPO_THREAD_WRAPPER_HPP___
+#pragma once
 
-#include "../thread/spin_lock.hpp"
+#include "capo/spin_lock.hpp"
 
 #include <mutex>        // std::lock_guard
 #include <utility>      // std::forward
@@ -55,5 +54,3 @@ public:
 };
 
 } // namespace capo
-
-#endif // CAPO_THREAD_WRAPPER_HPP___

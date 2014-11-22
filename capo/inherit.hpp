@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_UTILITY_INHERIT_HPP___
-#define CAPO_UTILITY_INHERIT_HPP___
+#pragma once
 
 #include <type_traits>  // std::is_class
 
@@ -65,6 +64,6 @@ namespace detail_inherit
 template <typename T, template <typename, typename> class... BasesT>
 using inherit_chain = inherit<typename detail_inherit::chain<T, BasesT...>::type>;
 
-} // namespace capo
+////////////////////////////////////////////////////////////////
 
-#endif // CAPO_UTILITY_INHERIT_HPP___
+} // namespace capo

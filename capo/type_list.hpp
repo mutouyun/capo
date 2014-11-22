@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_TYPE_LIST_HPP___
-#define CAPO_TYPE_LIST_HPP___
+#pragma once
 
 #include <type_traits> // std::integral_constant
 
@@ -543,5 +542,3 @@ using types_sort_if_t = typename types_sort_if<TypesT, If_>::type;
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_TYPE_LIST_HPP___
