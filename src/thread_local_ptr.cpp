@@ -5,11 +5,11 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || \
-    defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || \
-    defined(WINCE) || defined(_WIN32_WCE)
+#include "capo/detect_plat.hpp"
 
-#include "../include/thread/thread_local_ptr.hpp"
+#if defined(CAPO_OS_WIN_)
+
+#include "capo/thread_local_ptr.hpp"
 
 #include <windows.h>
 
@@ -21,7 +21,7 @@ using namespace detail_thread_local_ptr;
 /// Call destructors on thread exit
 ////////////////////////////////////////////////////////////////
 
-void __cdecl onThreadExit(void)
+void onThreadExit(void)
 {
     auto rec = tls_data::records();
     if (rec)
@@ -49,7 +49,7 @@ void NTAPI onTlsCallback(PVOID, DWORD dwReason, PVOID)
 
 #if defined(_MSC_VER)
 
-#if defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+#if defined(CAPO_OS_WIN64_)
 
 #pragma comment(linker, "/INCLUDE:_tls_used")
 #pragma comment(linker, "/INCLUDE:_tls_xl_b__")
@@ -62,7 +62,7 @@ extern "C"
 #   pragma const_seg()
 }
 
-#else /*!WIN64*/
+#else /*!CAPO_OS_WIN64_*/
 
 #pragma comment(linker, "/INCLUDE:__tls_used")
 #pragma comment(linker, "/INCLUDE:__tls_xl_b__")
@@ -74,7 +74,7 @@ extern "C"
 #   pragma data_seg()
 }
 
-#endif/*!WIN64*/
+#endif/*!CAPO_OS_WIN64_*/
 
 #elif defined(__GNUC__)
 
@@ -119,4 +119,4 @@ extern "C" NX_CRTALLOC_(".tls") const IMAGE_TLS_DIRECTORY _tls_used =
 
 } // namespace capo
 
-#endif/*WIN*/
+#endif/*CAPO_OS_WIN_*/

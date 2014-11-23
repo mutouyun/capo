@@ -5,8 +5,7 @@
     Author: mutouyun (http://darkc.at)
 */
 
-#ifndef CAPO_ALGORITHM_MAX_MIN_HPP___
-#define CAPO_ALGORITHM_MAX_MIN_HPP___
+#pragma once
 
 #include <algorithm>    // std::max, std::min
 
@@ -49,5 +48,3 @@ inline const T& min(const T& x, const T& y, const P&... args)
 ////////////////////////////////////////////////////////////////
 
 } // namespace capo
-
-#endif // CAPO_ALGORITHM_MAX_MIN_HPP___
