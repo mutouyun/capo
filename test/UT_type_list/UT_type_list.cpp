@@ -18,7 +18,7 @@ struct is_large : std::integral_constant<bool, (sizeof(T) > sizeof(U))> {};
 
 ////////////////////////////////////////////////////////////////
 
-TEST_METHOD(type_list_at)
+TEST_METHOD(types_at)
 {
     {
         using t_t = types_front_t<types_t>;
@@ -40,7 +40,7 @@ TEST_METHOD(type_list_at)
     }
 }
 
-TEST_METHOD(type_list_link)
+TEST_METHOD(types_link)
 {
     {
         using t_t = types_link_t<void, types_t>;
@@ -61,7 +61,7 @@ TEST_METHOD(type_list_link)
     }
 }
 
-TEST_METHOD(type_list_assign)
+TEST_METHOD(types_assign)
 {
     {
         using t_t = types_assign_t<3, int>;
@@ -83,7 +83,7 @@ TEST_METHOD(type_list_assign)
     }
 }
 
-TEST_METHOD(type_list_insert)
+TEST_METHOD(types_insert)
 {
     {
         using t_t = types_insert_t<types_t, 0, void>;
@@ -109,7 +109,7 @@ TEST_METHOD(type_list_insert)
     }
 }
 
-TEST_METHOD(type_list_erase)
+TEST_METHOD(types_erase)
 {
     {
         using t_t = types_erase_t<types_t, 0>;
@@ -143,13 +143,13 @@ TEST_METHOD(type_list_erase)
     }
 }
 
-TEST_METHOD(type_list_find)
+TEST_METHOD(types_find)
 {
     EXPECT_EQ(3 , (types_find<types_t, long long>::value));
     EXPECT_EQ(-1, (types_find<types_t, void>::value));
 }
 
-TEST_METHOD(type_list_replace)
+TEST_METHOD(types_replace)
 {
     {
         using t_t = types_replace_t<types_t, int, void*&&>;
@@ -162,5 +162,86 @@ TEST_METHOD(type_list_replace)
     {
         using t_t = types_replace_t<types<int, long, int>, int, types<void, void>>;
         EXPECT_EQ((type_name<types<void, void, long, void, void>>()), type_name<t_t>());
+    }
+}
+
+TEST_METHOD(types_remove)
+{
+#if !defined(_MSC_VER)
+    /*
+        <MSVC 2013> **STRANGE**
+        These tests will make TEST_METHOD(types_compact) FAIL.
+    */
+    {
+        using t_t = types_remove_t<types_link_t<types_t, types_t>, int>;
+        EXPECT_EQ((type_name<types<short, unsigned char, long long, float&, const double, long*, 
+                                   short, unsigned char, long long, float&, const double, long*>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_remove_t<types_t, types<int, long*, void>>;
+        EXPECT_EQ((type_name<types<short, unsigned char, long long, float&, const double>>()), type_name<t_t>());
+    }
+#endif
+    {
+        using t_t = types_remove_t<types<int, int, int>, int>;
+        EXPECT_EQ((type_name<types<>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_remove_t<types<void, void, void>, int>;
+        EXPECT_EQ((type_name<types<void, void, void>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_remove_t<types_t, types_t>;
+        EXPECT_EQ((type_name<types<>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_remove_t<types<types<>>, types<>>;
+        EXPECT_EQ((type_name<types<>>()), type_name<t_t>());
+    }
+    {
+        //using t_t = types_remove_t<int, void>;
+    }
+}
+
+TEST_METHOD(types_compact)
+{
+    {
+        using t_t = types_compact_t<types_link_t<types_t, types_t>>;
+        EXPECT_EQ((type_name<types_t>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_compact_t<types<int, int, void, void*, void>>;
+        EXPECT_EQ((type_name<types<int, void, void*>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_compact_t<types<int>>;
+        EXPECT_EQ((type_name<types<int>>()), type_name<t_t>());
+    }
+    {
+        //using t_t = types_compact_t<int>;
+    }
+}
+
+TEST_METHOD(types_reverse)
+{
+    using t_t = types_reverse_t<types_t>;
+    EXPECT_EQ((type_name<types<long*, const double, float&, long long, unsigned char, int, short>>()), type_name<t_t>());
+}
+
+TEST_METHOD(types_select_if)
+{
+    using t_t = types_select_if_t<types_t, is_large>;
+    EXPECT_EQ(type_name<const double>(), type_name<t_t>());
+}
+
+TEST_METHOD(types_sort_if)
+{
+    {
+        using t_t = types_sort_if_t<types_t, is_large>;
+        EXPECT_EQ((type_name<types<const double, long long, long*, float&, int, short, unsigned char>>()), type_name<t_t>());
+    }
+    {
+        using t_t = types_sort_if_t<types<int>, is_large>;
+        EXPECT_EQ((type_name<types<int>>()), type_name<t_t>());
     }
 }
