@@ -167,7 +167,7 @@ TEST_METHOD(types_replace)
 
 TEST_METHOD(types_remove)
 {
-#if !defined(_MSC_VER)
+//#if !defined(_MSC_VER)
     /*
         <MSVC 2013> **STRANGE**
         These tests will make TEST_METHOD(types_compact) FAIL.
@@ -181,7 +181,7 @@ TEST_METHOD(types_remove)
         using t_t = types_remove_t<types_t, types<int, long*, void>>;
         EXPECT_EQ((type_name<types<short, unsigned char, long long, float&, const double>>()), type_name<t_t>());
     }
-#endif
+//#endif/*!defined(_MSC_VER)*/
     {
         using t_t = types_remove_t<types<int, int, int>, int>;
         EXPECT_EQ((type_name<types<>>()), type_name<t_t>());

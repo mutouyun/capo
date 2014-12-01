@@ -1,0 +1,107 @@
+# Compiler, tools and options
+
+WORKPATH = ..
+
+CC = gcc
+CX = g++
+LB = ar
+
+CFLAGS = -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++11
+LFLAGS = -Wl,-s -Wl,-subsystem,console -mthreads
+AFLAGS = -csr
+
+DEFINES =
+INCPATH = -I$(WORKPATH) -I$(WORKPATH)\third
+THIRDLIB =
+
+DEBUG = 0
+BITS = 32
+
+ifeq ($(DEBUG), 0)
+	# release
+	CFLAGS += -O2 -DNDEBUG
+	Configuration = release
+	THIRDLIB = $(WORKPATH)\third\gtest\lib\win32-g++\gtest.a
+else
+	# debug
+	CFLAGS += -g
+	Configuration = debug
+	THIRDLIB = $(WORKPATH)\third\gtest\lib\win32-g++\gtestd.a
+endif
+
+ifeq ($(BITS), 32)
+	# 32-bit
+	CFLAGS += -m32
+	LFLAGS += -m32
+else
+	# 64-bit
+	CFLAGS += -m64
+	LFLAGS += -m64
+endif
+
+# Output directory
+
+OUT = bin\$(Configuration)\$(CC)
+TMP = tmp\$(Configuration)\$(CC)
+
+# Build rules
+
+.PHONY: all clean out tmp_capo tmp_test
+
+all: $(OUT)\capo.a \
+     $(OUT)\UT_main.a \
+     $(OUT)\UT_type_name \
+     $(OUT)\UT_type_list
+
+clean:
+	-rmdir /s /q $(TMP)
+	-rmdir /s /q $(OUT)
+
+out:
+	-mkdir $(OUT)
+
+tmp_capo:
+	-mkdir $(TMP)\capo
+
+tmp_test:
+	-mkdir $(TMP)\UT_main
+	-mkdir $(TMP)\UT_type_name
+	-mkdir $(TMP)\UT_type_list
+
+# Compile capo
+
+$(TMP)\capo\thread_local_ptr.o: $(WORKPATH)\src\thread_local_ptr.cpp | tmp_capo
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)\capo.a: $(TMP)\capo\thread_local_ptr.o | out
+	$(AR) $(AFLAGS) $@ $^
+
+# Compile test
+
+## UT_main
+
+$(TMP)\UT_main\UT_main.o: $(WORKPATH)\test\UT_main\UT_main.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)\UT_main.a: $(TMP)\UT_main\UT_main.o | out
+	$(AR) $(AFLAGS) $@ $^
+
+## UT_type_name
+
+$(TMP)\UT_type_name\UT_type_name.o: $(WORKPATH)\test\UT_type_name\UT_type_name.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)\UT_type_name: $(TMP)\UT_type_name\UT_type_name.o \
+                     $(OUT)\UT_main.a $(OUT)\capo.a \
+                     $(THIRDLIB) | out
+	$(CX) $(LFLAGS) -o $@ $^
+
+## UT_type_list
+
+$(TMP)\UT_type_list\UT_type_list.o: $(WORKPATH)\test\UT_type_list\UT_type_list.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)\UT_type_list: $(TMP)\UT_type_list\UT_type_list.o \
+                     $(OUT)\UT_main.a $(OUT)\capo.a \
+                     $(THIRDLIB) | out
+	$(CX) $(LFLAGS) -o $@ $^

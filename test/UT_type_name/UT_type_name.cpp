@@ -16,7 +16,7 @@ auto func(T&&)->T;
 
 ////////////////////////////////////////////////////////////////
 
-TEST_METHOD(type_name_cv_qualified_compound_types)
+TEST_METHOD(cv_qualified_compound_types)
 {
     std::cout << capo::type_name<const volatile void *>() << std::endl;
     std::cout << capo::type_name<const volatile void *(&)[10]>() << std::endl;
@@ -25,13 +25,13 @@ TEST_METHOD(type_name_cv_qualified_compound_types)
     std::cout << capo::type_name<int(unsigned)>() << std::endl;
 }
 
-TEST_METHOD(type_name_function)
+TEST_METHOD(function)
 {
     std::cout << capo::type_name<int(*)(const int *(*)[3][10], Foo&&, int, unsigned)>() << std::endl;
     std::cout << capo::type_name<char(*(*const)(const int(&)[10]))[10]>() << std::endl;
 }
 
-TEST_METHOD(type_name_type_with_class)
+TEST_METHOD(type_with_class)
 {
     std::cout << capo::type_name<int Foo::* const(&)[]>() << std::endl;
     std::cout << capo::type_name<void(Foo::*)(void)>() << std::endl;
@@ -40,7 +40,7 @@ TEST_METHOD(type_name_type_with_class)
     std::cout << capo::type_name<int (Foo::* const)(int, Foo&&, int) volatile>() << std::endl;
 }
 
-TEST_METHOD(type_name_reference)
+TEST_METHOD(reference)
 {
     std::cout << capo::type_name<decltype(func<Foo>)>() << std::endl;
     std::cout << capo::type_name<decltype(func<Foo&>)>() << std::endl;
