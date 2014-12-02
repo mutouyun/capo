@@ -27,6 +27,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-concept", "..\test\ut-co
 		{0D0420E0-5C76-4F0E-BC54-101D6FB674A9} = {0D0420E0-5C76-4F0E-BC54-101D6FB674A9}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-constant_array", "..\test\ut-constant_array\ut-constant_array.vcxproj", "{370F20D5-FA1B-4F26-8D3B-69D1125990D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0D0420E0-5C76-4F0E-BC54-101D6FB674A9} = {0D0420E0-5C76-4F0E-BC54-101D6FB674A9}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -53,6 +58,10 @@ Global
 		{EA4771E5-C351-4DFE-A7CA-6B33140BF85F}.Debug|Win32.Build.0 = Debug|Win32
 		{EA4771E5-C351-4DFE-A7CA-6B33140BF85F}.Release|Win32.ActiveCfg = Release|Win32
 		{EA4771E5-C351-4DFE-A7CA-6B33140BF85F}.Release|Win32.Build.0 = Release|Win32
+		{370F20D5-FA1B-4F26-8D3B-69D1125990D5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{370F20D5-FA1B-4F26-8D3B-69D1125990D5}.Debug|Win32.Build.0 = Debug|Win32
+		{370F20D5-FA1B-4F26-8D3B-69D1125990D5}.Release|Win32.ActiveCfg = Release|Win32
+		{370F20D5-FA1B-4F26-8D3B-69D1125990D5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,5 +71,6 @@ Global
 		{1012F2A8-C9CA-45C9-80B7-0F4F3BDC3CA2} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 		{E6533F90-CA88-465F-9902-B6F588C55BC8} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 		{EA4771E5-C351-4DFE-A7CA-6B33140BF85F} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
+		{370F20D5-FA1B-4F26-8D3B-69D1125990D5} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 	EndGlobalSection
 EndGlobal

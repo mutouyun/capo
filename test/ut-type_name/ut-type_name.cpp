@@ -12,7 +12,7 @@ class Foo {};
 template <typename T>
 auto func(T&&)->T;
 
-#define TEST_METHOD(TEST_NAME) TEST(UT_type_name, TEST_NAME)
+#define TEST_METHOD(TEST_NAME) TEST(type_name, TEST_NAME)
 
 ////////////////////////////////////////////////////////////////
 

@@ -187,6 +187,24 @@ struct types_link<T, TypesT<U...>>
     using type = TypesT<T, U...>;
 };
 
+template <typename... T, template <typename...> class TypesT>
+struct types_link<TypesT<T...>, types<>>
+{
+    using type = TypesT<T...>;
+};
+
+template <typename... U, template <typename...> class TypesT>
+struct types_link<types<>, TypesT<U...>>
+{
+    using type = TypesT<U...>;
+};
+
+template <>
+struct types_link<types<>, types<>>
+{
+    using type = types<>;
+};
+
 template <typename T, typename U>
 using types_link_t = typename types_link<T, U>::type;
 

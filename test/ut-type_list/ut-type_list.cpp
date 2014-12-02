@@ -14,7 +14,7 @@ using types_t = types<short, int, unsigned char, long long, float&, const double
 template <typename T, typename U>
 struct is_large : std::integral_constant<bool, (sizeof(T) > sizeof(U))> {};
 
-#define TEST_METHOD(TEST_NAME) TEST(UT_type_list, TEST_NAME)
+#define TEST_METHOD(TEST_NAME) TEST(type_list, TEST_NAME)
 
 ////////////////////////////////////////////////////////////////
 

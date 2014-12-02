@@ -49,9 +49,11 @@ TMP = tmp/$(Configuration)/$(CC)
 .PHONY: all clean out tmp_capo tmp_test
 
 all: $(OUT)/capo.a \
-     $(OUT)/UT_main.a \
-     $(OUT)/UT_type_name \
-     $(OUT)/UT_type_list
+     $(OUT)/ut-main.a \
+     $(OUT)/ut-type_name \
+     $(OUT)/ut-type_list \
+     $(OUT)/ut-concept \
+     $(OUT)/ut-constant_array
 
 clean:
 	-rm -r $(TMP)
@@ -64,9 +66,11 @@ tmp_capo:
 	-mkdir -p $(TMP)/capo
 
 tmp_test:
-	-mkdir -p $(TMP)/UT_main
-	-mkdir -p $(TMP)/UT_type_name
-	-mkdir -p $(TMP)/UT_type_list
+	-mkdir -p $(TMP)/ut-main
+	-mkdir -p $(TMP)/ut-type_name
+	-mkdir -p $(TMP)/ut-type_list
+	-mkdir -p $(TMP)/ut-concept
+	-mkdir -p $(TMP)/ut-constant_array
 
 # Compile capo
 
@@ -78,30 +82,50 @@ $(OUT)/capo.a: $(TMP)/capo/thread_local_ptr.o | out
 
 # Compile test
 
-## UT_main
+## ut-main
 
-$(TMP)/UT_main/UT_main.o: $(WORKPATH)/test/UT_main/UT_main.cpp | tmp_test
+$(TMP)/ut-main/ut-main.o: $(WORKPATH)/test/ut-main/ut-main.cpp | tmp_test
 	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
 
-$(OUT)/UT_main.a: $(TMP)/UT_main/UT_main.o | out
+$(OUT)/ut-main.a: $(TMP)/ut-main/ut-main.o | out
 	$(AR) $(AFLAGS) $@ $^
 
-## UT_type_name
+## ut-type_name
 
-$(TMP)/UT_type_name/UT_type_name.o: $(WORKPATH)/test/UT_type_name/UT_type_name.cpp | tmp_test
+$(TMP)/ut-type_name/ut-type_name.o: $(WORKPATH)/test/ut-type_name/ut-type_name.cpp | tmp_test
 	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
 
-$(OUT)/UT_type_name: $(TMP)/UT_type_name/UT_type_name.o \
-                     $(OUT)/UT_main.a $(OUT)/capo.a \
+$(OUT)/ut-type_name: $(TMP)/ut-type_name/ut-type_name.o \
+                     $(OUT)/ut-main.a $(OUT)/capo.a \
                      $(THIRDLIB) | out
 	$(CX) $(LFLAGS) -o $@ $^
 
-## UT_type_list
+## ut-type_list
 
-$(TMP)/UT_type_list/UT_type_list.o: $(WORKPATH)/test/UT_type_list/UT_type_list.cpp | tmp_test
+$(TMP)/ut-type_list/ut-type_list.o: $(WORKPATH)/test/ut-type_list/ut-type_list.cpp | tmp_test
 	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
 
-$(OUT)/UT_type_list: $(TMP)/UT_type_list/UT_type_list.o \
-                     $(OUT)/UT_main.a $(OUT)/capo.a \
+$(OUT)/ut-type_list: $(TMP)/ut-type_list/ut-type_list.o \
+                     $(OUT)/ut-main.a $(OUT)/capo.a \
                      $(THIRDLIB) | out
+	$(CX) $(LFLAGS) -o $@ $^
+
+## ut-concept
+
+$(TMP)/ut-concept/ut-concept.o: $(WORKPATH)/test/ut-concept/ut-concept.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)/ut-concept: $(TMP)/ut-concept/ut-concept.o \
+                   $(OUT)/ut-main.a $(OUT)/capo.a \
+                   $(THIRDLIB) | out
+	$(CX) $(LFLAGS) -o $@ $^
+
+## ut-constant_array
+
+$(TMP)/ut-constant_array/ut-constant_array.o: $(WORKPATH)/test/ut-constant_array/ut-constant_array.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)/ut-constant_array: $(TMP)/ut-constant_array/ut-constant_array.o \
+                          $(OUT)/ut-main.a $(OUT)/capo.a \
+                          $(THIRDLIB) | out
 	$(CX) $(LFLAGS) -o $@ $^
