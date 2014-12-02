@@ -25,4 +25,11 @@
 #define CAPO_PP_JOIN__(X, ...)          CAPO_PP_CAT_(X, __VA_ARGS__)
 #define CAPO_PP_JOIN_(X, ...)           CAPO_PP_JOIN__(X, __VA_ARGS__)
 
+/*
+    Circumvent MSVC __VA_ARGS__ BUG
+*/
+
+#define CAPO_PP_VA_(...)                __VA_ARGS__ /* Try to expand __VA_ARGS__ */
+#define CAPO_PP_PROXY_(F, ...)          CAPO_PP_VA_(F(__VA_ARGS__))
+
 ////////////////////////////////////////////////////////////////

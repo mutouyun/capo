@@ -8,7 +8,7 @@
 #pragma once
 
 #include "capo/inherit.hpp"
-#include "capo/pp_macros.hpp"
+#include "capo/preprocessor.hpp"
 
 #include <utility>  // std::move, std::forward
 
