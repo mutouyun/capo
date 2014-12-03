@@ -83,19 +83,26 @@ include $(BUILD_PATH)/Makefile.Build
 # Targets
 
 output:
-	-$(MK) "$(OUT)"
-	-$(MK) "$(TMP)"
+	@echo Making directorys...
+	@-$(MK) "$(OUT)"
+	@-$(MK) "$(TMP)"
+	@echo Making complete.
+	@echo.
 
 clean:
-	-$(RM) "$(TMP)"
-	-$(RM) "$(OUT)"
+	@echo Cleaning directorys...
+	@-$(RM) "$(TMP)"
+	@-$(RM) "$(OUT)"
+	@echo Clean complete.
 
 distclean:
-	-$(RM) "$(BUILD_PATH)/tmp"
-	-$(RM) "$(BUILD_PATH)/bin"
+	@echo Cleaning directorys...
+	@-$(RM) "$(BUILD_PATH)/tmp"
+	@-$(RM) "$(BUILD_PATH)/bin"
+	@echo Clean complete.
 
 export DEPEND = $(OUT)/ut-main.a $(OUT)/$(PRO_NAME).a
 $(MODULES):
-	$(MAKE) -C $(TESTS_PATH)/$@
+	@$(MAKE) -C $(TESTS_PATH)/$@
 
 .PHONY: all clean
