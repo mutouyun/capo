@@ -70,7 +70,15 @@ SRC_FILES = \
 	$(SRC_PATH)/thread_local_ptr.cpp
 
 MODULES = \
-	ut-main ut-preprocessor ut-type_name ut-type_list ut-concept ut-constant_array ut-types_to_seq
+	ut-main \
+	ut-preprocessor \
+	ut-type_name \
+	ut-type_list \
+	ut-concept \
+	ut-constant_array \
+	ut-types_to_seq \
+	ut-countof \
+	ut-operator
 
 BUILD_RULES = output $(PRO_NAME) $(MODULES)
 include $(BUILD_PATH)/Makefile.Project
