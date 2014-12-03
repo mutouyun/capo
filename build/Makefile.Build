@@ -1,0 +1,20 @@
+# Build rules
+
+all: $(BUILD_RULES)
+
+# Compile
+
+$(OBJ_FILES): $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $<
+
+ifeq ($(BUILD_TYPE), lib)
+
+$(PRO_NAME): $(OBJ_FILES)
+	$(AR) $(AFLAGS) $(OUT)/$@.a $^
+
+else
+
+$(PRO_NAME): $(OBJ_FILES) $(DEPEND)
+	$(CX) $(LFLAGS) -o $(OUT)/$@ $^ $(THIRD_LIB)
+
+endif

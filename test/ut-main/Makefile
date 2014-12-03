@@ -1,10 +1,11 @@
 # Project
 
 PRO_NAME = ut-main
-SRC_FILES = $(SRC_PATH)ut-main.cpp
+SRC_FILES = $(SRC_PATH)/ut-main.cpp
 
-include $(BUILD_PATH)$(SP)Makefile.project
+include $(BUILD_PATH)/Makefile.Project
 
 # Build
 
-include $(BUILD_PATH)$(SP)Makefile.ar
+BUILD_TYPE = lib
+include $(BUILD_PATH)/Makefile.Build

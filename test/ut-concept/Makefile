@@ -1,10 +1,10 @@
 # Project
 
 PRO_NAME = ut-concept
-SRC_FILES = $(SRC_PATH)ut-concept.cpp
+SRC_FILES = $(SRC_PATH)/ut-concept.cpp
 
-include $(BUILD_PATH)$(SP)Makefile.project
+include $(BUILD_PATH)/Makefile.Project
 
 # Build
 
-include $(BUILD_PATH)$(SP)Makefile.bin
+include $(BUILD_PATH)/Makefile.Build
