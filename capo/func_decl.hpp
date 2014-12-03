@@ -9,16 +9,16 @@
 
 ////////////////////////////////////////////////////////////////
 
-#ifdef CAPO_FUNC_NAME_
-#   error "CAPO_FUNC_NAME_ has been defined."
+#ifdef CAPO_FUNC_DECL_
+#   error "CAPO_FUNC_DECL_ has been defined."
 #endif
 
 #if defined(_MSC_VER)
-#   define CAPO_FUNC_NAME_ __FUNCSIG__
+#   define CAPO_FUNC_DECL_ __FUNCSIG__
 #elif defined(__GNUC__)
-#   define CAPO_FUNC_NAME_ __PRETTY_FUNCTION__
+#   define CAPO_FUNC_DECL_ __PRETTY_FUNCTION__
 #else
-#   define CAPO_FUNC_NAME_ __func__
+#   define CAPO_FUNC_DECL_ __func__
 #endif
 
 ////////////////////////////////////////////////////////////////
