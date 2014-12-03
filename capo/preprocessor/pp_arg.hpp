@@ -44,7 +44,7 @@
 #define CAPO_PP_B_20_(...)      CAPO_PP_B_1_(CAPO_PP_B_19_(__VA_ARGS__))
 
 #define CAPO_PP_B_P_(F, ...)    CAPO_PP_VA_(F(__VA_ARGS__))
-#define CAPO_PP_B_(N, ...)      CAPO_PP_B_P_(CAPO_PP_JOIN_(CAPO_PP_B_, N)_, __VA_ARGS__)
+#define CAPO_PP_B_(N, ...)      CAPO_PP_B_P_(CAPO_PP_JOIN_(CAPO_PP_B_, CAPO_PP_JOIN_(N, _)), __VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -81,4 +81,4 @@
 #define CAPO_PP_A_20_(...)      CAPO_PP_A_1_(CAPO_PP_B_19_(__VA_ARGS__))
 
 #define CAPO_PP_A_P_(F, ...)    CAPO_PP_VA_(F(__VA_ARGS__))
-#define CAPO_PP_A_(N, ...)      CAPO_PP_A_P_(CAPO_PP_JOIN_(CAPO_PP_A_, N)_, __VA_ARGS__)
+#define CAPO_PP_A_(N, ...)      CAPO_PP_A_P_(CAPO_PP_JOIN_(CAPO_PP_A_, CAPO_PP_JOIN_(N, _)), __VA_ARGS__)

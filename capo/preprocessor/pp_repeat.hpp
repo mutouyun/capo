@@ -44,7 +44,7 @@
 
 #define CAPO_PP_REPEAT_P_(F, ...)           CAPO_PP_VA_(F(__VA_ARGS__))
 
-#define CAPO_PP_REPEATEX_(N, F1, F2, ...)   CAPO_PP_REPEAT_P_(CAPO_PP_JOIN_(CAPO_PP_REPEAT_, N)_, F1, F2, __VA_ARGS__)
+#define CAPO_PP_REPEATEX_(N, F1, F2, ...)   CAPO_PP_REPEAT_P_(CAPO_PP_JOIN_(CAPO_PP_REPEAT_, CAPO_PP_JOIN_(N, _)), F1, F2, __VA_ARGS__)
 #define CAPO_PP_REPEATEX_MAX_(F1, F2, ...)  CAPO_PP_REPEATEX_(CAPO_PP_MAX_, F1, F2, __VA_ARGS__)
 
 #define CAPO_PP_REPEAT_(N, F, ...)          CAPO_PP_REPEATEX_(N, F, F, __VA_ARGS__)

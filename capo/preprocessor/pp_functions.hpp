@@ -31,13 +31,13 @@
 //////////////////////////////////////////////////////////////////////////
 
 /*
-    CAPO_PP_REV_(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    CAPO_PP_REVERSE_(1, 2, 3, 4, 5, 6, 7, 8, 9)
     -->
     9, 8, 7, 6, 5, 4, 3, 2, 1
 */
 
-#define CAPO_PP_REV_T__(DATA, ...)          __VA_ARGS__, CAPO_PP_A1_(DATA)
-#define CAPO_PP_REV_(...)                   CAPO_PP_NEST_(CAPO_PP_COUNT_(__VA_ARGS__), CAPO_PP_REV_T__, CAPO_PP_VA_, CAPO_PP_B1_, __VA_ARGS__)
+#define CAPO_PP_REVERSE_T__(DATA, ...)      __VA_ARGS__, CAPO_PP_A_1_(DATA)
+#define CAPO_PP_REVERSE_(...)               CAPO_PP_NEST_(CAPO_PP_COUNT_(__VA_ARGS__), CAPO_PP_REVERSE_T__, CAPO_PP_VA_, CAPO_PP_B_1_, __VA_ARGS__)
 
 /*
     CAPO_PP_LIMIT_(3, a, b, c, d, e, f)
@@ -45,8 +45,8 @@
     a, b, c
 */
 
-#define CAPO_PP_LIMIT_T__(DATA, ...)        CAPO_PP_A1_(DATA), __VA_ARGS__
-#define CAPO_PP_LIMIT_(N, ...)              CAPO_PP_NEST_(N, CAPO_PP_LIMIT_T__, CAPO_PP_A1_, CAPO_PP_B1_, __VA_ARGS__)
+#define CAPO_PP_LIMIT_T__(DATA, ...)        CAPO_PP_A_1_(DATA), __VA_ARGS__
+#define CAPO_PP_LIMIT_(N, ...)              CAPO_PP_NEST_(N, CAPO_PP_LIMIT_T__, CAPO_PP_A_1_, CAPO_PP_B_1_, __VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@
 */
 
 #define CAPO_PP_INC_(NUM)                   CAPO_PP_COUNT_(CAPO_PP_CLONE_(NUM, -, ,) , -)
-#define CAPO_PP_DEC_(NUM)                   CAPO_PP_COUNT_(CAPO_PP_B1_(CAPO_PP_CLONE_(NUM, -, ,)))
+#define CAPO_PP_DEC_(NUM)                   CAPO_PP_COUNT_(CAPO_PP_B_1_(CAPO_PP_CLONE_(NUM, -, ,)))
 
 #define CAPO_PP_ADD_(NUM1, NUM2)            CAPO_PP_COUNT_(CAPO_PP_CLONE_(NUM1, -, ,) , CAPO_PP_CLONE_(NUM2, -, ,))
 #define CAPO_PP_SUB_(NUM1, NUM2)            CAPO_PP_COUNT_(CAPO_PP_B_(NUM2, CAPO_PP_CLONE_(NUM1, -, ,)))
@@ -82,8 +82,8 @@
     No
 */
 
-#define CAPO_PP_LESS_NUMBER__(NUM, Y, N)    CAPO_PP_REV_(CAPO_PP_CLONE_(NUM, N, ,) , CAPO_PP_CLONE_(CAPO_PP_REM_(NUM), Y, ,))
-#define CAPO_PP_MORE_NUMBER__(NUM, Y, N)    CAPO_PP_REV_(CAPO_PP_CLONE_(CAPO_PP_DEC_(NUM), Y, ,) , CAPO_PP_CLONE_(CAPO_PP_REM_(NUM), N, ,) , N)
+#define CAPO_PP_LESS_NUMBER__(NUM, Y, N)    CAPO_PP_REVERSE_(CAPO_PP_CLONE_(NUM, N, ,) , CAPO_PP_CLONE_(CAPO_PP_REM_(NUM), Y, ,))
+#define CAPO_PP_MORE_NUMBER__(NUM, Y, N)    CAPO_PP_REVERSE_(CAPO_PP_CLONE_(CAPO_PP_DEC_(NUM), Y, ,) , CAPO_PP_CLONE_(CAPO_PP_REM_(NUM), N, ,) , N)
 
 #define CAPO_PP_LESS_(NUM1, NUM2, Y, N)     CAPO_PP_HELPER_(CAPO_PP_CLONE_(NUM2, -, ,) , CAPO_PP_LESS_NUMBER__(NUM1, Y, N))
 #define CAPO_PP_MORE_(NUM1, NUM2, Y, N)     CAPO_PP_HELPER_(CAPO_PP_CLONE_(NUM2, -, ,) , CAPO_PP_MORE_NUMBER__(NUM1, Y, N))
@@ -97,8 +97,8 @@
     f(c, f(c, f(c, f(c, f(c, f(c, f(c, f(c, f(c, nul)))))))))
 */
 
-#define CAPO_PP_RECUR_1__(DATA, ...)        CAPO_PP_A1_(DATA)(CAPO_PP_B2_(DATA), __VA_ARGS__)
-#define CAPO_PP_RECUR_2__(DATA)             CAPO_PP_A1_(DATA)(CAPO_PP_B2_(DATA), CAPO_PP_A2_(DATA))
+#define CAPO_PP_RECUR_1__(DATA, ...)        CAPO_PP_A_1_(DATA)(CAPO_PP_B_2_(DATA), __VA_ARGS__)
+#define CAPO_PP_RECUR_2__(DATA)             CAPO_PP_A_1_(DATA)(CAPO_PP_B_2_(DATA), CAPO_PP_A_2_(DATA))
 #define CAPO_PP_RECUR_(N, F, NUL, ...)      CAPO_PP_NEST_(N, CAPO_PP_RECUR_1__, CAPO_PP_RECUR_2__, CAPO_PP_VA_, F, NUL, __VA_ARGS__)
 
 /*
@@ -107,11 +107,11 @@
     f(1, f(2, f(3, f(4, f(5, f(6, f(7, f(8, 9))))))))
 */
 
-#define CAPO_PP_ORDER_1__(DATA, ...)        CAPO_PP_A1_(DATA)(CAPO_PP_A2_(DATA), __VA_ARGS__)
-#define CAPO_PP_ORDER_2__(DATA)             CAPO_PP_A1_(DATA)(CAPO_PP_B1_(DATA))
-#define CAPO_PP_ORDER_3__(...)              CAPO_PP_A1_(__VA_ARGS__), CAPO_PP_B2_(__VA_ARGS__)
+#define CAPO_PP_ORDER_1__(DATA, ...)        CAPO_PP_A_1_(DATA)(CAPO_PP_A_2_(DATA), __VA_ARGS__)
+#define CAPO_PP_ORDER_2__(DATA)             CAPO_PP_A_1_(DATA)(CAPO_PP_B_1_(DATA))
+#define CAPO_PP_ORDER_3__(...)              CAPO_PP_A_1_(__VA_ARGS__), CAPO_PP_B_2_(__VA_ARGS__)
 #define CAPO_PP_ORDER_N_(N, F, ...)         CAPO_PP_NEST_(N, CAPO_PP_ORDER_1__, CAPO_PP_ORDER_2__, CAPO_PP_ORDER_3__, F, __VA_ARGS__)
-#define CAPO_PP_ORDER_(F, ...)              CAPO_PP_ORDER_N_(CAPO_PP_COUNT_(CAPO_PP_B1_(__VA_ARGS__)), F, __VA_ARGS__)
+#define CAPO_PP_ORDER_(F, ...)              CAPO_PP_ORDER_N_(CAPO_PP_COUNT_(CAPO_PP_B_1_(__VA_ARGS__)), F, __VA_ARGS__)
 
 /*
     CAPO_PP_CALL_(func, 1, 2, 3, 4, 5, 6, 7)
@@ -126,7 +126,7 @@
 #define CAPO_PP_CALL_1__(F, ...)            CAPO_PP_VA_(CAPO_PP_JOIN_(F, CAPO_PP_COUNT_(__VA_ARGS__))(__VA_ARGS__))
 #define CAPO_PP_CALL_2__(F)                 CAPO_PP_VA_(CAPO_PP_JOIN_(F, 0)())
 #define CAPO_PP_CALL_T__(N)                 CAPO_PP_JOIN_(CAPO_PP_CALL_, CAPO_PP_LESS_(1, N, 1__, 2__))
-#define CAPO_PP_CALL_N_(N, ...)             CAPO_PP_PROXY(CAPO_PP_CALL_T__(N), __VA_ARGS__)
+#define CAPO_PP_CALL_N_(N, ...)             CAPO_PP_PROXY_(CAPO_PP_CALL_T__(N), __VA_ARGS__)
 #define CAPO_PP_CALL_(...)                  CAPO_PP_CALL_N_(CAPO_PP_COUNT_(__VA_ARGS__), __VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
@@ -137,10 +137,10 @@
     int par1 , char par2 , long par3 , double par4
 */
 
-#define CAPO_PP_PARAM_1__(N, ...)           CAPO_PP_A1_(CAPO_PP_B_(N, __VA_ARGS__)) CAPO_PP_JOIN_(CAPO_PP_A1_(__VA_ARGS__), N)
+#define CAPO_PP_PARAM_1__(N, ...)           CAPO_PP_A_1_(CAPO_PP_B_(N, __VA_ARGS__)) CAPO_PP_JOIN_(CAPO_PP_A_1_(__VA_ARGS__), N)
 #define CAPO_PP_PARAM_2__(N, ...)           , CAPO_PP_PARAM_1__(N, __VA_ARGS__)
 #define CAPO_PP_PARAM_(...) \
-    CAPO_PP_REPEATEX_(CAPO_PP_COUNT_(CAPO_PP_B1_(__VA_ARGS__)), CAPO_PP_PARAM_1__, CAPO_PP_PARAM_2__, __VA_ARGS__)
+    CAPO_PP_REPEATEX_(CAPO_PP_COUNT_(CAPO_PP_B_1_(__VA_ARGS__)), CAPO_PP_PARAM_1__, CAPO_PP_PARAM_2__, __VA_ARGS__)
 
 /*
     CAPO_PP_TYPE_1_(3, T)

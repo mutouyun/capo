@@ -42,5 +42,5 @@
 */
 
 #define CAPO_PP_MULT_P_(F, ...)     CAPO_PP_VA_(F(__VA_ARGS__))
-#define CAPO_PP_MULT_(N, F)         CAPO_PP_MULT_P_(CAPO_PP_JOIN_(CAPO_PP_MULT_, N)_, F)
+#define CAPO_PP_MULT_(N, F)         CAPO_PP_MULT_P_(CAPO_PP_JOIN_(CAPO_PP_MULT_, CAPO_PP_JOIN_(N, _)), F)
 #define CAPO_PP_MULT_MAX_(F)        CAPO_PP_MULT_(CAPO_PP_MAX_, F)

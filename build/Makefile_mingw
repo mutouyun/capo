@@ -54,7 +54,8 @@ all: $(OUT)\capo.a \
      $(OUT)\ut-type_list \
      $(OUT)\ut-concept \
      $(OUT)\ut-constant_array \
-     $(OUT)\ut-types_to_seq
+     $(OUT)\ut-types_to_seq \
+     $(OUT)\ut-preprocessor
 
 clean:
 	-rmdir /s /q $(TMP)
@@ -73,6 +74,7 @@ tmp_test:
 	-mkdir $(TMP)\ut-concept
 	-mkdir $(TMP)\ut-constant_array
 	-mkdir $(TMP)\ut-types_to_seq
+	-mkdir $(TMP)\ut-preprocessor
 
 # Compile capo
 
@@ -138,6 +140,16 @@ $(TMP)\ut-types_to_seq\ut-types_to_seq.o: $(WORKPATH)\test\ut-types_to_seq\ut-ty
 	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
 
 $(OUT)\ut-types_to_seq: $(TMP)\ut-types_to_seq\ut-types_to_seq.o \
+                        $(OUT)\ut-main.a $(OUT)\capo.a \
+                        $(THIRDLIB) | out
+	$(CX) $(LFLAGS) -o $@ $^
+
+## ut-preprocessor
+
+$(TMP)\ut-preprocessor\ut-preprocessor.o: $(WORKPATH)\test\ut-preprocessor\ut-preprocessor.cpp | tmp_test
+	$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $^
+
+$(OUT)\ut-preprocessor: $(TMP)\ut-preprocessor\ut-preprocessor.o \
                         $(OUT)\ut-main.a $(OUT)\capo.a \
                         $(THIRDLIB) | out
 	$(CX) $(LFLAGS) -o $@ $^

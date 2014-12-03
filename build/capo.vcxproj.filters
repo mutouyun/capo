@@ -9,6 +9,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="capo\preprocessor">
+      <UniqueIdentifier>{8ccd5a63-66ff-4c9d-8a47-14b0000b52ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\thread_local_ptr.cpp">
@@ -22,7 +25,13 @@
     <ClInclude Include="..\capo\alloc_concept.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\allocator.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
     <ClInclude Include="..\capo\assert.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\concept.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\constant_array.hpp">
@@ -49,9 +58,6 @@
     <ClInclude Include="..\capo\forward_list.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\func.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\hash_map.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -65,9 +71,6 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\list.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\macro_pp.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\make.hpp">
@@ -85,10 +88,7 @@
     <ClInclude Include="..\capo\operator.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\pp_func.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\pp_macro.hpp">
+    <ClInclude Include="..\capo\preprocessor.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\printf.hpp">
@@ -139,9 +139,6 @@
     <ClInclude Include="..\capo\thread_wrapper.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\type_concept.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\type_list.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -163,7 +160,28 @@
     <ClInclude Include="..\capo\waiter.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\allocator.hpp">
+    <ClInclude Include="..\capo\preprocessor\pp_arg.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_count.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_functions.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_macros.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_mult.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_nest.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\preprocessor\pp_repeat.hpp">
+      <Filter>capo\preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\func_decl.hpp">
       <Filter>capo</Filter>
     </ClInclude>
   </ItemGroup>
