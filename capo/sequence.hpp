@@ -37,7 +37,7 @@ struct arithmetic
 
     template <typename T> static void at(T& a1, size_t n)
     {
-        capo_assert(n);
+        CAPO_ASSERT_(n);
         a1 += D * (n - 1);
     }
 };
@@ -58,12 +58,12 @@ struct geometric
 
     template <typename T> static void at(T& a1, size_t n)
     {
-        capo_assert(n);
-        a1 *= power(Q, n - 1);
+        CAPO_ASSERT_(n);
+        a1 *= power<T>(Q, n - 1);
     }
 
 private:
-    static int power(int x, size_t n)
+    template <typename T> static T power(int x, size_t n)
     {
         if (n == 0) return 1;
         if (x == 0 || x == 1) return x;
@@ -161,7 +161,7 @@ public:
         , cur_end_  (end)
         , state_    (std::forward<U>(args)...)
     {
-        capo_ensure(cur_begin_ < cur_end_)(cur_begin_)(cur_end_)
+        CAPO_ENSURE_(cur_begin_ < cur_end_)(cur_begin_)(cur_end_)
             .except(std::logic_error("End index must be greater than begin index."));
     }
 

@@ -53,7 +53,7 @@ public:
 
     void push(head_t* curr)
     {
-        capo_assert(curr);
+        CAPO_ASSERT_(curr);
         if (curr->free_ >= check_size())
         {
             curr->next_ = root_;
@@ -117,7 +117,7 @@ private:
 
     head_t* alloc_head(size_t size)
     {
-        capo_assert(size > HeadSize)(size);
+        CAPO_ASSERT_(size > HeadSize)(size);
 
         if (cache_.check_size() >= size)
             return cache_.pop();
@@ -135,7 +135,7 @@ private:
 
     void free_head(head_t* curr)
     {
-        capo_assert(curr);
+        CAPO_ASSERT_(curr);
         if (father_)
             father_->cache_.push(curr);
         else
@@ -215,12 +215,12 @@ public:
         // To remove self from father-child chain
         if (father_)
         {
-            capo_assert(father_->child_ == this);
+            CAPO_ASSERT_(father_->child_ == this);
             father_->child_ = child_;
         }
         if (child_)
         {
-            capo_assert(child_->father_ == this);
+            CAPO_ASSERT_(child_->father_ == this);
             child_->father_ = father_;
         }
     }
@@ -258,7 +258,7 @@ public:
     void* alloc(size_t size, size_t alignment = alignof(std::max_align_t))
 #endif/*!__GNUC__*/
     {
-        capo_assert(!(alignment & (alignment - 1)))(alignment);
+        CAPO_ASSERT_(!(alignment & (alignment - 1)))(alignment);
 
         if (remain() < size)
         {

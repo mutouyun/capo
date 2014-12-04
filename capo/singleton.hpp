@@ -56,7 +56,7 @@ public:
         static thread_local_ptr<T> tls_ptr;
         T* pi = tls_ptr;
         if (!pi) pi = tls_ptr = new T(std::forward<P>(args)...);
-        capo_assert(pi);
+        CAPO_ASSERT_(pi);
         return (*pi);
     }
 };

@@ -48,13 +48,13 @@ private:
     {
         if (step_val > 0)
         {
-            capo_ensure(begin_val < end_val)
+            CAPO_ENSURE_(begin_val < end_val)
                 .except(std::logic_error("End value must be greater than begin value."));
         }
         else
         if (step_val < 0)
         {
-            capo_ensure(begin_val > end_val)
+            CAPO_ENSURE_(begin_val > end_val)
                 .except(std::logic_error("End value must be less than begin value."));
         }
 
