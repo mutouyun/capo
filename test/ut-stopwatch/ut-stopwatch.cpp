@@ -1,11 +1,13 @@
-#ifndef TEST_CHRONO_H
-#define TEST_CHRONO_H
+
+#include "gtest/gtest.h"
+
+#include "capo/stopwatch.hpp"
+
+#include <iostream>
+#include <iomanip>
+#include <thread>
 
 ////////////////////////////////////////////////////////////////
-
-#include "../include/chrono/stopwatch.hpp"
-#include <thread>
-#include <iomanip>
 
 #ifndef STOPWATCH_CHECKER__
 #define STOPWATCH_CHECKER__(OP) \
@@ -24,10 +26,12 @@
     }
 #endif/*STOPWATCH_CHECKER__*/
 
-void test_stopwatch(void)
-{
-    TEST_CASE();
+#define TEST_METHOD(TEST_NAME) TEST(stopwatch, TEST_NAME)
 
+////////////////////////////////////////////////////////////////
+
+TEST_METHOD(stopwatch)
+{
     std::cout.setf(std::ios::fixed);
     std::cout << std::setiosflags(std::ios_base::showpoint);
 
@@ -46,15 +50,6 @@ void test_stopwatch(void)
     std::cout.unsetf(std::ios::fixed);
 }
 
+////////////////////////////////////////////////////////////////
+
 #undef STOPWATCH_CHECKER__
-
-////////////////////////////////////////////////////////////////
-
-void test_chrono(void)
-{
-    test_stopwatch();
-}
-
-////////////////////////////////////////////////////////////////
-
-#endif // TEST_CHRONO_H
