@@ -4,4 +4,4 @@ SRC_PATH ?= .
 OBJ_PATH ?= $(TMP)
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC_FILES))
 
-BUILD_RULES ?= $(PRO_NAME)
+BUILD_RULES ?= begin $(PRO_NAME)

@@ -43,8 +43,8 @@ public:
     using size_type = typename base_t::size_type;
 
 private:
-    template <typename T, typename U>
-    size_type get_adjusted_count(T&& begin_val, T&& end_val, U&& step_val) const
+    template <typename T_, typename U_>
+    size_type get_adjusted_count(T_&& begin_val, T_&& end_val, U_&& step_val) const
     {
         if (step_val > 0)
         {
@@ -64,13 +64,13 @@ private:
     }
 
 public:
-    template <typename T, typename U>
-    impl(T&& begin_val, T&& end_val, U&& step_val)
-        : base_t(0, get_adjusted_count(std::forward<T>(begin_val),
-                                       std::forward<T>(end_val),
-                                       std::forward<U>(step_val)),
-                 std::forward<T>(begin_val),
-                 std::forward<U>(step_val))
+    template <typename T_, typename U_>
+    impl(T_&& begin_val, T_&& end_val, U_&& step_val)
+        : base_t(0, get_adjusted_count(std::forward<T_>(begin_val),
+                                       std::forward<T_>(end_val),
+                                       std::forward<U_>(step_val)),
+                 std::forward<T_>(begin_val),
+                 std::forward<U_>(step_val))
     {}
 };
 

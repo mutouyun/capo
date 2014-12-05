@@ -8,18 +8,20 @@ export CFLAGS = -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++11
 export LFLAGS = -Wl,-s
 export AFLAGS = -csr
 
-os = linux
-debug = 0
-bits = 32
-
 # Check os
 
+os    = linux
+debug = 0
+bits  = 32
+
 ifeq ($(os), win)
+	# windows
 	LFLAGS += -Wl,-subsystem,console -mthreads
 	MK = mkdir
 	RM = rmdir /s /q
 	LIB_DIR = $(os)$(bits)-$(CX)
 else
+	# linux or others
 	LFLAGS += -pthread
 	MK = mkdir -p
 	RM = rm -r
@@ -28,12 +30,12 @@ endif
 
 # Define workspace
 
-export WORK_PATH = $(CURDIR)/..
+export WORK_PATH  = $(CURDIR)/..
 export BUILD_PATH = $(CURDIR)
 export THIRD_PATH = $(WORK_PATH)/third
-export THIRD_LIB =
+export THIRD_LIB  =
 export TESTS_PATH = $(WORK_PATH)/test
-export INCPATH = -I$(WORK_PATH) -I$(THIRD_PATH)
+export INCPATH    = -I$(WORK_PATH) -I$(THIRD_PATH)
 
 ifeq ($(debug), 0)
 	# release
@@ -70,25 +72,22 @@ SRC_FILES = \
 	$(SRC_PATH)/thread_local_ptr.cpp
 
 MODULES = \
-	ut-main \
-	ut-preprocessor \
-	ut-type_name \
-	ut-type_list \
-	ut-concept \
-	ut-constant_array \
-	ut-types_to_seq \
-	ut-countof \
-	ut-operator \
-	ut-max_min \
-	ut-sequence
+	ut-main ut-preprocessor ut-type_name ut-type_list \
+	ut-concept ut-constant_array ut-types_to_seq ut-countof \
+	ut-operator ut-max_min ut-sequence ut-range
 
-BUILD_RULES = output $(PRO_NAME) $(MODULES)
+BUILD_RULES = $(PRO_NAME) $(MODULES)
 include $(BUILD_PATH)/Makefile.Project
 
 # Build
 
-BUILD_TYPE = lib
+BUILD_TYPE    = lib
+DEPEND_TARGET = output begin
 include $(BUILD_PATH)/Makefile.Build
+
+export DEPEND = $(OUT)/ut-main.a $(OUT)/$(PRO_NAME).a
+$(MODULES): output
+	@$(MAKE) -C $(TESTS_PATH)/$@
 
 # Targets
 
@@ -111,8 +110,6 @@ distclean:
 	@-$(RM) "$(BUILD_PATH)/bin"
 	@echo Clean complete.
 
-export DEPEND = $(OUT)/ut-main.a $(OUT)/$(PRO_NAME).a
-$(MODULES):
-	@$(MAKE) -C $(TESTS_PATH)/$@
+# PHONY
 
-.PHONY: all clean
+.PHONY: all clean distclean

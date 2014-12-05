@@ -1,35 +1,28 @@
 # Build rules
 
-all: build_begin $(BUILD_RULES) build_end
+all: $(BUILD_RULES)
 
-# Compile
-
-$(OBJ_FILES): $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-	@echo Compiling $<...
-	@$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $<
-
-ifeq ($(BUILD_TYPE), lib)
-
-$(PRO_NAME): $(OBJ_FILES)
-	@echo Linking $@.a...
-	@$(AR) $(AFLAGS) $(OUT)/$@.a $^
-
-else
-
-$(PRO_NAME): $(OBJ_FILES) $(DEPEND)
-	@echo Linking $@...
-	@$(CX) $(LFLAGS) -o $(OUT)/$@ $^ $(THIRD_LIB)
-
-endif
-
-build_begin:
+begin:
 	@echo.
 	@echo ================================
 	@echo  - Building: $(PRO_NAME)...
 	@echo ================================
 	@echo.
 
-build_end:
+# Compile
+
+$(OBJ_FILES): $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(INC_FILES) $(DEPEND_TARGET)
+	@echo Compiling $<...
+	@$(CX) $(CFLAGS) -o $@ $(INCPATH) -c $<
+
+$(PRO_NAME): $(OBJ_FILES) $(DEPEND)
+ifeq ($(BUILD_TYPE), lib)
+	@echo Linking $@.a...
+	@$(AR) $(AFLAGS) $(OUT)/$@.a $^
+else
+	@echo Linking $@...
+	@$(CX) $(LFLAGS) -o $(OUT)/$@ $^ $(THIRD_LIB)
+endif
 	@echo.
 	@echo  - Building complete: $(PRO_NAME).
 	@echo.
