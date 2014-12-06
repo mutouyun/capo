@@ -33,31 +33,22 @@ namespace capo {
 
 namespace use
 {
-    struct std_cout
+    inline static void std_cout(const std::string& str)
     {
-        static void out(const std::string& str)
-        {
-            std::cout << str;
-        }
+        std::cout << str;
+    }
+
+    inline static void std_cerr(const std::string& str)
+    {
+#   if defined(CAPO_OS_WIN_)
+        ::OutputDebugStringA(str.c_str());
+#   endif
+        std::cerr << str;
     };
 
-    struct std_cerr
+    inline static void std_clog(const std::string& str)
     {
-        static void out(const std::string& str)
-        {
-#       if defined(CAPO_OS_WIN_)
-            ::OutputDebugStringA(str.c_str());
-#       endif
-            std::cerr << str;
-        }
-    };
-
-    struct std_clog
-    {
-        static void out(const std::string& str)
-        {
-            std::clog << str;
-        }
+        std::clog << str;
     };
 }
 
@@ -205,8 +196,8 @@ namespace detail_printf
         enforce("Too few format specifiers");
     }
 
-    template <class PolicyT>
-    int output(const char* fmt, ...)
+    template <typename F>
+    int output(F&& call_out, const char* fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
@@ -216,7 +207,7 @@ namespace detail_printf
         buf.resize(n);
         n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
         if (n <= 0) goto exit_printf;
-        PolicyT::out(buf);
+        call_out(buf);
     exit_printf:
         va_end(args);
         return n;
@@ -227,12 +218,12 @@ namespace detail_printf
 /// Print formatted data to standard stream
 ////////////////////////////////////////////////////////////////
 
-template <class PolicyT = capo::use::std_cout, typename... T>
-int printf(const char* fmt, T&&... args)
+template <typename F, typename... T>
+int printf(F&& call_out, const char* fmt, T&&... args)
 {
     if (!fmt) return 0;
     detail_printf::check(fmt, std::forward<T>(args)...);
-    return detail_printf::output<PolicyT>(fmt, std::forward<T>(args)...);
+    return detail_printf::output(std::forward<F>(call_out), fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo
