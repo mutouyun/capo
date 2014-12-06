@@ -1,11 +1,11 @@
 
-#include <iostream>
-
 #include "gtest/gtest.h"
 
 #include "capo/constant_array.hpp"
 #include "capo/type_name.hpp"
 #include "capo/countof.hpp"
+
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////
 

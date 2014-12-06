@@ -53,6 +53,11 @@ public:
     template <typename... P>
     static T& instance(P&&... args)
     {
+        /*
+            Did not use thread_local, cause thread_local's performance is unfavorable.
+            See: https://gcc.gnu.org/gcc-4.8/changes.html#cxx
+                 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55812
+        */
         static thread_local_ptr<T> tls_ptr;
         T* pi = tls_ptr;
         if (!pi) pi = tls_ptr = new T(std::forward<P>(args)...);

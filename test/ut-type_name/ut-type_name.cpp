@@ -1,9 +1,9 @@
 
-#include <iostream>
-
 #include "gtest/gtest.h"
 
 #include "capo/type_name.hpp"
+
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////
 

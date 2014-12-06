@@ -93,7 +93,7 @@ public:
         {
             pt.second = pt.first = now - (pt.second - pt.first);
         }
-        is_stopped_  = false;
+        is_stopped_ = false;
     }
 
     void stop(void)
@@ -102,7 +102,7 @@ public:
         {
             pt.second = pt.first;
         }
-        is_stopped_  = true;
+        is_stopped_ = true;
     }
 };
 

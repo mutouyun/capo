@@ -29,7 +29,7 @@ TEST_METHOD(sequence)
 
 TEST_METHOD(fibonacci)
 {
-    static const int fb[] =
+    static const unsigned int fb[] =
     {
         0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 
         55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181
@@ -37,7 +37,7 @@ TEST_METHOD(fibonacci)
 
     for (size_t i = 0; i < capo::countof(fb); ++i)
     {
-        unsigned long long x = 0, y = 1;
+        unsigned int x = 0, y = 1;
         capo::use::fibonacci::at(x, y, i);
         EXPECT_EQ(fb[i], x) << "At index: " << i;
     }
