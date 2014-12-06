@@ -57,6 +57,9 @@ public:
             Did not use thread_local, cause thread_local's performance is unfavorable.
             See: https://gcc.gnu.org/gcc-4.8/changes.html#cxx
                  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55812
+
+            And the construction on first usage/destruction on thread exit does not work properly.
+            See: https://connect.microsoft.com/VisualStudio/Feedback/Details/955546
         */
         static thread_local_ptr<T> tls_ptr;
         T* pi = tls_ptr;
