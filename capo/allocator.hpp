@@ -8,6 +8,7 @@
 #pragma once
 
 #include "capo/construct.hpp"
+#include "capo/standard_alloc.hpp"
 
 #include <utility>  // std::move, std::forward
 #include <new>      // std::bad_alloc
@@ -19,13 +20,11 @@ namespace capo {
 /// The wrapper class for capo's allocator
 ////////////////////////////////////////////////////////////////
 
-template <typename T, class AllocT>
-class allocator
+template <typename T, class AllocP>
+class allocator_wrapper
 {
     template <typename U, class AllocU>
-    friend class allocator;
-
-    AllocT alloc_;
+    friend class allocator_wrapper;
 
 public:
     // type definitions
@@ -35,38 +34,41 @@ public:
     typedef value_type&       reference;
     typedef const value_type& const_reference;
     typedef size_t            size_type;
-    typedef AllocT            alloc_type;
+    typedef AllocP            alloc_policy;
+
+private:
+    alloc_policy alloc_;
 
 public:
-    allocator(void) noexcept {}
+    allocator_wrapper(void) noexcept {}
 
-    allocator(const allocator<T, AllocT>& rhs) noexcept
+    allocator_wrapper(const allocator_wrapper<T, AllocP>& rhs) noexcept
         : alloc_(rhs.alloc_)
     {}
     template <typename U>
-    allocator(const allocator<U, AllocT>& rhs) noexcept
+    allocator_wrapper(const allocator_wrapper<U, AllocP>& rhs) noexcept
         : alloc_(rhs.alloc_)
     {}
 
-    allocator(allocator<T, AllocT>&& rhs) noexcept
+    allocator_wrapper(allocator_wrapper<T, AllocP>&& rhs) noexcept
         : alloc_(std::move(rhs.alloc_))
     {}
     template <typename U>
-    allocator(allocator<U, AllocT>&& rhs) noexcept
+    allocator_wrapper(allocator_wrapper<U, AllocP>&& rhs) noexcept
         : alloc_(std::move(rhs.alloc_))
     {}
 
-    allocator(const AllocT& rhs) noexcept
+    allocator_wrapper(const AllocP& rhs) noexcept
         : alloc_(rhs)
     {}
-    allocator(AllocT&& rhs) noexcept
+    allocator_wrapper(AllocP&& rhs) noexcept
         : alloc_(std::move(rhs))
     {}
 
 public:
     // the other type of std_allocator
     template <typename U>
-    struct rebind { typedef allocator<U, AllocT> other; };
+    struct rebind { typedef allocator_wrapper<U, AllocP> other; };
 
     size_type max_size(void) const noexcept
     { return (static_cast<size_type>(-1) / sizeof(T)); }
@@ -99,32 +101,43 @@ public:
     }
 };
 
-template <class AllocT>
-class allocator<void, AllocT>
+template <class AllocP>
+class allocator_wrapper<void, AllocP>
 {
 public:
     typedef void    value_type;
-    typedef AllocT  alloc_type;
+    typedef AllocP  alloc_policy;
 };
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1900)
 /*
     <MSVC 2013> compile error C3757
-    'const capo::allocator<T, AllocT> &': type not allowed for 'constexpr' function.
+    'const capo::allocator_wrapper<T, AllocP> &': type not allowed for 'constexpr' function.
 */
-template <typename T, typename U, class AllocT>
-inline bool operator==(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
+template <typename T, typename U, class AllocP>
+inline bool operator==(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
 { return true; }
-template <typename T, typename U, class AllocT>
-inline bool operator!=(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
+template <typename T, typename U, class AllocP>
+inline bool operator!=(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
 { return false; }
 #else /*!_MSC_VER*/
-template <typename T, typename U, class AllocT>
-constexpr bool operator==(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
+template <typename T, typename U, class AllocP>
+constexpr bool operator==(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
 { return true; }
-template <typename T, typename U, class AllocT>
-constexpr bool operator!=(const allocator<T, AllocT>&, const allocator<U, AllocT>&) noexcept
+template <typename T, typename U, class AllocP>
+constexpr bool operator!=(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
 { return false; }
 #endif/*!_MSC_VER*/
+
+////////////////////////////////////////////////////////////////
+/// The capo's allocator
+////////////////////////////////////////////////////////////////
+
+#if !defined(CAPO_ALLOCATOR_POLICY_)
+#   define CAPO_ALLOCATOR_POLICY_ capo::use::alloc_malloc
+#endif/*!CAPO_ALLOCATOR_POLICY_*/
+
+template <typename T>
+using allocator = allocator_wrapper<T, CAPO_ALLOCATOR_POLICY_>;
 
 } // namespace capo

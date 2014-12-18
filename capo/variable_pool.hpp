@@ -78,16 +78,16 @@ public:
 /// Variable-size blocks allocation
 ////////////////////////////////////////////////////////////////
 
-#ifndef CAPO_VARIABLE_POOL_CHUNKSIZE_
-#define CAPO_VARIABLE_POOL_CHUNKSIZE_ (sizeof(void*) << 10) /* 4K */
-#endif
+#if !defined(CAPO_VARIABLE_POOL_CHUNKSIZE_)
+#   define CAPO_VARIABLE_POOL_CHUNKSIZE_ (sizeof(void*) << 10) /* 4K */
+#endif/*!CAPO_VARIABLE_POOL_CHUNKSIZE_*/
 
-template <class AllocT, size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_>
+template <class AllocP, size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_>
 class variable_pool
 {
 public:
     enum { AllocType = alloc_concept::RegionAlloc };
-    using alloc_type = AllocT;
+    using alloc_policy = AllocP;
 
 private:
     using head_t = detail_variable_pool::head_t;
@@ -96,7 +96,7 @@ private:
     variable_pool* child_  = nullptr;
     detail_variable_pool::cache cache_;
 
-    alloc_type alloc_;
+    alloc_policy alloc_;
 
     char* head_;
     char* tail_;

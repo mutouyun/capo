@@ -17,23 +17,23 @@ namespace capo {
 /// Scope allocation -- The destructor will release all memory blocks.
 ////////////////////////////////////////////////////////////////
 
-template <class AllocT>
+template <class AllocP>
 class scope_alloc
 {
 public:
     enum { AllocType = alloc_concept::RegionAlloc };
-    using alloc_type = AllocT;
+    using alloc_policy = AllocP;
 
 private:
-    alloc_type alloc_;
-    void*      list_;
+    alloc_policy alloc_;
+    void*        list_;
 
 public:
     scope_alloc(void)
         : list_(nullptr)
     {}
 
-    scope_alloc(const alloc_type& r_alc)
+    scope_alloc(const alloc_policy& r_alc)
         : alloc_(r_alc)
         , list_(nullptr)
     {}
