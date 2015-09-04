@@ -184,5 +184,11 @@
     <ClInclude Include="..\capo\func_decl.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\type_traits.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\output.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

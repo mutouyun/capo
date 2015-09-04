@@ -18,7 +18,7 @@
 TEST_METHOD(std_cout)
 {
     char c = 'A';
-    capo::printf(capo::use::std_cout, "1234567%s%c\n", " ", c);
+    capo::printf(std::cout, "1234567%s%c\n", " ", c);
 }
 
 TEST_METHOD(sprintf)

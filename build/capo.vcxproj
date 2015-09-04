@@ -13,18 +13,19 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA5326DF-EB5D-4877-B2EA-DC7F0D57F484}</ProjectGuid>
     <RootNamespace>capo</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -100,6 +101,7 @@
     <ClInclude Include="..\capo\max_min.hpp" />
     <ClInclude Include="..\capo\noncopyable.hpp" />
     <ClInclude Include="..\capo\operator.hpp" />
+    <ClInclude Include="..\capo\output.hpp" />
     <ClInclude Include="..\capo\preprocessor.hpp" />
     <ClInclude Include="..\capo\preprocessor\pp_arg.hpp" />
     <ClInclude Include="..\capo\preprocessor\pp_count.hpp" />
@@ -127,6 +129,7 @@
     <ClInclude Include="..\capo\types_to_seq.hpp" />
     <ClInclude Include="..\capo\type_list.hpp" />
     <ClInclude Include="..\capo\type_name.hpp" />
+    <ClInclude Include="..\capo\type_traits.hpp" />
     <ClInclude Include="..\capo\unused.hpp" />
     <ClInclude Include="..\capo\variable_pool.hpp" />
     <ClInclude Include="..\capo\vector.hpp" />

@@ -9,48 +9,15 @@
 
 #include "capo/detect_plat.hpp"
 #include "capo/type_name.hpp"
+#include "capo/output.hpp"
 
-#include <iostream>     // std::cout, std::cerr, std::clog
 #include <string>       // std::string
 #include <stdexcept>    // std::invalid_argument
-#include <type_traits>  // std::is_convertible, std::decay
 #include <utility>      // std::forward, std::move
 #include <cstdint>      // intmax_t, uintmax_t
 #include <cstddef>      // size_t, ptrdiff_t
-#include <cwchar>       // wint_t
-#include <cstdio>       // vsnprintf
-#include <cstdarg>      // va_list, va_start, va_end
-
-#if defined(CAPO_OS_WIN_)
-#   include <windows.h> // ::OutputDebugStringA
-#endif
 
 namespace capo {
-
-////////////////////////////////////////////////////////////////
-/// Define standard stream policies
-////////////////////////////////////////////////////////////////
-
-namespace use
-{
-    inline static void std_cout(const std::string& str)
-    {
-        std::cout << str;
-    }
-
-    inline static void std_cerr(const std::string& str)
-    {
-#   if defined(CAPO_OS_WIN_)
-        ::OutputDebugStringA(str.c_str());
-#   endif
-        std::cerr << str;
-    };
-
-    inline static void std_clog(const std::string& str)
-    {
-        std::clog << str;
-    };
-}
 
 ////////////////////////////////////////////////////////////////
 /// Perpare for type-safe printf
@@ -195,35 +162,18 @@ namespace detail_printf
         }
         enforce("Too few format specifiers");
     }
-
-    template <typename F>
-    int output(F&& call_out, const char* fmt, ...)
-    {
-        va_list args;
-        va_start(args, fmt);
-        std::string buf;
-        int n = ::vsnprintf(NULL, 0, fmt, args);
-        if (n <= 0) goto exit_printf;
-        buf.resize(n);
-        n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
-        if (n <= 0) goto exit_printf;
-        call_out(buf);
-    exit_printf:
-        va_end(args);
-        return n;
-    }
 }
 
 ////////////////////////////////////////////////////////////////
-/// Print formatted data to standard stream
+/// Print formatted data to output stream
 ////////////////////////////////////////////////////////////////
 
 template <typename F, typename... T>
-int printf(F&& call_out, const char* fmt, T&&... args)
+int printf(F&& out, const char* fmt, T&&... args)
 {
-    if (!fmt) return 0;
+    if (fmt == nullptr) return 0;
     detail_printf::check(fmt, std::forward<T>(args)...);
-    return detail_printf::output(std::forward<F>(call_out), fmt, std::forward<T>(args)...);
+    return detail_output::output(std::forward<F>(out), fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo
