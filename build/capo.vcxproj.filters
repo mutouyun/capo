@@ -190,5 +190,8 @@
     <ClInclude Include="..\capo\output.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\signal.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
