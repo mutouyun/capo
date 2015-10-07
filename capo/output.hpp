@@ -8,9 +8,11 @@
 #pragma once
 
 #include "capo/type_traits.hpp"
+#include "capo/printf.hpp"
 
-#include <cstdio>       // vsnprintf
-#include <cstdarg>      // va_list, va_start, va_end
+#include <cstddef>      // std::size_t
+#include <string>       // std::string
+#include <utility>      // std::forward
 
 namespace capo {
 
@@ -35,8 +37,8 @@ template <> struct pf<unsigned long     > { static const char* val(void) { retur
 template <> struct pf<long long         > { static const char* val(void) { return "lld"; } };
 template <> struct pf<unsigned long long> { static const char* val(void) { return "llu"; } };
 template <> struct pf<float             > { static const char* val(void) { return "f"  ; } };
-template <> struct pf<double            > { static const char* val(void) { return "g"  ; } };
-template <> struct pf<long double       > { static const char* val(void) { return "Lg" ; } };
+template <> struct pf<double            > { static const char* val(void) { return "f"  ; } };
+template <> struct pf<long double       > { static const char* val(void) { return "Lf" ; } };
 template <> struct pf<char*             > { static const char* val(void) { return "s"  ; } };
 template <> struct pf<wchar_t*          > { static const char* val(void) { return "ls" ; } };
 template <> struct pf<void*             > { static const char* val(void) { return "p"  ; } };
@@ -46,36 +48,72 @@ template <size_t N> struct pf<char[N]         > : pf<char*   > {};
 template <size_t N> struct pf<unsigned char[N]> : pf<char*   > {};
 template <size_t N> struct pf<wchar_t[N]      > : pf<wchar_t*> {};
 
-template <typename F> typename std::enable_if<capo::is_closure<F>::value>::type 
-    do_out(F&& out, const std::string& buf)
+template <std::size_t N = 0>
+void replace_placeholders(std::string& /*fmt*/)
 {
-    out(buf);
+    // Do Nothing.
 }
 
-template <typename F> typename std::enable_if<!capo::is_closure<F>::value>::type
-    do_out(F&& out, const std::string& buf)
+template <std::size_t N = 0, typename A, typename... T>
+void replace_placeholders(std::string& fmt, const A& a, T&&... args)
 {
-    out << buf;
+    using rep_t = typename std::remove_volatile<A>::type;
+    std::string phstr = '{' + std::to_string(N);
+    std::size_t found = 0;
+    do
+    {
+    next_loop:
+        found = fmt.find(phstr.c_str(), found);
+        if (found == std::string::npos)
+            break;
+        else
+        {
+            if (found > 0)
+            {
+                if (fmt[found - 1] == '\\')
+                {
+                    found += phstr.size();
+                    goto next_loop;
+                }
+            }
+            std::size_t start = found + phstr.size();
+            std::string buf("%");
+            auto buf_out = [&buf](const std::string& str)
+            {
+                buf = std::move(str);
+            };
+            switch (fmt[start])
+            {
+            case '}':
+                {
+                    buf += pf<rep_t>::val();
+                    capo::printf(buf_out, buf.c_str(), a);
+                    fmt.replace(found, phstr.size() + 1, buf);
+                }
+                break;
+            case ':':
+                {
+                    start += 1;
+                    std::size_t brac = fmt.find('}', start);
+                    if (brac == std::string::npos || fmt[brac - 1] == '\\')
+                    {
+                        found = start;
+                        goto next_loop;
+                    }
+                    std::string cfg = fmt.substr(start, brac - start);
+                    buf += cfg + pf<rep_t>::val();
+                    capo::printf(buf_out, buf.c_str(), a);
+                    fmt.replace(found, brac - found + 1, buf);
+                }
+                break;
+            default:
+                found = start;
+                goto next_loop;
+            }
+        }
+    } while (true);
+    replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
 }
-
-template <typename F>
-int output(F&& out, const char* fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    std::string buf;
-    int n = ::vsnprintf(NULL, 0, fmt, args);
-    if (n <= 0) goto exit_output;
-    buf.resize(n);
-    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
-    if (n <= 0) goto exit_output;
-    do_out(out, buf);
-exit_output:
-    va_end(args);
-    return n;
-}
-
-
 
 } // namespace detail_output
 
@@ -84,8 +122,11 @@ exit_output:
 ////////////////////////////////////////////////////////////////
 
 template <typename F, typename... T>
-int output(F&& out, const char* fmt, T&&... args)
+void output(F&& out, const char* fmt, T&&... args)
 {
+    std::string buf(fmt);
+    detail_output::replace_placeholders(buf, std::forward<T>(args)...);
+    detail_printf::do_out(std::forward<F>(out), buf);
 }
 
 } // namespace capo

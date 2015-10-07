@@ -14,13 +14,14 @@ namespace capo {
 template <typename T>
 struct underlying : std::remove_cv<typename std::remove_reference<T>::type> {};
 
-struct is_functor_checker_
+struct is_functor_
 {
     template <typename T> static std::true_type  check(decltype(&T::operator())*);
     template <typename T> static std::false_type check(...);
 };
+
 template <typename T>
-struct is_functor : decltype(is_functor_checker_::check<T>(nullptr)) {};
+struct is_functor : decltype(is_functor_::check<T>(nullptr)) {};
 
 template <typename T, bool = std::is_function<typename std::remove_pointer<T>::type>::value || is_functor<T>::value>
 struct is_closure_;
