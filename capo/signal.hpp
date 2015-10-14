@@ -7,9 +7,10 @@
 
 #pragma once
 
+#include "capo/vector.hpp"
+
 #include <type_traits>  // std::remove_reference
 #include <utility>      // std::forward
-#include <vector>       // std::vector
 #include <cstddef>      // size_t
 
 namespace capo {
@@ -87,7 +88,7 @@ template <typename R, typename... P>
 class signal_b<R(P...)>
 {
 protected:
-    std::vector<slot<R, P...>*> slots_;
+    capo::vector<slot<R, P...>*> slots_;
 
 public:
     template <typename C, typename F>

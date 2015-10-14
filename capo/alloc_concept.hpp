@@ -15,7 +15,8 @@ namespace alloc_concept
     {
         StaticAlloc,
         ObjectAlloc,
-        RegionAlloc
+        RegionAlloc,
+        GCAlloc
     };
 }
 

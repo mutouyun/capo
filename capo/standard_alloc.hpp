@@ -9,9 +9,9 @@
 
 #include "capo/alloc_concept.hpp"
 
-#include <cstdlib>  // malloc, free, realloc
 #include <new>      // placement new
 #include <memory>   // std::allocator
+#include <cstdlib>  // malloc, free, realloc
 #include <cstddef>  // size_t
 
 namespace capo {

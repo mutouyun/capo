@@ -8,8 +8,11 @@
 #pragma once
 
 #include "capo/alloc_concept.hpp"
+#include "capo/construct.hpp"
 
-#include <cstddef>  // size_t
+#include <functional>   // std::function
+#include <utility>      // std::forward
+#include <cstddef>      // size_t
 
 namespace capo {
 
@@ -21,39 +24,40 @@ template <class AllocP>
 class scope_alloc
 {
 public:
-    enum { AllocType = alloc_concept::RegionAlloc };
+    enum { AllocType = alloc_concept::GCAlloc };
     using alloc_policy = AllocP;
 
 private:
     alloc_policy alloc_;
-    void*        list_;
+
+    struct block
+    {
+        block* next_;
+        std::function<void()> destructor_;
+    } * list_ = nullptr;
 
 public:
-    scope_alloc(void)
-        : list_(nullptr)
-    {}
+    scope_alloc(void) = default;
 
     scope_alloc(const alloc_policy& r_alc)
         : alloc_(r_alc)
-        , list_(nullptr)
     {}
 
     scope_alloc(const scope_alloc& rhs)
         : alloc_(rhs.alloc_)
-        , list_(nullptr)
     {}
 
-    ~scope_alloc(void) { clear(); }
+    virtual ~scope_alloc(void) { clear(); }
 
 public:
     size_t remain(void) const
     {
         size_t c = 0;
-        void* curr = list_;
+        block* curr = list_;
         while (curr != nullptr)
         {
             ++c;
-            curr = *(void**)curr;
+            curr = curr->next_;
         }
         return c;
     }
@@ -62,8 +66,10 @@ public:
     {
         while (list_ != nullptr)
         {
-            void* curr = list_;
-            list_ = *(void**)list_;
+            block* curr = list_;
+            list_ = list_->next_;
+            if (curr->destructor_) curr->destructor_();
+            capo::destruct(curr);
             alloc_.free(curr);
         }
         // Now list_ is nullptr.
@@ -72,9 +78,28 @@ public:
 
     void* alloc(size_t size)
     {
-        void* curr = alloc_.alloc(sizeof(void*) + size);
-        (*(void**)curr) = list_;
-        return (void*)((void**)(list_ = curr) + 1);
+        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + size));
+        curr->next_ = list_;
+        return ((list_ = curr) + 1);
+    }
+
+    template <typename F>
+    void* alloc(size_t size, F&& destructor)
+    {
+        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + size));
+        curr->next_ = list_;
+        curr->destructor_ = std::forward<F>(destructor);
+        return ((list_ = curr) + 1);
+    }
+
+    template <typename T, typename... P>
+    T* alloc(P&&... args)
+    {
+        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + sizeof(T)));
+        curr->next_ = list_;
+        T* p = capo::construct<T>((list_ = curr) + 1, std::forward<P>(args)...);
+        curr->destructor_ = [p]{ capo::destruct(p); };
+        return p;
     }
 
     void free(void* /*p*/) {}

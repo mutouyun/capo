@@ -76,7 +76,8 @@ MODULES = \
 	ut-concept ut-constant_array ut-types_to_seq ut-countof \
 	ut-operator ut-max_min ut-sequence ut-range \
 	ut-stopwatch ut-printf ut-assert ut-spin_lock \
-	ut-semaphore ut-waiter ut-construct ut-signal
+	ut-semaphore ut-waiter ut-construct ut-signal \
+	ut-memory
 
 BUILD_RULES = $(PRO_NAME) $(MODULES)
 include $(BUILD_PATH)/Makefile.Project

@@ -12,7 +12,7 @@
 #include "capo/allocator.hpp"
 
 #include <type_traits>  // std::enable_if
-#include <cstddef>      // std::size_t
+#include <cstddef>      // size_t
 
 namespace capo {
 
@@ -24,7 +24,7 @@ namespace detail_alloc {
 
 ////////////////////////////////////////////////////////////////
 
-CAPO_CONCEPT_MEMBER_FUNCTION_(size_of, std::size_t(C::*)(void) const);
+CAPO_CONCEPT_MEMBER_FUNCTION_(size_of, size_t (C::*)(void) const);
 
 ////////////////////////////////////////////////////////////////
 

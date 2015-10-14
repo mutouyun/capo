@@ -19,15 +19,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\capo\alloc.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\alloc_concept.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\allocator.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\assert.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -35,9 +26,6 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\constant_array.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\construct.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\countof.hpp">
@@ -103,9 +91,6 @@
     <ClInclude Include="..\capo\range.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\scope_alloc.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\scope_guard.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -127,9 +112,6 @@
     <ClInclude Include="..\capo\stack.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\standard_alloc.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\stopwatch.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -149,9 +131,6 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\unused.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\variable_pool.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\vector.hpp">
@@ -191,6 +170,27 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\signal.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\allocator.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\scope_alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\alloc_concept.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\construct.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\standard_alloc.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\variable_pool.hpp">
       <Filter>capo</Filter>
     </ClInclude>
   </ItemGroup>

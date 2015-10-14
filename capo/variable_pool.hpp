@@ -8,7 +8,6 @@
 #pragma once
 
 #include "capo/alloc_concept.hpp"
-#include "capo/allocator.hpp"
 #include "capo/assert.hpp"
 
 #include <utility>  // std::move
