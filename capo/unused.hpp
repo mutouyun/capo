@@ -14,7 +14,7 @@
 #endif
 
 #if defined(_MSC_VER)
-#   define CAPO_UNUSED_ __pragma(warning(suppress:4100))
+#   define CAPO_UNUSED_ __pragma(warning(suppress: 4100 4101))
 #elif defined(__GNUC__)
 #   define CAPO_UNUSED_ __attribute__((__unused__))
 #else

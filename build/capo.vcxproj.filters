@@ -172,9 +172,6 @@
     <ClInclude Include="..\capo\signal.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\alloc.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\allocator.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -191,6 +188,9 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\variable_pool.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\fixed_pool.hpp">
       <Filter>capo</Filter>
     </ClInclude>
   </ItemGroup>

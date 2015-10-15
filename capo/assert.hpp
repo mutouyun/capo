@@ -142,7 +142,7 @@ public:
     // default assert handler
     static void assert_handler(context_t& context)
     {
-        capo::printf(capo::use::std_cerr, context.what());
+        capo::printf(std::cerr, context.what());
         if (context.level_ == context_t::LevelAbort) ::abort();
     }
 

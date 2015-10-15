@@ -82,7 +82,7 @@ public:
 #endif/*!CAPO_VARIABLE_POOL_CHUNKSIZE_*/
 
 template <class AllocP, size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_>
-class variable_pool
+class variable_pool final
 {
 public:
     enum { AllocType = alloc_concept::RegionAlloc };

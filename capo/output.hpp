@@ -44,9 +44,13 @@ template <> struct pf<wchar_t*          > { static const char* val(void) { retur
 template <> struct pf<void*             > { static const char* val(void) { return "p"  ; } };
 template <> struct pf<unsigned char*    > : pf<char*> {};
 
-template <size_t N> struct pf<char[N]         > : pf<char*   > {};
-template <size_t N> struct pf<unsigned char[N]> : pf<char*   > {};
-template <size_t N> struct pf<wchar_t[N]      > : pf<wchar_t*> {};
+template <typename T          > struct pf<const T*           > : pf<T*  > {};
+template <typename T          > struct pf<volatile T*        > : pf<T*  > {};
+template <typename T          > struct pf<const volatile T*  > : pf<T*  > {};
+template <typename T, size_t N> struct pf<T[N]               > : pf<T*  > {};
+template <typename T, size_t N> struct pf<const T[N]         > : pf<T[N]> {};
+template <typename T, size_t N> struct pf<volatile T[N]      > : pf<T[N]> {};
+template <typename T, size_t N> struct pf<const volatile T[N]> : pf<T[N]> {};
 
 template <std::size_t N = 0>
 void replace_placeholders(std::string& /*fmt*/)
@@ -55,9 +59,9 @@ void replace_placeholders(std::string& /*fmt*/)
 }
 
 template <std::size_t N = 0, typename A, typename... T>
-void replace_placeholders(std::string& fmt, const A& a, T&&... args)
+void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 {
-    using rep_t = typename std::remove_volatile<A>::type;
+    using rep_t = typename std::decay<A>::type;
     std::string phstr = '{' + std::to_string(N);
     std::size_t found = 0;
     do
@@ -87,7 +91,7 @@ void replace_placeholders(std::string& fmt, const A& a, T&&... args)
             case '}':
                 {
                     buf += pf<rep_t>::val();
-                    capo::printf(buf_out, buf.c_str(), a);
+                    capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
                     fmt.replace(found, phstr.size() + 1, buf);
                 }
                 break;
@@ -102,7 +106,7 @@ void replace_placeholders(std::string& fmt, const A& a, T&&... args)
                     }
                     std::string cfg = fmt.substr(start, brac - start);
                     buf += cfg + pf<rep_t>::val();
-                    capo::printf(buf_out, buf.c_str(), a);
+                    capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
                     fmt.replace(found, brac - found + 1, buf);
                 }
                 break;

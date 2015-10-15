@@ -9,6 +9,7 @@
 
 #include "capo/alloc_concept.hpp"
 #include "capo/construct.hpp"
+#include "capo/noncopyable.hpp"
 
 #include <functional>   // std::function
 #include <utility>      // std::forward
@@ -21,7 +22,7 @@ namespace capo {
 ////////////////////////////////////////////////////////////////
 
 template <class AllocP>
-class scope_alloc
+class scope_alloc final : capo::noncopyable
 {
 public:
     enum { AllocType = alloc_concept::GCAlloc };
@@ -37,17 +38,7 @@ private:
     } * list_ = nullptr;
 
 public:
-    scope_alloc(void) = default;
-
-    scope_alloc(const alloc_policy& r_alc)
-        : alloc_(r_alc)
-    {}
-
-    scope_alloc(const scope_alloc& rhs)
-        : alloc_(rhs.alloc_)
-    {}
-
-    virtual ~scope_alloc(void) { clear(); }
+    ~scope_alloc(void) { clear(); }
 
 public:
     size_t remain(void) const
