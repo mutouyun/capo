@@ -26,7 +26,7 @@ namespace detail_spin_lock {
     See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms687419(v=vs.85).aspx
     Not for intel c++ compiler, so ignore http://software.intel.com/en-us/forums/topic/296168
 */
-#   define CAPO_SPIN_LOCK_PAUSE() YieldProcessor()
+#   define CAPO_SPIN_LOCK_PAUSE_() YieldProcessor()
 #elif defined(__GNUC__)
 #if defined(__i386__) || defined(__x86_64__)
 /*
@@ -34,29 +34,29 @@ namespace detail_spin_lock {
          PAUSE-Spin Loop Hint, 4-57
          http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-software-developer-instruction-set-reference-manual-325383.html?wapkw=instruction+set+reference
 */
-#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__("pause")
+#   define CAPO_SPIN_LOCK_PAUSE_() __asm__ __volatile__("pause")
 #elif defined(__ia64__) || defined(__ia64)
 /*
     See: Intel(R) Itanium(R) Architecture Developer's Manual, Vol.3
          hint - Performance Hint, 3:145
          http://www.intel.com/content/www/us/en/processors/itanium/itanium-architecture-vol-3-manual.html
 */
-#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__ ("hint @pause")
+#   define CAPO_SPIN_LOCK_PAUSE_() __asm__ __volatile__ ("hint @pause")
 #elif defined(__arm__)
 /*
     See: ARM Architecture Reference Manuals (YIELD)
          http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.subset.architecture.reference/index.html
 */
-#   define CAPO_SPIN_LOCK_PAUSE() __asm__ __volatile__ ("yield")
+#   define CAPO_SPIN_LOCK_PAUSE_() __asm__ __volatile__ ("yield")
 #endif
 #endif/*compilers*/
 
-#if !defined(CAPO_SPIN_LOCK_PAUSE)
+#if !defined(CAPO_SPIN_LOCK_PAUSE_)
 /*
     Just use a compiler fence, prevent compiler from optimizing loop
 */
-#   define CAPO_SPIN_LOCK_PAUSE() std::atomic_signal_fence(std::memory_order_seq_cst)
-#endif/*!defined(CAPO_SPIN_LOCK_PAUSE)*/
+#   define CAPO_SPIN_LOCK_PAUSE_() std::atomic_signal_fence(std::memory_order_seq_cst)
+#endif/*!defined(CAPO_SPIN_LOCK_PAUSE_)*/
 
 ////////////////////////////////////////////////////////////////
 /// Yield to other threads
@@ -66,7 +66,7 @@ inline void yield(unsigned k)
 {
     if (k < 4)  { /* Do nothing */ }
     else
-    if (k < 16) { CAPO_SPIN_LOCK_PAUSE(); }
+    if (k < 16) { CAPO_SPIN_LOCK_PAUSE_(); }
     else
     if (k < 32) { std::this_thread::yield(); }
     else
