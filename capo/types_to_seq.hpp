@@ -7,52 +7,45 @@
 
 #pragma once
 
+#include "capo/type_list.hpp"
+
+#include <type_traits>  // std::integral_constant
+#include <cstddef>      // size_t
+
 namespace capo {
 
 ////////////////////////////////////////////////////////////////
 
 template <int... N>
-struct constant_seq
+struct constant_seq : std::integral_constant<size_t, sizeof...(N)>
 {
     using next = constant_seq<N..., sizeof...(N)>;
 };
 
-namespace detail_types_to_seq
+namespace detail_size_to_seq_ {
+
+template <size_t N>
+struct impl_
 {
-    template <typename... T>
-    struct impl;
+    using type = typename impl_<N - 1>::type::next;
+};
 
-    template <typename T1, typename... T>
-    struct impl<T1, T...>
-    {
-        using type = typename impl<T...>::type::next;
-    };
+template <>
+struct impl_<0>
+{
+    using type = constant_seq<>;
+};
 
-    template <>
-    struct impl<>
-    {
-        using type = constant_seq<>;
-    };
-} // namespace detail_types_to_seq
+} // namespace detail_size_to_seq_
+
+template <size_t N>
+using size_to_seq = typename detail_size_to_seq_::impl_<N>::type;
 
 template <typename... T>
-using types_to_seq = typename detail_types_to_seq::impl<T...>::type;
-
-namespace detail_list_to_seq
-{
-    template <typename TypesT>
-    struct impl;
-
-    template <typename... T,
-              template <typename...> class TypesT>
-    struct impl<TypesT<T...>>
-    {
-        using type = types_to_seq<T...>;
-    };
-} // namespace detail_types_to_seq
+using types_to_seq = size_to_seq<sizeof...(T)>;
 
 template <typename TypesT>
-using list_to_seq = typename detail_list_to_seq::impl<TypesT>::type;
+using list_to_seq = size_to_seq<capo::types_size<TypesT>::value>;
 
 ////////////////////////////////////////////////////////////////
 

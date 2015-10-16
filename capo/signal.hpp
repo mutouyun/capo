@@ -8,14 +8,30 @@
 #pragma once
 
 #include "capo/vector.hpp"
+#include "capo/type_traits.hpp"
+#include "capo/types_to_seq.hpp"
+#include "capo/tuple.hpp"
 
-#include <type_traits>  // std::remove_reference
-#include <utility>      // std::forward
-#include <cstddef>      // size_t
+#include <utility>  // std::forward
+#include <cstddef>  // size_t
 
 namespace capo {
 
 namespace detail_signal_ {
+
+/*
+    Function traits
+*/
+
+template <typename S, typename F>
+struct traits
+     : std::conditional<std::is_same<void, typename capo::function_traits<F>::type>::value,
+                        capo::function_traits<S>, capo::function_traits<F>>
+{};
+
+/*
+    Define slot struct
+*/
 
 template <typename R, typename... P>
 struct slot
@@ -30,9 +46,17 @@ struct slot_fn;
 template <typename F, typename... P>
 struct slot_fn<void, F, void, P...> : slot<void, P...>
 {
+    using pars_t = typename traits<void(P...), F>::parameters;
+
     F f_;
 
     slot_fn(F f) : f_(f) {}
+
+    template <typename Tp, int... N>
+    void forward(Tp&& tp, constant_seq<N...>)
+    {
+        f_(static_cast<P&&>(args)...);
+    }
 
     void call(P... args) override
     {

@@ -10,21 +10,34 @@
 #include "capo/type_list.hpp"
 #include "capo/types_to_seq.hpp"
 #include "capo/type_traits.hpp"
+#include "capo/tuple.hpp"
 
-#include <tuple>        // std::tuple, std::get
-#include <utility>      // std::move, std::forward, std::swap
+#include <utility>  // std::move, std::forward, std::swap
 
 namespace capo {
+
+////////////////////////////////////////////////////////////////
+
+/*
+    Define infinity
+*/
 
 enum : size_t
 {
     Infinity = static_cast<size_t>(-1)
 };
 
-namespace detail_iterator {
+namespace detail_iterator_ {
+
+/*
+    P&&... args => std::tuple<T...>
+    Be used by iterator::iterator(P&&... args).
+*/
 
 template <typename T, typename... P>
-struct check;
+struct check
+    : std::false_type
+{};
 
 template <typename T, typename P1>
 struct check<T, P1>
@@ -36,38 +49,21 @@ struct check<T, P1, P...>
     : std::integral_constant<bool, std::is_convertible<typename std::remove_reference<P1>::type, T>::value && check<P...>::value>
 {};
 
-template <typename A, typename P1, typename... P, int... N>
-std::tuple<A, P...> join(P1&& a, std::tuple<P...>& tp, constant_seq<N...>)
+template <size_t ForwardN, typename... A>
+auto forward(A&&... args, typename std::enable_if<(ForwardN <= sizeof...(A))>::type* = nullptr)
 {
-    return std::tuple<A, P...>(
-        std::forward<P1>(a),
-        static_cast<typename std::tuple_element<N, std::tuple<P...>>::type>(std::get<N>(tp))...
-    );
+    return capo::forward_as_tuple<ForwardN>(std::forward<A>(args)...);
 }
 
-template <int... M, typename... P>
-std::tuple<> forward(constant_seq<>, constant_seq<M...>, P&&... args)
+template <size_t ForwardN, typename... A>
+auto forward(A&&... args, typename std::enable_if<(ForwardN > sizeof...(A))>::type* = nullptr)
 {
-    return {};
+    // Makes the front default values to 0.
+    return std::tuple_cat(capo::numbers_to_tuple(capo::constant_array<int>::assign<ForwardN - sizeof...(A), 0>{}), 
+                          std::forward_as_tuple(std::forward<A>(args)...));
 }
 
-template <int N1, int... N, int M1, int... M, typename P1, typename... P,
-          typename = typename std::enable_if<(sizeof...(N) <= sizeof...(M))>::type>
-auto forward(constant_seq<N1, N...>, constant_seq<M1, M...>, P1&& a, P&&... args)
-{
-    auto fr_tp = forward(constant_seq<N...>{}, constant_seq<M...>{}, std::forward<P>(args)...);
-    return join<typename capo::underlying<P1>::type>(std::forward<P1>(a), fr_tp, list_to_seq<decltype(fr_tp)>{});
-}
-
-template <int N1, int... N, int... M, typename... P,
-          typename = typename std::enable_if<(sizeof...(N) >= sizeof...(M))>::type>
-auto forward(constant_seq<N1, N...>, constant_seq<M...>, P&&... args)
-{
-    auto fr_tp = forward(constant_seq<N...>{}, constant_seq<M...>{}, std::forward<P>(args)...);
-    return join<int>(0 /* Makes the default value to 0. */, fr_tp, list_to_seq<decltype(fr_tp)>{});
-}
-
-} // namespace detail_iterator
+} // namespace detail_iterator_
 
 ////////////////////////////////////////////////////////////////
 /// Iterator pattern
@@ -99,9 +95,9 @@ public:
     iterator(void) {}
 
     template <typename... P,
-              typename = typename std::enable_if<detail_iterator::check<T, P...>::value>::type>
+              typename = typename std::enable_if<detail_iterator_::check<T, P...>::value>::type>
     iterator(P&&... args)
-        : x_(detail_iterator::forward(seq{}, types_to_seq<P...>{}, std::forward<P>(args)...))
+        : x_(detail_iterator_::forward<seq::value>(std::forward<P>(args)...))
     {}
 
     iterator(const tp_t& x)           : x_(x) {}

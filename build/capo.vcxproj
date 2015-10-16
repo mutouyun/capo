@@ -127,6 +127,7 @@
     <ClInclude Include="..\capo\stopwatch.hpp" />
     <ClInclude Include="..\capo\thread_local_ptr.hpp" />
     <ClInclude Include="..\capo\thread_wrapper.hpp" />
+    <ClInclude Include="..\capo\tuple.hpp" />
     <ClInclude Include="..\capo\types_to_seq.hpp" />
     <ClInclude Include="..\capo\type_list.hpp" />
     <ClInclude Include="..\capo\type_name.hpp" />
