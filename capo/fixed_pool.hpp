@@ -11,8 +11,10 @@
 #include "capo/sequence.hpp"
 #include "capo/assert.hpp"
 #include "capo/alloc_concept.hpp"
+#include "capo/allocator.hpp"
 #include "capo/unused.hpp"
 
+#include <utility>  // std::swap
 #include <cstddef>  // size_t
 
 namespace capo {
@@ -21,7 +23,11 @@ namespace capo {
 /// Fixed-size blocks allocation
 ////////////////////////////////////////////////////////////////
 
-template <size_t BlockSize, class PolicyT, class AllocP,
+#if !defined(CAPO_FIXED_POOL_ITERPOLICY_)
+#   define CAPO_FIXED_POOL_ITERPOLICY_ capo::use::arithmetic<>
+#endif/*!CAPO_FIXED_POOL_ITERPOLICY_*/
+
+template <size_t BlockSize, class PolicyT = CAPO_FIXED_POOL_ITERPOLICY_, class AllocP = CAPO_ALLOCATOR_POLICY_,
           bool = (BlockSize >= sizeof(void*))>
 class fixed_pool;
 
@@ -75,10 +81,21 @@ public:
         , fixed_pool(init_expand)
     {}
 
+    fixed_pool(fixed_pool&& rhs)            { this->swap(rhs); }
+    fixed_pool& operator=(fixed_pool&& rhs) { this->swap(rhs); }
+
     ~fixed_pool(void) { clear(); }
 
 public:
-    size_t block_size(void) const { return BlockSize; }
+    void swap(fixed_pool& rhs)
+    {
+        std::swap(this->alloc_      , rhs.alloc_);
+        std::swap(this->init_expand_, rhs.init_expand_);
+        std::swap(this->cursor_     , rhs.cursor_);
+        std::swap(this->iter_       , rhs.iter_);
+    }
+
+    constexpr size_t block_size(void) const { return BlockSize; }
 
     size_t remain(void) const
     {

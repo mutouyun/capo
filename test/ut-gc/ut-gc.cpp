@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 
-#include "capo/allocator.hpp"
 #include "capo/scope_alloc.hpp"
 
 ////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ public:
 
 TEST_METHOD(scope_alloc)
 {
-    capo::scope_alloc<CAPO_ALLOCATOR_POLICY_> gc;
+    capo::scope_alloc<> gc;
     gc.alloc(sizeof(XXX), []{ printf("XXX is deleting...\n"); });
     gc.alloc<XXX[3]>();
 }

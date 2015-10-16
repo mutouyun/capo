@@ -50,7 +50,7 @@ public:
         catch(...) { /* Do nothing */ }
     }
 
-    void dismiss() const noexcept
+    void dismiss(void) const noexcept
     {
         dismiss_ = true;
     }

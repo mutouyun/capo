@@ -7,71 +7,15 @@
 
 #pragma once
 
+#include "capo/noncopyable.hpp"
 #include "capo/alloc_concept.hpp"
+#include "capo/allocator.hpp"
 #include "capo/assert.hpp"
 
-#include <utility>  // std::move
+#include <utility>  // std::move, std::swap
 #include <cstddef>  // std::max_align_t
 
 namespace capo {
-namespace detail_variable_pool {
-
-struct head_t
-{
-    head_t* next_;
-    size_t  size_;
-    size_t  free_;
-};
-
-////////////////////////////////////////////////////////////////
-/// head_t blocks cache
-////////////////////////////////////////////////////////////////
-
-class cache
-{
-    head_t* root_ = nullptr;
-
-public:
-    bool empty(void) const
-    {
-        return !root_;
-    }
-
-    size_t check_size(void) const
-    {
-        return root_ ? root_->free_ : 0;
-    }
-
-    head_t* pop(void)
-    {
-        head_t* curr = root_;
-        if (root_)
-            root_ = root_->next_;
-        return curr;
-    }
-
-    void push(head_t* curr)
-    {
-        CAPO_ASSERT_(curr);
-        if (curr->free_ >= check_size())
-        {
-            curr->next_ = root_;
-            root_ = curr;
-        }
-        else
-        {
-            head_t* iter = root_;
-            while (iter->next_ && iter->next_->free_ > curr->free_)
-            {
-                iter = iter->next_;
-            }
-            curr->next_ = iter->next_;
-            iter->next_ = curr;
-        }
-    }
-};
-
-} // namespace detail_variable_pool
 
 ////////////////////////////////////////////////////////////////
 /// Variable-size blocks allocation
@@ -81,24 +25,32 @@ public:
 #   define CAPO_VARIABLE_POOL_CHUNKSIZE_ (sizeof(void*) << 10) /* 4K */
 #endif/*!CAPO_VARIABLE_POOL_CHUNKSIZE_*/
 
-template <class AllocP, size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_>
-class variable_pool final
+template <size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_, class AllocP = CAPO_ALLOCATOR_POLICY_>
+class variable_pool final : capo::noncopyable
 {
+private:
+    struct head_t
+    {
+        head_t* next_;
+        size_t  size_;
+        size_t  free_;
+    };
+
 public:
     enum { AllocType = alloc_concept::RegionAlloc };
+
+    enum : size_t
+    {
+        HeadSize    = sizeof(head_t),
+        RequestSize = ChunkSize,
+        BufferSize  = RequestSize - HeadSize
+    };
+
     using alloc_policy = AllocP;
 
 private:
-    using head_t = detail_variable_pool::head_t;
-
-    variable_pool* father_ = nullptr;
-    variable_pool* child_  = nullptr;
-    detail_variable_pool::cache cache_;
-
     alloc_policy alloc_;
-
-    char* head_;
-    char* tail_;
+    char* head_, * tail_;
 
     // List operations
 
@@ -118,27 +70,16 @@ private:
     {
         CAPO_ASSERT_(size > HeadSize)(size);
 
-        if (cache_.check_size() >= size)
-            return cache_.pop();
-        else
-        if (father_ && father_->cache_.check_size() >= size)
-            return father_->cache_.pop();
-        else
-        {
-            size = (size < RequestSize) ? RequestSize : size;
-            head_t* p = static_cast<head_t*>(alloc_.alloc(size));
-            p->free_ = (p->size_ = size) - HeadSize;
-            return p;
-        }
+        size = (size < RequestSize) ? RequestSize : size;
+        head_t* p = static_cast<head_t*>(alloc_.alloc(size));
+        p->free_ = (p->size_ = size) - HeadSize;
+        return p;
     }
 
     void free_head(head_t* curr)
     {
-        CAPO_ASSERT_(curr);
-        if (father_)
-            father_->cache_.push(curr);
-        else
-            alloc_.free(curr, curr->size_);
+        CAPO_ASSERT_(curr != nullptr);
+        alloc_.free(curr, curr->size_);
     }
 
     // Allocate memory block with alignment
@@ -176,55 +117,27 @@ private:
     }
 
 public:
-    enum : size_t
-    {
-        HeadSize    = sizeof(head_t),
-        RequestSize = ChunkSize,
-        BufferSize  = RequestSize - HeadSize
-    };
-
-public:
     variable_pool(void)
     {
         init();
     }
 
-    variable_pool(const variable_pool& rhs)
-        : father_(const_cast<variable_pool*>(&rhs))
-        , alloc_(rhs.alloc_)
-    {
-        init();
-        father_->child_ = this;
-    }
-
-    variable_pool(variable_pool&& rhs)
-        : father_(rhs.father_)
-        , child_(rhs.child_)
-        , alloc_(std::move(rhs.alloc_))
-        , head_(rhs.head_)
-        , tail_(rhs.tail_)
-    {
-        rhs.child_ = rhs.father_ = nullptr;
-        rhs.init();
-    }
+    variable_pool(variable_pool&& rhs)            { this->swap(rhs); }
+    variable_pool& operator=(variable_pool&& rhs) { this->swap(rhs); }
 
     ~variable_pool(void)
     {
         clear();
-        // To remove self from father-child chain
-        if (father_)
-        {
-            CAPO_ASSERT_(father_->child_ == this);
-            father_->child_ = child_;
-        }
-        if (child_)
-        {
-            CAPO_ASSERT_(child_->father_ == this);
-            child_->father_ = father_;
-        }
     }
 
 public:
+    void swap(variable_pool& rhs)
+    {
+        std::swap(this->alloc_, rhs.alloc_);
+        std::swap(this->head_ , rhs.head_);
+        std::swap(this->tail_ , rhs.tail_);
+    }
+
     size_t remain(void) const
     {
         return (tail_ - head_);
@@ -240,11 +153,6 @@ public:
             free_head(curr);
         }
         init();
-        // Clean the cache
-        while (!cache_.empty())
-        {
-            free_head(cache_.pop());
-        }
     }
 
 #if defined(__GNUC__)

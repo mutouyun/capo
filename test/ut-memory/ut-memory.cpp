@@ -8,6 +8,7 @@
 #include "capo/type_name.hpp"
 #include "capo/standard_alloc.hpp"
 #include "capo/fixed_pool.hpp"
+#include "capo/variable_pool.hpp"
 
 #include <vector>
 #include <array>
@@ -29,18 +30,28 @@ const size_t TestSMax = 256;
 #endif
 
 std::vector<size_t> sizes(TestCont);
-std::vector<size_t> index[2];
+std::vector<size_t> index[3][2];
 
 void init(void)
 {
     capo::output(std::cout, "Cycles:\t\t{0}\nContinuous:\t{1}\nAlloc Size:\t{2} - {3} bytes\n", 
                  TestCycl, TestCont, TestSMin * sizeof(char), TestSMax * sizeof(char));
 
-    capo::random<> rdm(TestSMin, TestSMax);
-    for (size_t i = 0; i < TestCont; ++i) sizes[i] = rdm();
+    capo::random<> rdm_sizes(TestSMin, TestSMax);
+    for (size_t i = 0; i < TestCont; ++i) sizes[i] = rdm_sizes();
 
-    index[0].resize(TestCont);
-    index[1].resize(TestCont);
+    for (auto& ix : index)
+    {
+        ix[0].resize(TestCont);
+        ix[1].resize(TestCont);
+    }
+    for (size_t i = 0, n = TestCont - 1; i < TestCont; ++i, --n)
+        index[0][1][n] = index[0][0][i] = i;
+    for (size_t i = 0; i < TestCont; ++i)
+        index[1][1][i] = index[1][0][i] = i;
+    capo::random<> rdm_index(0, TestCont - 1);
+    for (size_t i = 0; i < TestCont; ++i)
+        index[2][1][i] = index[2][0][i] = rdm_index();
 }
 
 struct RunOnce
@@ -72,10 +83,15 @@ template <class AllocT, int AC>
 AllocT test_alloc<AllocT, AC>::pool_;
 
 template <class AllocT>
-struct test_alloc<AllocT, capo::alloc_concept::RegionAlloc> : AllocT
+struct test_alloc<AllocT, capo::alloc_concept::RegionAlloc>
 {
+    AllocT pool_;
+
     static size_t remain(void) { return 0; }
     static void   clear(void)  {}
+
+    void* alloc(size_t size)        { return pool_.alloc(size); }
+    void free(void* p, size_t size) { pool_.free(p, size); }
 };
 
 volatile bool is_not_started;
@@ -86,7 +102,7 @@ volatile bool is_not_started;
     for(int x = 0; x < C; ++x)          \
     for(int n = 0; n < TestCont; ++n)   \
     {                                   \
-        size_t m   = index[x][n];       \
+        size_t m   = ix[x][n];          \
         void*(& p) = ptrs [m];          \
         size_t s   = sizes[m];          \
         if (p == nullptr)               \
@@ -104,7 +120,7 @@ volatile bool is_not_started;
 } while(0)
 
 template <typename AllocT, size_t ThreadN>
-void working_proc(size_t& alloced_size)
+void working_proc(size_t& alloced_size, const std::vector<size_t>* ix)
 {
     static const size_t TEST_CYCL = (TestCycl / ThreadN / 2) - 1;
     std::array<void*, TestCont> ptrs;
@@ -120,7 +136,7 @@ void working_proc(size_t& alloced_size)
 
 #undef TEST_CYCLES__
 
-template <typename AllocT, size_t ThreadN>
+template <typename AllocT, size_t ThreadN, size_t IndexN>
 void test_memory_pool(const char* name)
 {
     capo::output(std::cout, "{0} test: \t", name);
@@ -128,7 +144,7 @@ void test_memory_pool(const char* name)
 
     struct {
         size_t      alloced_size_ = 0;
-        std::thread working_ { working_proc<test_alloc<AllocT>, ThreadN>, std::ref(alloced_size_) };
+        std::thread working_ { working_proc<test_alloc<AllocT>, ThreadN>, std::ref(alloced_size_), index[IndexN] };
     } threads[ThreadN];
 
     is_not_started = false;
@@ -150,24 +166,14 @@ template <typename AllocT, size_t ThreadN = 1>
 void start(void)
 {
     static_assert(ThreadN > 0, "Thread number is 0!");
+
     capo::output(std::cout, "Start for {0}...(threads: {1})\n",
                  capo::type_name<AllocT>().c_str(), ThreadN);
-    {
-        for (size_t i = 0, n = TestCont - 1; i < TestCont; ++i, --n)
-            index[1][n] = index[0][i] = i;
-        test_memory_pool<AllocT, ThreadN>("LIFO");
-    }
-    {
-        for (size_t i = 0; i < TestCont; ++i)
-            index[1][i] = index[0][i] = i;
-        test_memory_pool<AllocT, ThreadN>("FIFO");
-    }
-    {
-        capo::random<> rdm(0, TestCont - 1);
-        for (size_t i = 0; i < TestCont; ++i)
-            index[1][i] = index[0][i] = rdm();
-        test_memory_pool<AllocT, ThreadN>("Random");
-    }
+
+    test_memory_pool<AllocT, ThreadN, 0>("LIFO");
+    test_memory_pool<AllocT, ThreadN, 1>("FIFO");
+    test_memory_pool<AllocT, ThreadN, 2>("Random");
+
     std::cout << std::endl;
 }
 
@@ -175,14 +181,19 @@ void start(void)
 
 ////////////////////////////////////////////////////////////////
 
-TEST_METHOD(alloc_malloc)
-{
-    start<capo::use::alloc_malloc>();
-}
+//TEST_METHOD(alloc_malloc)
+//{
+//    start<capo::use::alloc_malloc>();
+//}
 
 TEST_METHOD(fixed_pool)
 {
-    start<capo::fixed_pool<TestSMax, capo::use::fibonacci   , capo::use::alloc_malloc>>();
-    start<capo::fixed_pool<TestSMax, capo::use::geometric<> , capo::use::alloc_malloc>>();
     start<capo::fixed_pool<TestSMax, capo::use::arithmetic<>, capo::use::alloc_malloc>>();
+    start<capo::fixed_pool<TestSMax, capo::use::geometric<> , capo::use::alloc_malloc>>();
+    start<capo::fixed_pool<TestSMax, capo::use::fibonacci   , capo::use::alloc_malloc>>();
+}
+
+TEST_METHOD(variable_pool)
+{
+    start<capo::variable_pool<>>();
 }

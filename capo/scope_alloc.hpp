@@ -9,10 +9,11 @@
 
 #include "capo/alloc_concept.hpp"
 #include "capo/construct.hpp"
+#include "capo/allocator.hpp"
 #include "capo/noncopyable.hpp"
 
 #include <functional>   // std::function
-#include <utility>      // std::forward
+#include <utility>      // std::forward, std::swap
 #include <cstddef>      // size_t
 
 namespace capo {
@@ -21,7 +22,7 @@ namespace capo {
 /// Scope allocation -- The destructor will release all memory blocks.
 ////////////////////////////////////////////////////////////////
 
-template <class AllocP>
+template <class AllocP = CAPO_ALLOCATOR_POLICY_>
 class scope_alloc final : capo::noncopyable
 {
 public:
@@ -38,9 +39,20 @@ private:
     } * list_ = nullptr;
 
 public:
+    scope_alloc(void) = default;
+
+    scope_alloc(scope_alloc&& rhs)            { this->swap(rhs); }
+    scope_alloc& operator=(scope_alloc&& rhs) { this->swap(rhs); }
+
     ~scope_alloc(void) { clear(); }
 
 public:
+    void swap(scope_alloc& rhs)
+    {
+        std::swap(this->alloc_, rhs.alloc_);
+        std::swap(this->list_ , rhs.list_);
+    }
+
     size_t remain(void) const
     {
         size_t c = 0;
