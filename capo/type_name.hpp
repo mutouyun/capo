@@ -173,6 +173,8 @@ struct check
     }
 };
 
+#pragma push_macro("CAPO_CHECK_TYPE__")
+#undef  CAPO_CHECK_TYPE__
 #define CAPO_CHECK_TYPE__(OPT)                                 \
     template <typename T, bool IsBase>                         \
     struct check<T OPT, IsBase> : check<T, true>               \
@@ -189,11 +191,19 @@ CAPO_CHECK_TYPE__(&)
 CAPO_CHECK_TYPE__(&&)
 CAPO_CHECK_TYPE__(*)
 
-#undef CAPO_CHECK_TYPE__
+#pragma pop_macro("CAPO_CHECK_TYPE__")
 
 /*
     Arrays
 */
+
+#pragma push_macro("CAPO_CHECK_TYPE_ARRAY__")
+#pragma push_macro("CAPO_CHECK_TYPE_ARRAY_CV__")
+#pragma push_macro("CAPO_CHECK_TYPE_PLACEHOLDER__")
+
+#undef CAPO_CHECK_TYPE_ARRAY__
+#undef CAPO_CHECK_TYPE_ARRAY_CV__
+#undef CAPO_CHECK_TYPE_PLACEHOLDER__
 
 #define CAPO_CHECK_TYPE_ARRAY__(CV_OPT, BOUND_OPT, ...)                                    \
     template <typename T, bool IsBase __VA_ARGS__>                                         \
@@ -215,15 +225,16 @@ CAPO_CHECK_TYPE__(*)
     CAPO_CHECK_TYPE_ARRAY__(const volatile, BOUND_OPT, ,##__VA_ARGS__)
 
 #define CAPO_CHECK_TYPE_PLACEHOLDER__
+
 CAPO_CHECK_TYPE_ARRAY_CV__(CAPO_CHECK_TYPE_PLACEHOLDER__)
 #if defined(__GNUC__)
 CAPO_CHECK_TYPE_ARRAY_CV__(0)
 #endif/*__GNUC__*/
 CAPO_CHECK_TYPE_ARRAY_CV__(N, size_t N)
 
-#undef CAPO_CHECK_TYPE_PLACEHOLDER__
-#undef CAPO_CHECK_TYPE_ARRAY_CV__
-#undef CAPO_CHECK_TYPE_ARRAY__
+#pragma pop_macro("CAPO_CHECK_TYPE_PLACEHOLDER__")
+#pragma pop_macro("CAPO_CHECK_TYPE_ARRAY_CV__")
+#pragma pop_macro("CAPO_CHECK_TYPE_ARRAY__")
 
 /*
     Functions
@@ -262,6 +273,8 @@ struct check<T C::*, IsBase> : check<T, true>
     Pointers to member functions
 */
 
+#pragma push_macro("CAPO_CHECK_TYPE_MEM_FUNC__")
+#undef  CAPO_CHECK_TYPE_MEM_FUNC__
 #define CAPO_CHECK_TYPE_MEM_FUNC__(...)                           \
     template <typename T, bool IsBase, typename C, typename... P> \
     struct check<T(C::*)(P...) __VA_ARGS__, IsBase>               \
@@ -284,7 +297,7 @@ CAPO_CHECK_TYPE_MEM_FUNC__(const)
 CAPO_CHECK_TYPE_MEM_FUNC__(volatile)
 CAPO_CHECK_TYPE_MEM_FUNC__(const volatile)
 
-#undef CAPO_CHECK_TYPE_MEM_FUNC__
+#pragma pop_macro("CAPO_CHECK_TYPE_MEM_FUNC__")
 
 } // namespace detail_type_name
 

@@ -100,6 +100,18 @@ template <typename T, typename U,
           template <typename...> class TypesT, typename BaseT>
 struct decrementable<TypesT<T, U>, BaseT> : capo::decrementable<T, BaseT> {};
 
+#pragma push_macro("CAPO_MAKE_OP_SAME__")
+#pragma push_macro("CAPO_MAKE_OP_DIFF_COMM__Y__")
+#pragma push_macro("CAPO_MAKE_OP_DIFF_COMM__N__")
+#pragma push_macro("CAPO_MAKE_OP_DIFF__")
+#pragma push_macro("CAPO_MAKE_OPERABLE__")
+
+#undef CAPO_MAKE_OP_SAME__
+#undef CAPO_MAKE_OP_DIFF_COMM__Y__
+#undef CAPO_MAKE_OP_DIFF_COMM__N__
+#undef CAPO_MAKE_OP_DIFF__
+#undef CAPO_MAKE_OPERABLE__
+
 #define CAPO_MAKE_OP_SAME__(OP) \
     friend T operator OP(const T & x, const T & y) { return std::move(T(x) OP##= y); } \
     friend T operator OP(      T&& x,       T&& y) { return std::move(  x  OP##= y); } \
@@ -145,11 +157,11 @@ CAPO_MAKE_OPERABLE__(xorable     , ^, Y)
 CAPO_MAKE_OPERABLE__(andable     , &, Y)
 CAPO_MAKE_OPERABLE__(orable      , |, Y)
 
-#undef CAPO_MAKE_OPERABLE__
-#undef CAPO_MAKE_OP_DIFF__
-#undef CAPO_MAKE_OP_DIFF_COMM__N__
-#undef CAPO_MAKE_OP_DIFF_COMM__Y__
-#undef CAPO_MAKE_OP_SAME__
+#pragma pop_macro("CAPO_MAKE_OPERABLE__")
+#pragma pop_macro("CAPO_MAKE_OP_DIFF__")
+#pragma pop_macro("CAPO_MAKE_OP_DIFF_COMM__N__")
+#pragma pop_macro("CAPO_MAKE_OP_DIFF_COMM__Y__")
+#pragma pop_macro("CAPO_MAKE_OP_SAME__")
 
 ////////////////////////////////////////////////////////////////
 
