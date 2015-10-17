@@ -10,24 +10,29 @@
 #include "capo/vector.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/types_to_seq.hpp"
-#include "capo/tuple.hpp"
+#include "capo/max_min.hpp"
 
 #include <utility>  // std::forward
 #include <cstddef>  // size_t
 
 namespace capo {
-
 namespace detail_signal_ {
 
-/*
-    Function traits
-*/
+////////////////////////////////////////////////////////////////
+
+// Function traits
 
 template <typename S, typename F>
 struct traits
      : std::conditional<std::is_same<void, typename capo::function_traits<F>::type>::value,
-                        capo::function_traits<S>, capo::function_traits<F>>
+                        capo::function_traits<S>, capo::function_traits<F>>::type
 {};
+
+// Get suitable constant_seq<N...>
+
+template <typename F, typename... P>
+using suitable_size = 
+    size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
 /*
     Define slot struct
@@ -46,21 +51,19 @@ struct slot_fn;
 template <typename F, typename... P>
 struct slot_fn<void, F, void, P...> : slot<void, P...>
 {
-    using pars_t = typename traits<void(P...), F>::parameters;
-
     F f_;
 
     slot_fn(F f) : f_(f) {}
 
     template <typename Tp, int... N>
-    void forward(Tp&& tp, constant_seq<N...>)
+    void forward(constant_seq<N...>, Tp&& tp)
     {
-        f_(static_cast<P&&>(args)...);
+        f_(std::get<N>(std::forward<Tp>(tp))...);
     }
 
     void call(P... args) override
     {
-        f_(static_cast<P&&>(args)...);
+        this->forward(suitable_size<F, P...>{}, std::forward_as_tuple(static_cast<P&&>(args)...));
     }
 };
 
@@ -71,9 +74,15 @@ struct slot_fn<void, F, R, P...> : slot<R, P...>
 
     slot_fn(F f) : f_(f) {}
 
+    template <typename Tp, int... N>
+    R forward(constant_seq<N...>, Tp&& tp)
+    {
+        return f_(std::get<N>(std::forward<Tp>(tp))...);
+    }
+
     R call(P... args) override
     {
-        return f_(static_cast<P&&>(args)...);
+        return this->forward(suitable_size<F, P...>{}, std::forward_as_tuple(static_cast<P&&>(args)...));
     }
 };
 
@@ -85,9 +94,15 @@ struct slot_fn<C, F, void, P...> : slot<void, P...>
 
     slot_fn(C c, F f) : c_(c), f_(f) {}
 
+    template <typename Tp, int... N>
+    void forward(constant_seq<N...>, Tp&& tp)
+    {
+        (c_->*f_)(std::get<N>(std::forward<Tp>(tp))...);
+    }
+
     void call(P... args) override
     {
-        (c_->*f_)(static_cast<P&&>(args)...);
+        this->forward(suitable_size<F, P...>{}, std::forward_as_tuple(static_cast<P&&>(args)...));
     }
 };
 
@@ -99,11 +114,21 @@ struct slot_fn<C, F, R, P...> : slot<R, P...>
 
     slot_fn(C c, F f) : c_(c), f_(f) {}
 
+    template <typename Tp, int... N>
+    R forward(constant_seq<N...>, Tp&& tp)
+    {
+        return (c_->*f_)(std::get<N>(std::forward<Tp>(tp))...);
+    }
+
     R call(P... args) override
     {
-        return (c_->*f_)(static_cast<P&&>(args)...);
+        return this->forward(suitable_size<F, P...>{}, std::forward_as_tuple(static_cast<P&&>(args)...));
     }
 };
+
+/*
+    Define signal base class
+*/
 
 template <typename F>
 class signal_b;
@@ -181,6 +206,10 @@ public:
 
 } // namespace detail_signal_
 
+////////////////////////////////////////////////////////////////
+/// Define signal-slot service class
+////////////////////////////////////////////////////////////////
+
 template <typename F>
 class signal;
 
@@ -218,5 +247,7 @@ public:
         return sp->call(std::forward<A>(args)...);
     }
 };
+
+////////////////////////////////////////////////////////////////
 
 } // namespace capo

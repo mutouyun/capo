@@ -140,4 +140,8 @@ constexpr bool operator!=(const allocator_wrapper<T, AllocP>&, const allocator_w
 template <typename T>
 using allocator = allocator_wrapper<T, CAPO_ALLOCATOR_POLICY_>;
 
+#if !defined(CAPO_ALLOCATOR_)
+#   define CAPO_ALLOCATOR_ capo::allocator
+#endif/*!CAPO_ALLOCATOR_*/
+
 } // namespace capo

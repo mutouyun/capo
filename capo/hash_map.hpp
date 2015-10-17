@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "capo/alloc.hpp"
+#include "capo/allocator.hpp"
 
 #include <unordered_map> // std::unordered_map
 

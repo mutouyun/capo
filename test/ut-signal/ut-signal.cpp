@@ -26,7 +26,7 @@ public:
     }
 };
 
-capo::signal<int(int, XXX)> SigTest;
+capo::signal<int(int, XXX, int)> SigTest;
 
 class Foo
 {
@@ -47,6 +47,6 @@ TEST_METHOD(signal)
     Foo foo;
     SigTest.connect(&foo, &Foo::func);
     XXX xx;
-    int n = SigTest(123, xx/*std::move(xx)*/);
+    int n = SigTest(123, xx/*std::move(xx)*/, 321);
     EXPECT_EQ(foo.func(123, xx), n);
 }

@@ -8,11 +8,10 @@
 #pragma once
 
 #include "capo/types_to_seq.hpp"
-#include "capo/constant_array.hpp"
 
 #include <tuple>        // std::tuple, std::tuple_element, std::get, ...
 #include <utility>      // std::forward
-#include <type_traits>  // std::enable_if
+#include <type_traits>  // std::enable_if, std::integral_constant
 #include <cstddef>      // size_t
 
 namespace capo {

@@ -11,6 +11,7 @@
 #include "capo/types_to_seq.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/tuple.hpp"
+#include "capo/constant_array.hpp"
 
 #include <utility>  // std::move, std::forward, std::swap
 
