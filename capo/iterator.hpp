@@ -50,13 +50,13 @@ struct check<T, P1, P...>
 {};
 
 template <size_t ForwardN, typename... A>
-auto forward(A&&... args, typename std::enable_if<(ForwardN <= sizeof...(A))>::type* = nullptr)
+auto forward(typename std::enable_if<(ForwardN <= sizeof...(A))>::type*, A&&... args)
 {
     return capo::forward_as_tuple<ForwardN>(std::forward<A>(args)...);
 }
 
 template <size_t ForwardN, typename... A>
-auto forward(A&&... args, typename std::enable_if<(ForwardN > sizeof...(A))>::type* = nullptr)
+auto forward(typename std::enable_if<(ForwardN > sizeof...(A))>::type*, A&&... args)
 {
     // Makes the front default values to 0.
     return std::tuple_cat(capo::numbers_to_tuple(capo::constant_array<int>::assign<ForwardN - sizeof...(A), 0>{}), 
@@ -97,7 +97,7 @@ public:
     template <typename... P,
               typename = typename std::enable_if<detail_iterator_::check<T, P...>::value>::type>
     iterator(P&&... args)
-        : x_(detail_iterator_::forward<seq::value>(std::forward<P>(args)...))
+        : x_(detail_iterator_::forward<seq::value>(nullptr, std::forward<P>(args)...))
     {}
 
     iterator(const tp_t& x)           : x_(x) {}
