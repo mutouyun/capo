@@ -10,7 +10,7 @@
 #include "capo/types_to_seq.hpp"
 
 #include <tuple>        // std::tuple, std::tuple_element, std::get, ...
-#include <utility>      // std::forward
+#include <utility>      // std::forward, std::move
 #include <type_traits>  // std::enable_if, std::integral_constant
 #include <cstddef>      // size_t
 
@@ -27,18 +27,16 @@ namespace detail_forward_as_tuple_ {
 template <int... M, typename... A>
 std::tuple<> impl_(constant_seq<>, constant_seq<M...>, A&&...) { return {}; }
 
-template <int N1, int... N, typename A1, typename... A,
-          typename = typename std::enable_if<(sizeof...(N) < sizeof...(A))>::type>
-auto impl_(constant_seq<N1, N...>, A1&& a, A&&... args)
+template <int... N, typename... A>
+auto impl_(constant_seq<N...>, std::tuple<A...>&& tp, typename std::enable_if<(sizeof...(N) < sizeof...(A))>::type* = nullptr)
 {
-    return std::tuple_cat(std::forward_as_tuple(std::forward<A1>(a)), impl_(constant_seq<N...>{}, std::forward<A>(args)...));
+    return std::forward_as_tuple(std::get<N>(std::move(tp))...);
 }
 
-template <int... N, typename... A,
-          typename = typename std::enable_if<(sizeof...(N) == sizeof...(A))>::type>
-auto impl_(constant_seq<N...>, A&&... args)
+template <int... N, typename... A>
+auto impl_(constant_seq<N...>, std::tuple<A...>&& tp, typename std::enable_if<(sizeof...(N) == sizeof...(A))>::type* = nullptr)
 {
-    return std::forward_as_tuple(std::forward<A>(args)...);
+    return std::move(tp);
 }
 
 } // namespace detail_forward_as_tuple_
@@ -46,7 +44,7 @@ auto impl_(constant_seq<N...>, A&&... args)
 template <size_t ForwardN, typename... A>
 auto forward_as_tuple(A&&... args)
 {
-    return detail_forward_as_tuple_::impl_(size_to_seq<ForwardN>{}, std::forward<A>(args)...);
+    return detail_forward_as_tuple_::impl_(size_to_seq<ForwardN>{}, std::forward_as_tuple(std::forward<A>(args)...));
 }
 
 /*

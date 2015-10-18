@@ -55,7 +55,7 @@ struct slot_fn<void, F, void, P...> : slot<void, P...>
 
     slot_fn(F f) : f_(f) {}
 
-    template <typename Tp, int... N>
+    template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
     {
         f_(std::get<N>(std::forward<Tp>(tp))...);
@@ -74,7 +74,7 @@ struct slot_fn<void, F, R, P...> : slot<R, P...>
 
     slot_fn(F f) : f_(f) {}
 
-    template <typename Tp, int... N>
+    template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
     {
         return f_(std::get<N>(std::forward<Tp>(tp))...);
@@ -94,7 +94,7 @@ struct slot_fn<C, F, void, P...> : slot<void, P...>
 
     slot_fn(C c, F f) : c_(c), f_(f) {}
 
-    template <typename Tp, int... N>
+    template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
     {
         (c_->*f_)(std::get<N>(std::forward<Tp>(tp))...);
@@ -114,7 +114,7 @@ struct slot_fn<C, F, R, P...> : slot<R, P...>
 
     slot_fn(C c, F f) : c_(c), f_(f) {}
 
-    template <typename Tp, int... N>
+    template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
     {
         return (c_->*f_)(std::get<N>(std::forward<Tp>(tp))...);
