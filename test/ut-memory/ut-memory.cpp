@@ -11,7 +11,6 @@
 #include "capo/variable_pool.hpp"
 
 #include <vector>
-#include <array>
 #include <thread>
 #include <future>
 
@@ -96,35 +95,35 @@ struct test_alloc<AllocT, capo::alloc_concept::RegionAlloc>
 
 volatile bool is_not_started;
 
-#define TEST_CYCLES__(C, A1, A2) do     \
-{                                       \
-    CAPO_UNUSED_ AllocT alc;            \
-    for(int x = 0; x < C; ++x)          \
-    for(int n = 0; n < TestCont; ++n)   \
-    {                                   \
-        size_t m   = ix[x][n];          \
-        void*(& p) = ptrs [m];          \
-        size_t s   = sizes[m];          \
-        if (p == nullptr)               \
-        {                               \
-            A1;                         \
-            p = alc.alloc(s);           \
-        }                               \
-        else                            \
-        {                               \
-            A2;                         \
-            alc.free(p, s);             \
-            p = nullptr;                \
-        }                               \
-    }                                   \
+#define TEST_CYCLES__(C, A1, A2) do      \
+{                                        \
+    CAPO_UNUSED_ AllocT alc;             \
+    for(size_t x = 0; x < C; ++x)        \
+    for(size_t n = 0; n < TestCont; ++n) \
+    {                                    \
+        size_t m   = ix[x][n];           \
+        void*(& p) = ptrs [m];           \
+        size_t s   = sizes[m];           \
+        if (p == nullptr)                \
+        {                                \
+            A1;                          \
+            p = alc.alloc(s);            \
+        }                                \
+        else                             \
+        {                                \
+            A2;                          \
+            alc.free(p, s);              \
+            p = nullptr;                 \
+        }                                \
+    }                                    \
 } while(0)
 
 template <typename AllocT, size_t ThreadN>
 void working_proc(size_t& alloced_size, const std::vector<size_t>* ix)
 {
     static const size_t TEST_CYCL = (TestCycl / ThreadN / 2) - 1;
-    std::array<void*, TestCont> ptrs;
-    ptrs.assign(nullptr);
+    void* (ptrs[TestCont]);
+    memset(ptrs, 0, sizeof(ptrs));
     while (is_not_started) std::this_thread::yield();
     TEST_CYCLES__(2, if (x == 0) alloced_size += s, 
                      if (x == 0) alloced_size -= s);

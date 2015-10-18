@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "capo/type_traits.hpp"
 #include "capo/printf.hpp"
 
 #include <cstddef>      // std::size_t

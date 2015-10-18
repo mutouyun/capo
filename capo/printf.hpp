@@ -9,7 +9,7 @@
 
 #include "capo/detect_plat.hpp"
 #include "capo/type_name.hpp"
-#include "capo/output.hpp"
+#include "capo/type_traits.hpp"
 
 #include <string>       // std::string
 #include <stdexcept>    // std::invalid_argument

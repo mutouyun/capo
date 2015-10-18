@@ -107,7 +107,7 @@ struct slot_fn<C, F, void, P...> : slot<void, P...>
 };
 
 template <class C, typename F, typename R, typename... P>
-struct slot_fn<C, F, R, P...> : slot<R, P...>
+struct slot_fn : slot<R, P...>
 {
     C c_;
     F f_;

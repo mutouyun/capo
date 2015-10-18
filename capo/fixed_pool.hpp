@@ -78,8 +78,9 @@ public:
 
     fixed_pool(const alloc_policy& r_alc, size_t init_expand = 1)
         : alloc_(r_alc)
-        , fixed_pool(init_expand)
-    {}
+    {
+        init(init_expand);
+    }
 
     fixed_pool(fixed_pool&& rhs)            { this->swap(rhs); }
     fixed_pool& operator=(fixed_pool&& rhs) { this->swap(rhs); }

@@ -4,7 +4,7 @@ export CC = gcc
 export CX = g++
 export LB = ar
 
-export CFLAGS = -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++11
+export CFLAGS = -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++1y
 export LFLAGS = -Wl,-s
 export AFLAGS = -csr
 
