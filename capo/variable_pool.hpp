@@ -13,7 +13,7 @@
 #include "capo/assert.hpp"
 
 #include <utility>  // std::move, std::swap
-#include <cstddef>  // std::max_align_t
+#include <cstddef>  // size_t
 
 namespace capo {
 
@@ -95,9 +95,9 @@ private:
         size_t adjust_size = offset + size;
 
         head_t* p = alloc_head(HeadSize + adjust_size);
-        if (!p) return nullptr;
+        if (p == nullptr) return nullptr;
         head_t* list = chain();
-        if (adjust_size > BufferSize && list)
+        if (adjust_size > BufferSize && list != nullptr)
         {
             p->next_ = list->next_;
             list->next_ = p;
@@ -111,6 +111,30 @@ private:
             p->next_ = list;
             head_ = reinterpret_cast<char*>(p + 1);
             tail_ = adjust_alignment(head_ + p->free_ - size, offset);
+            p->free_ = remain();
+            return tail_;
+        }
+    }
+
+    void* alloc_new_chunk(size_t size)
+    {
+        head_t* p = alloc_head(HeadSize + size);
+        if (p == nullptr) return nullptr;
+        head_t* list = chain();
+        if (size > BufferSize && list != nullptr)
+        {
+            p->next_ = list->next_;
+            list->next_ = p;
+            char* head = reinterpret_cast<char*>(p + 1);
+            char* tail = head + p->free_ - size;
+            p->free_ = tail - head;
+            return tail;
+        }
+        else
+        {
+            p->next_ = list;
+            head_ = reinterpret_cast<char*>(p + 1);
+            tail_ = head_ + p->free_ - size;
             p->free_ = remain();
             return tail_;
         }
@@ -155,15 +179,7 @@ public:
         init();
     }
 
-#if defined(__GNUC__)
-    /*
-        <GNUC> max_align_t should be in std namespace
-        See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56019
-    */
-    void* alloc(size_t size, size_t alignment = alignof(::max_align_t))
-#else /*!__GNUC__*/
-    void* alloc(size_t size, size_t alignment = alignof(std::max_align_t))
-#endif/*!__GNUC__*/
+    void* alloc(size_t size, size_t alignment)
     {
         CAPO_ASSERT_(!(alignment & (alignment - 1)))(alignment);
 
@@ -182,6 +198,22 @@ public:
             {
                 return alloc_new_chunk(size, alignment);
             }
+        }
+        tail_ = buff;
+        chain()->free_ = remain();
+        return tail_;
+    }
+
+    void* alloc(size_t size)
+    {
+        if (remain() < size)
+        {
+            return alloc_new_chunk(size);
+        }
+        char* buff = tail_ - size;
+        if (buff < head_)
+        {
+            return alloc_new_chunk(size);
         }
         tail_ = buff;
         chain()->free_ = remain();
