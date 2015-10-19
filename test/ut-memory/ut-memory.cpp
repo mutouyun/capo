@@ -9,6 +9,7 @@
 #include "capo/standard_alloc.hpp"
 #include "capo/fixed_pool.hpp"
 #include "capo/variable_pool.hpp"
+#include "capo/scope_alloc.hpp"
 
 #include <vector>
 #include <thread>
@@ -218,6 +219,14 @@ TEST_METHOD(fixed_pool)
     ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, ut::alloc_malloc>>();
     ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , ut::alloc_malloc>>();
     ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , ut::alloc_malloc>>();
+
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, capo::scope_alloc<ut::alloc_malloc>>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , capo::scope_alloc<ut::alloc_malloc>>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , capo::scope_alloc<ut::alloc_malloc>>>();
+
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, capo::scope_alloc<ut::alloc_malloc, capo::use::block_normal>>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , capo::scope_alloc<ut::alloc_malloc, capo::use::block_normal>>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , capo::scope_alloc<ut::alloc_malloc, capo::use::block_normal>>>();
 }
 
 TEST_METHOD(variable_pool)

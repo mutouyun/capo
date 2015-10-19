@@ -29,22 +29,22 @@
     {}
 
 /*
-    Make a concept for checking member function
+    Make a concept for checking member function/variable
 */
 
-#define CAPO_CONCEPT_MEMBER_FUNCTION_(FUNC_NAME, POINTER_TYPE)                 \
-    struct has_##FUNC_NAME##_member_func_checker__                             \
+#define CAPO_CONCEPT_MEMBER_(MEMB_NAME, POINTER_TYPE)                          \
+    struct has_##MEMB_NAME##_member_checker__                                  \
     {                                                                          \
         template <class C, POINTER_TYPE>                                       \
-        struct func_test;                                                      \
+        struct memb_test;                                                      \
         template <typename T>                                                  \
-        static std::true_type check(func_test<T, &T::FUNC_NAME>*);             \
+        static std::true_type check(memb_test<T, &T::MEMB_NAME>*);             \
         template <typename T>                                                  \
         static std::false_type check(...);                                     \
     };                                                                         \
     template <typename T>                                                      \
-    struct has_##FUNC_NAME                                                     \
-        : decltype(has_##FUNC_NAME##_member_func_checker__::check<T>(nullptr)) \
+    struct has_##MEMB_NAME                                                     \
+        : decltype(has_##MEMB_NAME##_member_checker__::check<T>(nullptr))      \
     {}
 
 /*

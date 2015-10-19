@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "capo/concept.hpp"
 #include "capo/alloc_concept.hpp"
 #include "capo/construct.hpp"
 #include "capo/allocator.hpp"
@@ -17,37 +18,31 @@
 #include <cstddef>      // size_t
 
 namespace capo {
+namespace detail_scope_alloc_ {
 
-////////////////////////////////////////////////////////////////
-/// Scope allocation -- The destructor will release all memory blocks.
-////////////////////////////////////////////////////////////////
+CAPO_CONCEPT_MEMBER_(destructor_, std::function<void()> C::*);
 
-template <class AllocP = CAPO_ALLOCATOR_POLICY_>
-class scope_alloc final : capo::noncopyable
+template <class AllocP, class BlockT, bool = has_destructor_<BlockT>::value>
+class impl_
 {
 public:
     enum { AllocType = alloc_concept::GCAlloc };
     using alloc_policy = AllocP;
 
-private:
+protected:
     alloc_policy alloc_;
-
-    struct block
-    {
-        block* next_;
-        std::function<void()> destructor_;
-    } * list_ = nullptr;
+    BlockT* list_ = nullptr;
 
 public:
-    scope_alloc(void) = default;
+    impl_(void) = default;
 
-    scope_alloc(scope_alloc&& rhs)            { this->swap(rhs); }
-    scope_alloc& operator=(scope_alloc&& rhs) { this->swap(rhs); }
+    impl_(impl_&& rhs)            { this->swap(rhs); }
+    impl_& operator=(impl_&& rhs) { this->swap(rhs); }
 
-    ~scope_alloc(void) { clear(); }
+    ~impl_(void) { clear(); }
 
 public:
-    void swap(scope_alloc& rhs)
+    void swap(impl_& rhs)
     {
         std::swap(this->alloc_, rhs.alloc_);
         std::swap(this->list_ , rhs.list_);
@@ -56,11 +51,11 @@ public:
     size_t remain(void) const
     {
         size_t c = 0;
-        block* curr = list_;
+        BlockT* curr = list_;
         while (curr != nullptr)
         {
             ++c;
-            curr = curr->next_;
+            curr = static_cast<BlockT*>(curr->next_);
         }
         return c;
     }
@@ -69,9 +64,8 @@ public:
     {
         while (list_ != nullptr)
         {
-            block* curr = list_;
-            list_ = list_->next_;
-            if (curr->destructor_) curr->destructor_();
+            BlockT* curr = list_;
+            list_ = static_cast<BlockT*>(list_->next_);
             capo::destruct(curr);
             alloc_.free(curr);
         }
@@ -81,15 +75,31 @@ public:
 
     void* alloc(size_t size)
     {
-        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + size));
+        BlockT* curr = capo::construct<BlockT>(alloc_.alloc(sizeof(BlockT) + size));
         curr->next_ = list_;
         return ((list_ = curr) + 1);
     }
 
+    void free(void* /*p*/) {}
+    void free(void* /*p*/, size_t /*size*/) {}
+};
+
+template <class AllocP, class BlockT>
+class impl_<AllocP, BlockT, true> : public impl_<AllocP, BlockT, false>
+{
+    using base_t = impl_<AllocP, BlockT, false>;
+
+protected:
+    using base_t::list_;
+
+public:
+    using base_t::impl_;
+    using base_t::alloc;
+
     template <typename F>
     void* alloc(size_t size, F&& destructor)
     {
-        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + size));
+        BlockT* curr = capo::construct<BlockT>(alloc_.alloc(sizeof(BlockT) + size));
         curr->next_ = list_;
         curr->destructor_ = std::forward<F>(destructor);
         return ((list_ = curr) + 1);
@@ -98,15 +108,43 @@ public:
     template <typename T, typename... P>
     T* alloc(P&&... args)
     {
-        block* curr = capo::construct<block>(alloc_.alloc(sizeof(block) + sizeof(T)));
+        BlockT* curr = capo::construct<BlockT>(alloc_.alloc(sizeof(BlockT) + sizeof(T)));
         curr->next_ = list_;
         T* p = capo::construct<T>((list_ = curr) + 1, std::forward<P>(args)...);
         curr->destructor_ = [p]{ capo::destruct(p); };
         return p;
     }
+};
 
-    void free(void* /*p*/) {}
-    void free(void* /*p*/, size_t /*size*/) {}
+} // namespace detail_scope_alloc_
+
+namespace use {
+
+struct block_normal
+{
+    block_normal* next_;
+};
+
+struct block_guard : block_normal
+{
+    std::function<void()> destructor_;
+    ~block_guard(void) { if (destructor_) destructor_(); }
+};
+
+} // namespace use
+
+////////////////////////////////////////////////////////////////
+/// Scope allocation -- The destructor will release all memory blocks.
+////////////////////////////////////////////////////////////////
+
+template <class AllocP = CAPO_ALLOCATOR_POLICY_, class BlockT = capo::use::block_guard>
+class scope_alloc final : capo::noncopyable, public detail_scope_alloc_::impl_<AllocP, BlockT>
+{
+    using base_t = detail_scope_alloc_::impl_<AllocP, BlockT>;
+
+public:
+    using base_t::impl_;
+    void swap(scope_alloc& rhs) { base_t::swap(rhs); }
 };
 
 ////////////////////////////////////////////////////////////////

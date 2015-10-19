@@ -22,7 +22,7 @@ class XXX
 };
 
 CAPO_CONCEPT_INNER_TYPE_(foo_type);
-CAPO_CONCEPT_MEMBER_FUNCTION_(bar_func, void (C::*)(int) const);
+CAPO_CONCEPT_MEMBER_(bar_func, void (C::*)(int) const);
 CAPO_CONCEPT_(FooBarType, has_foo_type<T>::value || has_bar_func<T>::value);
 
 #define TEST_METHOD(TEST_NAME) TEST(concept, TEST_NAME)

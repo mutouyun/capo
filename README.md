@@ -15,7 +15,6 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    memory.alloc_pool               - 基于内存池的内存分配器
     pattern.trackable               - 遍历出所有该类型尚未销毁的对象实例
     utility.optional                - Just like boost::optional
     utility.any                     - Just like boost::any

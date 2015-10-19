@@ -12,6 +12,7 @@
 #include "capo/assert.hpp"
 #include "capo/alloc_concept.hpp"
 #include "capo/allocator.hpp"
+#include "capo/scope_alloc.hpp"
 #include "capo/unused.hpp"
 
 #include <utility>  // std::swap
@@ -27,7 +28,9 @@ namespace capo {
 #   define CAPO_FIXED_POOL_ITERPOLICY_ capo::use::arithmetic<>
 #endif/*!CAPO_FIXED_POOL_ITERPOLICY_*/
 
-template <size_t BlockSize, class PolicyT = CAPO_FIXED_POOL_ITERPOLICY_, class AllocP = CAPO_ALLOCATOR_POLICY_,
+template <size_t BlockSize, 
+          class PolicyT = CAPO_FIXED_POOL_ITERPOLICY_, 
+          class AllocP = capo::scope_alloc<CAPO_ALLOCATOR_POLICY_, capo::use::block_normal>,
           bool = (BlockSize >= sizeof(void*))>
 class fixed_pool;
 
