@@ -99,7 +99,6 @@ output:
 	@-$(MK) "$(OUT)"
 	@-$(MK) "$(TMP)"
 	@echo Making complete.
-	@echo.
 
 clean:
 	@echo Cleaning directorys...

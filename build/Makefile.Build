@@ -3,11 +3,11 @@
 all: $(BUILD_RULES)
 
 begin:
-	@echo.
+	@echo ""
 	@echo ================================
 	@echo  - Building: $(PRO_NAME)...
 	@echo ================================
-	@echo.
+	@echo ""
 
 # Compile
 
@@ -23,6 +23,6 @@ else
 	@echo Linking $@...
 	@$(CX) $(LFLAGS) -o $(OUT)/$@ $^ $(THIRD_LIB)
 endif
-	@echo.
+	@echo ""
 	@echo  - Building complete: $(PRO_NAME).
-	@echo.
+	@echo ""

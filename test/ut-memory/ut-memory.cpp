@@ -16,6 +16,8 @@
 
 ////////////////////////////////////////////////////////////////
 
+namespace ut {
+
 #ifdef NDEBUG
 const size_t TestCycl = 10000;
 const size_t TestCont = 10000;
@@ -176,23 +178,25 @@ void start(void)
     std::cout << std::endl;
 }
 
+} // namespace ut
+
 #define TEST_METHOD(TEST_NAME) TEST(memory, TEST_NAME)
 
 ////////////////////////////////////////////////////////////////
 
 //TEST_METHOD(alloc_malloc)
 //{
-//    start<capo::use::alloc_malloc>();
+//    ut::start<capo::use::alloc_malloc>();
 //}
 
 TEST_METHOD(fixed_pool)
 {
-    start<capo::fixed_pool<TestSMax, capo::use::arithmetic<>, capo::use::alloc_malloc>>();
-    start<capo::fixed_pool<TestSMax, capo::use::geometric<> , capo::use::alloc_malloc>>();
-    start<capo::fixed_pool<TestSMax, capo::use::fibonacci   , capo::use::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, capo::use::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , capo::use::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , capo::use::alloc_malloc>>();
 }
 
 TEST_METHOD(variable_pool)
 {
-    start<capo::variable_pool<>>();
+    ut::start<capo::variable_pool<>>();
 }
