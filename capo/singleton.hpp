@@ -63,8 +63,8 @@ public:
         */
         static thread_local_ptr<T> tls_ptr;
         T* pi = tls_ptr;
-        if (!pi) pi = tls_ptr = new T(std::forward<P>(args)...);
-        CAPO_ASSERT_(pi);
+        if (pi == nullptr) pi = tls_ptr = new T(std::forward<P>(args)...);
+        CAPO_ASSERT_(pi != nullptr);
         return (*pi);
     }
 };
@@ -78,7 +78,7 @@ public:
 template <typename T,
           template <typename...> class PolicyT = capo::use::single_shared,
           typename... P>
-inline T& singleton(P&&... args)
+T& singleton(P&&... args)
 {
     return PolicyT<T>::instance(std::forward<P>(args)...);
 }

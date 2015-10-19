@@ -21,7 +21,7 @@ using namespace detail_thread_local_ptr;
 /// Call destructors on thread exit
 ////////////////////////////////////////////////////////////////
 
-void onThreadExit(void)
+void OnThreadExit(void)
 {
     auto rec = tls_data::records();
     if (rec)
@@ -42,9 +42,9 @@ void onThreadExit(void)
 */
 ////////////////////////////////////////////////////////////////
 
-void NTAPI onTlsCallback(PVOID, DWORD dwReason, PVOID)
+void NTAPI OnTlsCallback(PVOID, DWORD dwReason, PVOID)
 {
-    if (dwReason == DLL_THREAD_DETACH) onThreadExit();
+    if (dwReason == DLL_THREAD_DETACH) OnThreadExit();
 }
 
 #if defined(_MSC_VER)
@@ -58,7 +58,7 @@ extern "C"
 {
 #   pragma const_seg(".CRT$XLB")
     extern const PIMAGE_TLS_CALLBACK _tls_xl_b__;
-    const PIMAGE_TLS_CALLBACK _tls_xl_b__ = onTlsCallback;
+    const PIMAGE_TLS_CALLBACK _tls_xl_b__ = OnTlsCallback;
 #   pragma const_seg()
 }
 
@@ -70,7 +70,7 @@ extern "C"
 extern "C"
 {
 #   pragma data_seg(".CRT$XLB")
-    PIMAGE_TLS_CALLBACK _tls_xl_b__ = onTlsCallback;
+    PIMAGE_TLS_CALLBACK _tls_xl_b__ = OnTlsCallback;
 #   pragma data_seg()
 }
 
@@ -85,7 +85,7 @@ extern "C"
 
 extern "C"
 {
-    CAPO_CRTALLOC__(".CRT$XLB") PIMAGE_TLS_CALLBACK _tls_xl_b__ = onTlsCallback;
+    CAPO_CRTALLOC__(".CRT$XLB") PIMAGE_TLS_CALLBACK _tls_xl_b__ = OnTlsCallback;
 }
 
 #else /*!__MINGW*/
@@ -98,7 +98,7 @@ extern "C"
     CAPO_CRTALLOC__(".tls$ZZZ") char _tls_end__   = 0;
 
     CAPO_CRTALLOC__(".CRT$XLA") PIMAGE_TLS_CALLBACK _tls_xl_a__ = 0;
-    CAPO_CRTALLOC__(".CRT$XLB") PIMAGE_TLS_CALLBACK _tls_xl_b__ = onTlsCallback;
+    CAPO_CRTALLOC__(".CRT$XLB") PIMAGE_TLS_CALLBACK _tls_xl_b__ = OnTlsCallback;
     CAPO_CRTALLOC__(".CRT$XLZ") PIMAGE_TLS_CALLBACK _tls_xl_z__ = 0;
 }
 

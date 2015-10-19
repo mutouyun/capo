@@ -85,26 +85,26 @@ namespace detail_thread_local_ptr
 }
 
 #undef  CAPO_THREAD_LOCAL_CREATE
-#define CAPO_THREAD_LOCAL_CREATE(KEY, DESTRUCTOR) \
-    do \
-    { \
-        KEY = TlsAlloc(); \
-        using namespace detail_thread_local_ptr; \
-        auto rec = tls_data::records(); \
+#define CAPO_THREAD_LOCAL_CREATE(KEY, DESTRUCTOR)               \
+    do                                                          \
+    {                                                           \
+        KEY = TlsAlloc();                                       \
+        using namespace detail_thread_local_ptr;                \
+        auto rec = tls_data::records();                         \
         if (!rec) rec = tls_data::records(new tls_data::map_t); \
-        if (!rec) break; \
-        rec->emplace(KEY, tls_data(KEY, DESTRUCTOR)); \
+        if (!rec) break;                                        \
+        rec->emplace(KEY, KEY, DESTRUCTOR);                     \
     } while(false)
 
 #undef  CAPO_THREAD_LOCAL_DELETE
-#define CAPO_THREAD_LOCAL_DELETE(KEY) \
-    do \
-    { \
+#define CAPO_THREAD_LOCAL_DELETE(KEY)            \
+    do                                           \
+    {                                            \
         using namespace detail_thread_local_ptr; \
-        auto rec = tls_data::records(); \
-        if (!rec) break; \
-        rec->erase(KEY); \
-        TlsFree(KEY); \
+        auto rec = tls_data::records();          \
+        if (!rec) break;                         \
+        rec->erase(KEY);                         \
+        TlsFree(KEY);                            \
     } while(false)
 
 #else /*!CAPO_OS_WIN_*/
@@ -133,7 +133,7 @@ namespace detail_thread_local_ptr
         thread_local_ptr<int> p; // or p(false);
         if (!p) p = new int(123);
         // ...
-    </>
+    <code/>
     Just like an ordinary pointer.
 */
 
@@ -151,12 +151,12 @@ public:
         });
     }
 
-    template <typename... P>
-    thread_local_ptr(bool auto_set, P&&... args) : thread_local_ptr()
+    template <typename... A>
+    thread_local_ptr(bool auto_set, A&&... args) : thread_local_ptr()
     {
         if (auto_set)
         {
-            CAPO_THREAD_LOCAL_SET(key_, new T(std::forward<P>(args)...));
+            CAPO_THREAD_LOCAL_SET(key_, new T(std::forward<A>(args)...));
         }
     }
 
