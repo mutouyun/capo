@@ -176,6 +176,7 @@ public:
             list = list->next_;
             free_head(curr);
         }
+        alloc_.clear();
         init();
     }
 

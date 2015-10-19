@@ -21,11 +21,11 @@ namespace ut {
 #ifdef NDEBUG
 const size_t TestCycl = 10000;
 const size_t TestCont = 10000;
-const size_t TestSMin = 256;
-const size_t TestSMax = 256;
+const size_t TestSMin = 4;
+const size_t TestSMax = 4;
 #else
-const size_t TestCycl = 2/*1000*/;
-const size_t TestCont = 2/*100*/;
+const size_t TestCycl = 2;
+const size_t TestCont = 10000;
 const size_t TestSMin = 256;
 const size_t TestSMax = 256;
 #endif
@@ -60,26 +60,45 @@ struct RunOnce
     RunOnce(void) { init(); }
 } init__;
 
+struct alloc_malloc : capo::use::alloc_malloc
+{
+    enum { AllocType = capo::alloc_concept::StaticAlloc };
+
+    static size_t alloced_;
+
+    static size_t alloced(void) { return alloced_; }
+
+    static void* alloc(size_t size)
+    {
+        alloced_ += size;
+        return capo::use::alloc_malloc::alloc(size);
+    }
+    static void free(void* p, size_t size)
+    {
+        alloced_ -= size;
+        capo::use::alloc_malloc::free(p, size);
+    }
+    using capo::use::alloc_malloc::free;
+};
+size_t alloc_malloc::alloced_ = 0;
+
 template <class AllocT, int = AllocT::AllocType>
 struct test_alloc
 {
     static AllocT pool_;
 
-    static size_t remain(void) { return pool_.remain(); }
-
-    static void clear(void) { pool_.clear(); }
+    static size_t alloced(void) { return alloc_malloc::alloced(); }
+    static void   clear  (void) { pool_.clear(); alloc_malloc::alloced_ = 0; }
 
     static void* alloc(size_t size)
     {
         return pool_.alloc(size);
     }
-
     static void free(void* p, size_t size)
     {
         pool_.free(p, size);
     }
 };
-
 template <class AllocT, int AC>
 AllocT test_alloc<AllocT, AC>::pool_;
 
@@ -88,12 +107,17 @@ struct test_alloc<AllocT, capo::alloc_concept::RegionAlloc>
 {
     AllocT pool_;
 
-    static size_t remain(void) { return 0; }
-    static void   clear(void)  {}
+    static size_t alloced_;
+    ~test_alloc(void) { alloced_ = alloc_malloc::alloced(); }
 
-    void* alloc(size_t size)        { return pool_.alloc(size); }
-    void free(void* p, size_t size) { pool_.free(p, size); }
+    static size_t alloced(void) { return alloced_; }
+    static void   clear(void)   { alloced_ = alloc_malloc::alloced_ = 0; }
+
+    void* alloc(size_t size)          { return pool_.alloc(size); }
+    void  free (void* p, size_t size) { pool_.free(p, size); }
 };
+template <class AllocT>
+size_t test_alloc<AllocT, capo::alloc_concept::RegionAlloc>::alloced_ = 0;
 
 volatile bool is_not_started;
 
@@ -153,11 +177,11 @@ void test_memory_pool(const char* name)
     capo::stopwatch<> sw(true);
     for (auto& t : threads) t.working_.join();
 
-    auto value  = sw.elapsed<std::chrono::milliseconds>();
-    auto remain = test_alloc<AllocT>::remain();
+    auto value = sw.elapsed<std::chrono::milliseconds>();
+    size_t alloced_malc = test_alloc<AllocT>::alloced();
     size_t alloced_size = 0;
     for (auto& t : threads) alloced_size += t.alloced_size_;
-    size_t fragment = remain ? remain - alloced_size : 0;
+    size_t fragment = alloced_malc ? alloced_malc - alloced_size : 0;
 
     capo::output(std::cout, "{0} ms, allocated: {1} bytes, Fragment: {2} bytes, {3:.2}%\n",
                  value, alloced_size, fragment, alloced_size ? (fragment * 100 / (double)alloced_size) : 0.0);
@@ -169,8 +193,7 @@ void start(void)
 {
     static_assert(ThreadN > 0, "Thread number is 0!");
 
-    capo::output(std::cout, "Start for {0}...(threads: {1})\n",
-                 capo::type_name<AllocT>().c_str(), ThreadN);
+    capo::output(std::cout, "Start for {0}...(threads: {1})\n", capo::type_name<AllocT>().c_str(), ThreadN);
 
     test_memory_pool<AllocT, ThreadN, 0>("LIFO");
     test_memory_pool<AllocT, ThreadN, 1>("FIFO");
@@ -187,17 +210,17 @@ void start(void)
 
 TEST_METHOD(alloc_malloc)
 {
-    //ut::start<capo::use::alloc_malloc>();
+    ut::start<ut::alloc_malloc>();
 }
 
 TEST_METHOD(fixed_pool)
 {
-    //ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, capo::use::alloc_malloc>>();
-    //ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , capo::use::alloc_malloc>>();
-    //ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , capo::use::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::arithmetic<>, ut::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::geometric<> , ut::alloc_malloc>>();
+    ut::start<capo::fixed_pool<ut::TestSMax, capo::use::fibonacci   , ut::alloc_malloc>>();
 }
 
 TEST_METHOD(variable_pool)
 {
-    ut::start<capo::variable_pool<>>();
+    ut::start<capo::variable_pool<CAPO_VARIABLE_POOL_CHUNKSIZE_, ut::alloc_malloc>>();
 }
