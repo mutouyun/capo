@@ -154,7 +154,9 @@ template <typename R, typename... P>
 class slot
 {
     using type = slot_i<R, P...>;
-    type* s_ptr_ = nullptr;
+
+    type* s_ptr_   = nullptr;
+    bool  blocked_ = false; // Slots can be temporarily "blocked".
 
 public:
     slot(void) = default;
@@ -195,9 +197,19 @@ public:
         return dynamic_cast<T*>(s_ptr_);
     }
 
+    void block(bool b)
+    {
+        blocked_ = b;
+    }
+
+    bool blocked(void) const
+    {
+        return blocked_;
+    }
+
     explicit operator bool(void) const
     {
-        return (s_ptr_ != nullptr);
+        return (!blocked()) && (s_ptr_ != nullptr);
     }
 
     template <typename... A>
