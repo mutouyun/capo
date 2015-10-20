@@ -43,13 +43,14 @@ template <> struct pf<wchar_t*          > { static const char* val(void) { retur
 template <> struct pf<void*             > { static const char* val(void) { return "p"  ; } };
 template <> struct pf<unsigned char*    > : pf<char*> {};
 
-template <typename T          > struct pf<const T*           > : pf<T*  > {};
-template <typename T          > struct pf<volatile T*        > : pf<T*  > {};
-template <typename T          > struct pf<const volatile T*  > : pf<T*  > {};
-template <typename T, size_t N> struct pf<T[N]               > : pf<T*  > {};
-template <typename T, size_t N> struct pf<const T[N]         > : pf<T[N]> {};
-template <typename T, size_t N> struct pf<volatile T[N]      > : pf<T[N]> {};
-template <typename T, size_t N> struct pf<const volatile T[N]> : pf<T[N]> {};
+template <typename T          > struct pf<T*                 > : pf<void*> {};
+template <typename T          > struct pf<const T*           > : pf<T*   > {};
+template <typename T          > struct pf<volatile T*        > : pf<T*   > {};
+template <typename T          > struct pf<const volatile T*  > : pf<T*   > {};
+template <typename T, size_t N> struct pf<T[N]               > : pf<T*   > {};
+template <typename T, size_t N> struct pf<const T[N]         > : pf<T[N] > {};
+template <typename T, size_t N> struct pf<volatile T[N]      > : pf<T[N] > {};
+template <typename T, size_t N> struct pf<const volatile T[N]> : pf<T[N] > {};
 
 template <std::size_t N = 0>
 void replace_placeholders(std::string& /*fmt*/)

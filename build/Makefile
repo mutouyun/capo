@@ -77,7 +77,7 @@ MODULES = \
 	ut-operator ut-max_min ut-sequence ut-range \
 	ut-stopwatch ut-printf ut-assert ut-spin_lock \
 	ut-semaphore ut-waiter ut-construct ut-signal \
-	ut-gc ut-memory
+	ut-gc ut-memory ut-trackable
 
 BUILD_RULES = $(PRO_NAME) $(MODULES)
 include $(BUILD_PATH)/Makefile.Project
