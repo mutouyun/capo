@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "capo/noncopyable.hpp"
 #include "capo/sequence.hpp"
 #include "capo/assert.hpp"
 #include "capo/alloc_concept.hpp"
@@ -35,7 +34,7 @@ template <size_t BlockSize,
 class fixed_pool;
 
 template <size_t BlockSize, class PolicyT, class AllocP>
-class fixed_pool<BlockSize, PolicyT, AllocP, true> final : capo::noncopyable
+class fixed_pool<BlockSize, PolicyT, AllocP, true> final
 {
 public:
     enum { AllocType = alloc_concept::ObjectAlloc };
@@ -86,7 +85,7 @@ public:
     }
 
     fixed_pool(fixed_pool&& rhs)            { this->swap(rhs); }
-    fixed_pool& operator=(fixed_pool&& rhs) { this->swap(rhs); }
+    fixed_pool& operator=(fixed_pool&& rhs) { this->swap(rhs); return (*this); }
 
     ~fixed_pool(void) { clear(); }
 

@@ -11,7 +11,6 @@
 #include "capo/alloc_concept.hpp"
 #include "capo/construct.hpp"
 #include "capo/allocator.hpp"
-#include "capo/noncopyable.hpp"
 
 #include <functional>   // std::function
 #include <utility>      // std::forward, std::swap
@@ -37,7 +36,7 @@ public:
     impl_(void) = default;
 
     impl_(impl_&& rhs)            { this->swap(rhs); }
-    impl_& operator=(impl_&& rhs) { this->swap(rhs); }
+    impl_& operator=(impl_&& rhs) { this->swap(rhs); return (*this); }
 
     ~impl_(void) { clear(); }
 
@@ -138,7 +137,7 @@ struct block_guard : block_normal
 ////////////////////////////////////////////////////////////////
 
 template <class AllocP = CAPO_ALLOCATOR_POLICY_, class BlockT = capo::use::block_guard>
-class scope_alloc final : capo::noncopyable, public detail_scope_alloc_::impl_<AllocP, BlockT>
+class scope_alloc final : public detail_scope_alloc_::impl_<AllocP, BlockT>
 {
     using base_t = detail_scope_alloc_::impl_<AllocP, BlockT>;
 

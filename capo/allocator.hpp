@@ -109,25 +109,17 @@ public:
     typedef AllocP  alloc_policy;
 };
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1900)
-/*
-    <MSVC 2013> compile error C3757
-    'const capo::allocator_wrapper<T, AllocP> &': type not allowed for 'constexpr' function.
-*/
-template <typename T, typename U, class AllocP>
-inline bool operator==(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
-{ return true; }
-template <typename T, typename U, class AllocP>
-inline bool operator!=(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
-{ return false; }
-#else /*!_MSC_VER*/
 template <typename T, typename U, class AllocP>
 constexpr bool operator==(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
-{ return true; }
+{
+    return true;
+}
+
 template <typename T, typename U, class AllocP>
 constexpr bool operator!=(const allocator_wrapper<T, AllocP>&, const allocator_wrapper<U, AllocP>&) noexcept
-{ return false; }
-#endif/*!_MSC_VER*/
+{
+    return false;
+}
 
 ////////////////////////////////////////////////////////////////
 /// The capo's allocator

@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "capo/noncopyable.hpp"
 #include "capo/alloc_concept.hpp"
 #include "capo/allocator.hpp"
 #include "capo/assert.hpp"
@@ -26,7 +25,7 @@ namespace capo {
 #endif/*!CAPO_VARIABLE_POOL_CHUNKSIZE_*/
 
 template <size_t ChunkSize = CAPO_VARIABLE_POOL_CHUNKSIZE_, class AllocP = CAPO_ALLOCATOR_POLICY_>
-class variable_pool final : capo::noncopyable
+class variable_pool final
 {
 private:
     struct head_t
@@ -147,7 +146,7 @@ public:
     }
 
     variable_pool(variable_pool&& rhs)            { this->swap(rhs); }
-    variable_pool& operator=(variable_pool&& rhs) { this->swap(rhs); }
+    variable_pool& operator=(variable_pool&& rhs) { this->swap(rhs); return (*this); }
 
     ~variable_pool(void)
     {

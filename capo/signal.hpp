@@ -8,12 +8,14 @@
 #pragma once
 
 #include "capo/vector.hpp"
+#include "capo/list.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/types_to_seq.hpp"
 #include "capo/max_min.hpp"
 
-#include <utility>  // std::forward
-#include <cstddef>  // size_t
+#include <functional>   // std::function
+#include <utility>      // std::forward, std::move
+#include <cstddef>      // size_t
 
 namespace capo {
 namespace detail_signal_ {
@@ -34,14 +36,20 @@ template <typename F, typename... P>
 using suitable_size = 
     size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
+// enable_if helper
+
+template <typename T, typename U>
+using is_different = typename std::enable_if<!std::is_same<typename capo::underlying<T>::type, U>::value>::type;
+
 /*
-    Define slot struct
+    Define slot interface & the implementations
 */
 
 template <typename R, typename... P>
-struct slot
+struct slot_i
 {
-    virtual ~slot(void) {}
+    virtual ~slot_i(void) {}
+    virtual slot_i* clone(void) const = 0;
     virtual R call(P...) = 0;
 };
 
@@ -49,11 +57,14 @@ template <class C, typename F, typename R, typename... P>
 struct slot_fn;
 
 template <typename F, typename... P>
-struct slot_fn<void, F, void, P...> : slot<void, P...>
+struct slot_fn<void, F, void, P...> : slot_i<void, P...>
 {
     F f_;
 
-    slot_fn(F f) : f_(f) {}
+    template <typename F_, typename = is_different<F_, slot_fn>>
+    slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
+
+    slot_i* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
@@ -68,11 +79,14 @@ struct slot_fn<void, F, void, P...> : slot<void, P...>
 };
 
 template <typename F, typename R, typename... P>
-struct slot_fn<void, F, R, P...> : slot<R, P...>
+struct slot_fn<void, F, R, P...> : slot_i<R, P...>
 {
     F f_;
 
-    slot_fn(F f) : f_(f) {}
+    template <typename F_, typename = is_different<F_, slot_fn>>
+    slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
+
+    slot_i* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
@@ -87,12 +101,15 @@ struct slot_fn<void, F, R, P...> : slot<R, P...>
 };
 
 template <class C, typename F, typename... P>
-struct slot_fn<C, F, void, P...> : slot<void, P...>
+struct slot_fn<C, F, void, P...> : slot_i<void, P...>
 {
     C c_;
     F f_;
 
-    slot_fn(C c, F f) : c_(c), f_(f) {}
+    template <class C_, typename F_>
+    slot_fn(C_&& c, F_&& f) : c_(std::forward<C_>(c)), f_(std::forward<F_>(f)) {}
+
+    slot_i* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
@@ -107,12 +124,15 @@ struct slot_fn<C, F, void, P...> : slot<void, P...>
 };
 
 template <class C, typename F, typename R, typename... P>
-struct slot_fn : slot<R, P...>
+struct slot_fn : slot_i<R, P...>
 {
     C c_;
     F f_;
 
-    slot_fn(C c, F f) : c_(c), f_(f) {}
+    template <class C_, typename F_>
+    slot_fn(C_&& c, F_&& f) : c_(std::forward<C_>(c)), f_(std::forward<F_>(f)) {}
+
+    slot_i* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
@@ -127,6 +147,67 @@ struct slot_fn : slot<R, P...>
 };
 
 /*
+    Define slot class
+*/
+
+template <typename R, typename... P>
+class slot
+{
+    using type = slot_i<R, P...>;
+    type* s_ptr_ = nullptr;
+
+public:
+    slot(void) = default;
+
+    slot(type* p)
+        : s_ptr_(p)
+    {}
+
+    slot(const slot& rhs)
+    {
+        if (rhs.s_ptr_ != nullptr)
+        {
+            s_ptr_ = rhs.s_ptr_->clone();
+        }
+    }
+
+    slot(slot&& rhs)
+    {
+        this->swap(rhs);
+    }
+
+    ~slot(void) { delete s_ptr_; }
+
+    slot& operator=(slot rhs)
+    {
+        this->swap(rhs);
+        return (*this);
+    }
+
+    void swap(slot& rhs)
+    {
+        std::swap(this->s_ptr_, rhs.s_ptr_);
+    }
+
+    template <typename T>
+    T* cast(void) const
+    {
+        return dynamic_cast<T*>(s_ptr_);
+    }
+
+    explicit operator bool(void) const
+    {
+        return (s_ptr_ != nullptr);
+    }
+
+    template <typename... A>
+    R operator()(A&&... args) const
+    {
+        return s_ptr_->call(std::forward<A>(args)...);
+    }
+};
+
+/*
     Define signal base class
 */
 
@@ -136,15 +217,59 @@ class signal_b;
 template <typename R, typename... P>
 class signal_b<R(P...)>
 {
-protected:
-    capo::vector<slot<R, P...>*> slots_;
+    using slots_t = capo::list<slot<R, P...>>;
 
 public:
+    using value_type             = typename slots_t::value_type;
+    using reference              = typename slots_t::reference;
+    using const_reference        = typename slots_t::const_reference;
+    using size_type              = typename slots_t::size_type;
+    using iterator               = typename slots_t::iterator;
+    using const_iterator         = typename slots_t::const_iterator;
+    using reverse_iterator       = typename slots_t::reverse_iterator;
+    using const_reverse_iterator = typename slots_t::const_reverse_iterator;
+
+protected:
+    slots_t slots_;
+
+public:
+    signal_b(void)            = default;
+    signal_b(const signal_b&) = default;
+    signal_b(signal_b&&)      = default;
+
+    virtual ~signal_b(void) { disconnect(); }
+
+public:
+    void swap(signal_b& rhs)
+    {
+        slots_.swap(rhs.slots_);
+    }
+
+    size_t size(void) const
+    {
+        return slots_.size();
+    }
+
+    bool empty(void) const
+    {
+        return slots_.empty();
+    }
+
+          iterator begin(void)       { return slots_.begin(); }
+    const_iterator begin(void) const { return slots_.begin(); }
+          iterator end  (void)       { return slots_.end(); }
+    const_iterator end  (void) const { return slots_.end(); }
+
+          reverse_iterator rbegin(void)       { return slots_.rbegin(); }
+    const_reverse_iterator rbegin(void) const { return slots_.rbegin(); }
+          reverse_iterator rend  (void)       { return slots_.rend(); }
+    const_reverse_iterator rend  (void) const { return slots_.rend(); }
+
     template <typename C, typename F>
     void connect(C&& receiver, F&& slot)
     {
-        slots_.push_back(new slot_fn<typename std::remove_reference<C>::type, 
-                                     typename std::remove_reference<F>::type, R, P...>
+        slots_.emplace_back(new slot_fn<typename std::remove_reference<C>::type, 
+                                        typename std::remove_reference<F>::type, R, P...>
         {
             std::forward<C>(receiver), std::forward<F>(slot)
         });
@@ -153,7 +278,7 @@ public:
     template <typename F>
     void connect(F&& slot)
     {
-        slots_.push_back(new slot_fn<void, typename std::remove_reference<F>::type, R, P...>
+        slots_.emplace_back(new slot_fn<void, typename std::remove_reference<F>::type, R, P...>
         {
             std::forward<F>(slot)
         });
@@ -164,42 +289,37 @@ public:
     {
         using slot_t = slot_fn<typename std::remove_reference<C>::type,
                                typename std::remove_reference<F>::type, R, P...>;
-        auto it = slots_.begin();
-        for (; it != slots_.end(); ++it)
+        for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = dynamic_cast<slot_t*>(*it);
+            auto sp = it->cast<slot_t>();
             if (sp == nullptr) continue;
             if ( (sp->c_ == std::forward<C>(receiver)) && 
                  (sp->f_ == std::forward<F>(slot)) )
             {
-                delete sp;
-                break;
+                slots_.erase(it);
+                return;
             }
         }
-        if (it != slots_.end()) slots_.erase(it);
     }
 
     template <typename F>
     void disconnect(F&& slot)
     {
         using slot_t = slot_fn<void, typename std::remove_reference<F>::type, R, P...>;
-        auto it = slots_.begin();
-        for (; it != slots_.end(); ++it)
+        for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = dynamic_cast<slot_t*>(*it);
+            auto sp = it->cast<slot_t>();
             if (sp == nullptr) continue;
             if (sp->f_ == std::forward<F>(slot))
             {
-                delete sp;
-                break;
+                slots_.erase(it);
+                return;
             }
         }
-        if (it != slots_.end()) slots_.erase(it);
     }
 
     void disconnect(void)
     {
-        for (auto sp : slots_) delete sp;
         slots_.clear();
     }
 };
@@ -217,13 +337,23 @@ template <typename... P>
 class signal<void(P...)> : public detail_signal_::signal_b<void(P...)>
 {
 public:
-    template <typename... A>
-    void operator()(A&&... args)
+    signal(void)          = default;
+    signal(const signal&) = default;
+    signal(signal&&)      = default;
+
+    signal& operator=(signal rhs)
     {
-        for (auto sp : this->slots_)
+        this->swap(rhs);
+        return (*this);
+    }
+
+    template <typename... A>
+    void operator()(A&&... args) const
+    {
+        for (auto& sp : this->slots_)
         {
-            if (sp == nullptr) continue;
-            sp->call(std::forward<A>(args)...);
+            if (!sp) continue;
+            sp(std::forward<A>(args)...);
         }
     }
 };
@@ -231,20 +361,45 @@ public:
 template <typename R, typename... P>
 class signal<R(P...)> : public detail_signal_::signal_b<R(P...)>
 {
+    std::function<R(capo::vector<R>&)> combiner_;
+
 public:
+    signal(void)          = default;
+    signal(const signal&) = default;
+    signal(signal&&)      = default;
+
+    signal& operator=(signal rhs)
+    {
+        this->swap(rhs);
+        return (*this);
+    }
+
+    void swap(signal& rhs)
+    {
+        detail_signal_::signal_b<R(P...)>::swap(rhs);
+        combiner_.swap(rhs.combiner_);
+    }
+
+    explicit signal(std::function<R(capo::vector<R>&)> f)
+        : combiner_(std::move(f))
+    {}
+
+    void combiner(std::function<R(capo::vector<R>&)> f)
+    {
+        combiner_ = std::move(f);
+    }
+
     template <typename... A>
-    R operator()(A&&... args)
+    R operator()(A&&... args) const
     {
         if (this->slots_.empty()) return {};
-        for (size_t i = 0; i < this->slots_.size() - 1; ++i)
+        capo::vector<R> results;
+        for (auto& sp : this->slots_)
         {
-            auto sp = this->slots_[i];
-            if (sp == nullptr) continue;
-            sp->call(std::forward<A>(args)...);
+            if (!sp) continue;
+            results.push_back(sp(std::forward<A>(args)...));
         }
-        auto sp = this->slots_.back();
-        if (sp == nullptr) return {};
-        return sp->call(std::forward<A>(args)...);
+        return combiner_ ? combiner_(results) : results.back();
     }
 };
 

@@ -15,7 +15,6 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    pattern.trackable               - 遍历出所有该类型尚未销毁的对象实例
     utility.optional                - Just like boost::optional
     utility.any                     - Just like boost::any
     string.string                   - std::string的功能拓展

@@ -31,7 +31,7 @@ void thread_proc(void)
 }
 
 template <class Lock>
-auto do_test(void) -> decltype(std::declval<capo::stopwatch<>>().elapsed<std::chrono::milliseconds>())
+auto do_test(void)
 {
     g_counter = 0;
     std::thread threads[10];

@@ -270,26 +270,12 @@ struct types_insert<TypesT<T1, T...>, 0, U>
     using type = typename types_link<U, TypesT<T1, T...>>::type;
 };
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1900)
-/*
-    <MSVC 2013> error C2338: Index is out of range!
-    Cause:
-        'capo::types_insert<capo::type_list<>, 0, U>' will matching
-        'capo::types_insert<TypesT, 0, U>'
-*/
-template <typename U>
-struct types_insert<types<>, 0, U>
-{
-    using type = typename types_link<U, types<>>::type;
-};
-#else /*!_MSC_VER*/
 template <typename U,
           template <typename...> class TypesT>
 struct types_insert<TypesT<>, 0, U>
 {
     using type = typename types_link<U, TypesT<>>::type;
 };
-#endif/*!_MSC_VER*/
 
 template <typename TypesT, int IndexN, typename T>
 using types_insert_t = typename types_insert<TypesT, IndexN, T>::type;
