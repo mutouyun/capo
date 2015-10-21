@@ -101,6 +101,9 @@ TEST_METHOD(max)
         return *ret;
     });
     EXPECT_EQ(sig2(5.f, 3.f), 15.f);
+
+    sig2[0].block(true);
+    EXPECT_EQ(sig2(5.f, 3.f), 8.f);
 }
 
 TEST_METHOD(foreach)

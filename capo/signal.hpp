@@ -8,7 +8,6 @@
 #pragma once
 
 #include "capo/vector.hpp"
-#include "capo/list.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/types_to_seq.hpp"
 #include "capo/max_min.hpp"
@@ -229,7 +228,7 @@ class signal_b;
 template <typename R, typename... P>
 class signal_b<R(P...)>
 {
-    using slots_t = capo::list<slot<R, P...>>;
+    using slots_t = capo::vector<slot<R, P...>>;
 
 public:
     using value_type             = typename slots_t::value_type;
@@ -267,15 +266,21 @@ public:
         return slots_.empty();
     }
 
-          iterator begin(void)       { return slots_.begin(); }
-    const_iterator begin(void) const { return slots_.begin(); }
-          iterator end  (void)       { return slots_.end(); }
-    const_iterator end  (void) const { return slots_.end(); }
+    const_reference at(size_type pos) const { return slots_.at(pos); }
+          reference at(size_type pos)       { return slots_.at(pos); }
 
-          reverse_iterator rbegin(void)       { return slots_.rbegin(); }
+    const_reference operator[](size_type pos) const { return slots_[pos]; }
+          reference operator[](size_type pos)       { return slots_[pos]; }
+
+    const_iterator begin(void) const { return slots_.begin(); }
+          iterator begin(void)       { return slots_.begin(); }
+    const_iterator end  (void) const { return slots_.end(); }
+          iterator end  (void)       { return slots_.end(); }
+
     const_reverse_iterator rbegin(void) const { return slots_.rbegin(); }
-          reverse_iterator rend  (void)       { return slots_.rend(); }
+          reverse_iterator rbegin(void)       { return slots_.rbegin(); }
     const_reverse_iterator rend  (void) const { return slots_.rend(); }
+          reverse_iterator rend  (void)       { return slots_.rend(); }
 
     template <typename C, typename F>
     void connect(C&& receiver, F&& slot)
