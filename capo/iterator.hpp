@@ -12,6 +12,7 @@
 #include "capo/type_traits.hpp"
 #include "capo/tuple.hpp"
 #include "capo/constant_array.hpp"
+#include "capo/concept.hpp"
 
 #include <utility>  // std::move, std::forward, std::swap
 
@@ -31,24 +32,28 @@ enum : size_t
 namespace detail_iterator_ {
 
 /*
-    P&&... args => std::tuple<T...>
-    Be used by iterator::iterator(P&&... args).
+    Concept for checking convertible types.
 */
 
 template <typename T, typename... P>
-struct check
+struct Convertible
     : std::false_type
 {};
 
 template <typename T, typename P1>
-struct check<T, P1>
+struct Convertible<T, P1>
     : std::is_convertible<typename std::remove_reference<P1>::type, T>
 {};
 
 template <typename T, typename P1, typename... P>
-struct check<T, P1, P...>
-    : std::integral_constant<bool, std::is_convertible<typename std::remove_reference<P1>::type, T>::value && check<P...>::value>
+struct Convertible<T, P1, P...>
+    : std::integral_constant<bool, Convertible<T, P1>::value && Convertible<T, P...>::value>
 {};
+
+/*
+    P&&... args => std::tuple<T...>
+    Be used by iterator::iterator(P&&... args).
+*/
 
 template <size_t ForwardN, typename... A>
 auto forward(typename std::enable_if<(ForwardN <= sizeof...(A))>::type*, A&&... args)
@@ -96,7 +101,7 @@ public:
     iterator(void) {}
 
     template <typename... P,
-              typename = typename std::enable_if<detail_iterator_::check<T, P...>::value>::type>
+              typename = CAPO_REQUIRE_(detail_iterator_::Convertible<T, P...>::value)>
     iterator(P&&... args)
         : x_(detail_iterator_::forward<seq::value>(nullptr, std::forward<P>(args)...))
     {}
