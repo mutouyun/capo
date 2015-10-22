@@ -11,6 +11,7 @@
 #include "capo/type_traits.hpp"
 #include "capo/types_to_seq.hpp"
 #include "capo/max_min.hpp"
+#include "capo/concept.hpp"
 
 #include <functional>   // std::function
 #include <utility>      // std::forward, std::move
@@ -35,10 +36,10 @@ template <typename F, typename... P>
 using suitable_size = 
     size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
-// enable_if helper
+// The concept for checking different types
 
 template <typename T, typename U>
-using is_different = typename std::enable_if<!std::is_same<typename capo::underlying<T>::type, U>::value>::type;
+CAPO_CONCEPT_(IsDifferent, !std::is_same<capo::underlying<T>, capo::underlying<U>>::value);
 
 /*
     Define slot interface & the implementations
@@ -60,7 +61,7 @@ struct slot_fn<void, F, void, P...> : slot_i<void, P...>
 {
     F f_;
 
-    template <typename F_, typename = is_different<F_, slot_fn>>
+    template <typename F_, typename = IsDifferent<slot_fn, F_>>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }
@@ -82,7 +83,7 @@ struct slot_fn<void, F, R, P...> : slot_i<R, P...>
 {
     F f_;
 
-    template <typename F_, typename = is_different<F_, slot_fn>>
+    template <typename F_, typename = IsDifferent<slot_fn, F_>>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }

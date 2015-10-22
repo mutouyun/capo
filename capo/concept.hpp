@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <type_traits>  // std::true_type, std::false_type
+#include <type_traits>  // std::true_type, std::false_type, std::enable_if, ...
 
 ////////////////////////////////////////////////////////////////
 
@@ -51,15 +51,6 @@
     Make a concept for checking combined conditions.
 */
 
-#define CAPO_CONCEPT_(CONCEPT_NAME, ...)                                       \
-    template <typename T>                                                      \
-    struct CONCEPT_NAME : std::integral_constant<bool, (__VA_ARGS__)> {}
-
-namespace capo {
-
-template <template <typename> class ConceptT, typename T>
-struct is_concept : ConceptT<T> {};
-
-} // namespace capo
+#define CAPO_CONCEPT_(CONCEPT_NAME, ...) using CONCEPT_NAME = typename std::enable_if<__VA_ARGS__>::type;
 
 ////////////////////////////////////////////////////////////////

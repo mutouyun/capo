@@ -21,7 +21,7 @@ namespace capo {
 */
 
 template <typename T>
-struct underlying : std::remove_cv<typename std::remove_reference<T>::type> {};
+using underlying = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
 /*
     Functor & closure checking
@@ -42,7 +42,7 @@ template <typename T> struct is_closure_<T, true>  : std::true_type  {};
 template <typename T> struct is_closure_<T, false> : std::false_type {};
 
 template <typename T>
-struct is_closure : is_closure_<typename underlying<T>::type> {};
+struct is_closure : is_closure_<underlying<T>> {};
 
 /*
     Function type traits

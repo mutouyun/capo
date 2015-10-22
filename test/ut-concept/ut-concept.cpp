@@ -23,7 +23,10 @@ class XXX
 
 CAPO_CONCEPT_INNER_TYPE_(foo_type);
 CAPO_CONCEPT_MEMBER_(bar_func, void (C::*)(int) const);
-CAPO_CONCEPT_(FooBarType, has_foo_type<T>::value || has_bar_func<T>::value);
+
+template <typename T, bool B = true>
+CAPO_CONCEPT_(FooBarType, B ? (has_foo_type<T>::value || has_bar_func<T>::value) : 
+                            ! (has_foo_type<T>::value || has_bar_func<T>::value));
 
 #define TEST_METHOD(TEST_NAME) TEST(concept, TEST_NAME)
 
@@ -37,10 +40,13 @@ TEST_METHOD(has)
     EXPECT_EQ(true , has_bar_func<Bar>::value);
 }
 
+template <typename T> constexpr bool check(T&&, FooBarType<T>*        = nullptr) { return true ; }
+template <typename T> constexpr bool check(T&&, FooBarType<T, false>* = nullptr) { return false; }
+
 TEST_METHOD(is_concept)
 {
-    EXPECT_EQ(true , (capo::is_concept<FooBarType, Foo>::value));
-    EXPECT_EQ(true , (capo::is_concept<FooBarType, Bar>::value));
-    EXPECT_EQ(false, (capo::is_concept<FooBarType, XXX>::value));
-    EXPECT_EQ(false, (capo::is_concept<FooBarType, int>::value));
+    EXPECT_EQ(true , check(Foo{}));
+    EXPECT_EQ(true , check(Bar{}));
+    EXPECT_EQ(false, check(XXX{}));
+    EXPECT_EQ(false, check(int{}));
 }
