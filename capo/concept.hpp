@@ -24,9 +24,7 @@
         static std::false_type check(...);                                     \
     };                                                                         \
     template <typename T>                                                      \
-    struct has_##INNER_TYPE                                                    \
-        : decltype(has_##INNER_TYPE##_inner_type_checker__::check<T>(nullptr)) \
-    {}
+    using has_##INNER_TYPE = decltype(has_##INNER_TYPE##_inner_type_checker__::check<T>(nullptr))
 
 /*
     Make a concept for checking member function/variable
@@ -43,14 +41,13 @@
         static std::false_type check(...);                                     \
     };                                                                         \
     template <typename T>                                                      \
-    struct has_##MEMB_NAME                                                     \
-        : decltype(has_##MEMB_NAME##_member_checker__::check<T>(nullptr))      \
-    {}
+    using has_##MEMB_NAME = decltype(has_##MEMB_NAME##_member_checker__::check<T>(nullptr))
 
 /*
-    Make a concept for checking combined conditions.
+    Requires the concepts.
 */
 
-#define CAPO_CONCEPT_(CONCEPT_NAME, ...) using CONCEPT_NAME = typename std::enable_if<__VA_ARGS__>::type;
+#define CAPO_CONCEPT_(CONCEPT_NAME, ...) using CONCEPT_NAME = std::integral_constant<bool, (__VA_ARGS__)>
+#define CAPO_REQUIRE_(...)               typename std::enable_if<__VA_ARGS__>::type
 
 ////////////////////////////////////////////////////////////////

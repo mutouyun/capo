@@ -36,7 +36,7 @@ template <typename F, typename... P>
 using suitable_size = 
     size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
-// The concept for checking different types
+// The concept for checking different underlying types
 
 template <typename T, typename U>
 CAPO_CONCEPT_(IsDifferent, !std::is_same<capo::underlying<T>, capo::underlying<U>>::value);
@@ -61,7 +61,7 @@ struct slot_fn<void, F, void, P...> : slot_i<void, P...>
 {
     F f_;
 
-    template <typename F_, typename = IsDifferent<slot_fn, F_>>
+    template <typename F_, typename = CAPO_REQUIRE_(IsDifferent<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }
@@ -83,7 +83,7 @@ struct slot_fn<void, F, R, P...> : slot_i<R, P...>
 {
     F f_;
 
-    template <typename F_, typename = IsDifferent<slot_fn, F_>>
+    template <typename F_, typename = CAPO_REQUIRE_(IsDifferent<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }
