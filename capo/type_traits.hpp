@@ -29,15 +29,14 @@ using underlying = typename std::remove_cv<typename std::remove_reference<T>::ty
     Functor & closure checking
 */
 
-CAPO_CONCEPT_TYPING_(is_functor, &T::operator());
-
-template <typename T, bool = std::is_function<typename std::remove_pointer<T>::type>::value || is_functor<T>::value>
-struct is_closure_;
-template <typename T> struct is_closure_<T, true>  : std::true_type  {};
-template <typename T> struct is_closure_<T, false> : std::false_type {};
+CAPO_CONCEPT_TYPING_(is_functor_object  , &T::operator());
+CAPO_CONCEPT_TYPING_(is_functor_template, &T::template operator());
 
 template <typename T>
-struct is_closure : is_closure_<underlying<T>> {};
+CAPO_CONCEPT_(is_functor, is_functor_object<underlying<T>>::value || is_functor_template<underlying<T>>::value);
+
+template <typename T>
+CAPO_CONCEPT_(is_closure, is_functor<T>::value || std::is_function<typename std::remove_pointer<underlying<T>>::type>::value);
 
 /*
     Function type traits
