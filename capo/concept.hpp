@@ -44,6 +44,19 @@
     using has_##MEMB_NAME = decltype(has_##MEMB_NAME##_member_checker__::check<T>(nullptr))
 
 /*
+    Make a concept for duck typing
+*/
+
+#define CAPO_CONCEPT_TYPING_(NAME, ...)                                        \
+    struct NAME##_typing_checker__                                             \
+    {                                                                          \
+        template <typename T> static std::true_type  check(decltype(__VA_ARGS__)*); \
+        template <typename T> static std::false_type check(...);               \
+    };                                                                         \
+    template <typename T>                                                      \
+    using NAME = decltype(NAME##_typing_checker__::check<T>(nullptr))
+
+/*
     Requires the concepts.
 */
 

@@ -77,7 +77,7 @@ TEST_METHOD(no_placeholder)
     capo::output(out, "{}, {}, {}, {}", 0, 1, 2, 3);
     EXPECT_STREQ("0, 1, 2, 3", buf.c_str());
 
-    capo::output(out, "{_}, {:}, { }, {\t}, {-}, { \t }, {gdgd}", 0, 1, 2, 3);
+    capo::output(out, "{_}, {:}, { }, {\t}, {-}, { \t }, {gdgd}", 0, 1, 2);
     EXPECT_STREQ("0, 0, 0, 1, 0, 2, 0", buf.c_str());
 
     capo::output(out, "{{{}, {}}}, {{{}}}, {}", 0, 1, 2, 3);
@@ -89,4 +89,13 @@ TEST_METHOD(no_placeholder)
     EXPECT_THROW(capo::output(out, "{}, {}{}", 0, 1), std::invalid_argument);
     EXPECT_THROW(capo::output(out, "{}, {}}{}", 0, 1), std::invalid_argument);
     EXPECT_THROW(capo::output(out, "Hello, {1}!", "World"), std::invalid_argument);
+    EXPECT_THROW(capo::output(out, "Hello, {0}!", "World", 123), std::invalid_argument);
+}
+
+TEST_METHOD(default_out)
+{
+    capo::output("Hello, World!\n");
+    capo::output("Hello, {0}!\n", "World");
+    capo::output((char*)"Hello, {0}!\n", "World");
+    capo::output("{}, {}, {}, {}\n", "World", 0, 1, 2);
 }

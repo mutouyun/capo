@@ -11,6 +11,7 @@
 
 #include <string>       // std::string
 #include <utility>      // std::forward
+#include <iostream>     // std::cout
 #include <cstdlib>      // std::atoi
 #include <cstddef>      // size_t
 
@@ -75,7 +76,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 {
     using rep_t = typename std::decay<A>::type;
     size_t pos = 0;
-    bool is_empty = false;
+    bool is_empty = false, has_used = false;
     do
     {
         // Finds brackets.
@@ -111,6 +112,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
             capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
             fmt.replace(pos - 1, end - pos + 2, buf);
             pos += buf.size() - 1;
+            has_used = true;
         };
         if (!is_empty && cfg.empty())
         {
@@ -121,6 +123,10 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
         else pos = end + 1;
     } while (true);
 continue_replace:
+    if (!has_used)
+    {
+        detail_printf::enforce("Argument never used");
+    }
     // Recurs next argument.
     replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
 }
@@ -167,18 +173,29 @@ void replace_placeholders(std::string& fmt)
     }
 }
 
+CAPO_CONCEPT_TYPING_(can_shift_left, std::declval<T>() << std::declval<const std::string&>());
+
+template <typename T>
+CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlying<T>>::value);
+
 } // namespace detail_output
 
 ////////////////////////////////////////////////////////////////
 /// Print data to output stream
 ////////////////////////////////////////////////////////////////
 
-template <typename F, typename... T>
-void output(F&& out, const char* fmt, T&&... args)
+template <typename F, typename... T> CAPO_REQUIRE_(detail_output::OutputPred<F>::value)
+    output(F&& out, const char* fmt, T&&... args)
 {
     std::string buf(fmt);
     detail_output::replace_placeholders(buf, std::forward<T>(args)...);
     detail_printf::do_out(std::forward<F>(out), buf);
+}
+
+template <typename... T>
+void output(const char* fmt, T&&... args)
+{
+    return output(std::cout, fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo

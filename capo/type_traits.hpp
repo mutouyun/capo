@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "capo/concept.hpp"
+
 #include <type_traits>  // std::remove_cv, std::remove_reference, std::decay, ...
 #include <tuple>        // std::tuple
 #include <functional>   // std::function
@@ -27,14 +29,7 @@ using underlying = typename std::remove_cv<typename std::remove_reference<T>::ty
     Functor & closure checking
 */
 
-struct is_functor_
-{
-    template <typename T> static std::true_type  check(decltype(&T::operator())*);
-    template <typename T> static std::false_type check(...);
-};
-
-template <typename T>
-struct is_functor : decltype(is_functor_::check<T>(nullptr)) {};
+CAPO_CONCEPT_TYPING_(is_functor, &T::operator());
 
 template <typename T, bool = std::is_function<typename std::remove_pointer<T>::type>::value || is_functor<T>::value>
 struct is_closure_;

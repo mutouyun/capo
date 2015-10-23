@@ -10,6 +10,7 @@
 #include "capo/detect_plat.hpp"
 #include "capo/type_name.hpp"
 #include "capo/type_traits.hpp"
+#include "capo/concept.hpp"
 
 #include <string>       // std::string
 #include <stdexcept>    // std::invalid_argument
@@ -164,14 +165,14 @@ void check(const char* fmt, T1&& /*a1*/, T&&... args)
     }
     enforce("Too few format specifiers");
 }
-    
-template <typename F> typename std::enable_if<capo::is_closure<F>::value>::type 
+
+template <typename F> CAPO_REQUIRE_(capo::is_closure<F>::value)
     do_out(F&& out, const std::string& buf)
 {
     out(buf);
 }
 
-template <typename F> typename std::enable_if<!capo::is_closure<F>::value>::type
+template <typename F> CAPO_REQUIRE_(!capo::is_closure<F>::value)
     do_out(F&& out, const std::string& buf)
 {
     out << buf;
