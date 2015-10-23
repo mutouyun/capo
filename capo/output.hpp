@@ -9,9 +9,10 @@
 
 #include "capo/printf.hpp"
 
-#include <cstddef>      // std::size_t
 #include <string>       // std::string
 #include <utility>      // std::forward
+#include <cstdlib>      // std::atoi
+#include <cstddef>      // size_t
 
 namespace capo {
 
@@ -52,71 +53,91 @@ template <typename T, size_t N> struct pf<const T[N]         > : pf<T[N] > {};
 template <typename T, size_t N> struct pf<volatile T[N]      > : pf<T[N] > {};
 template <typename T, size_t N> struct pf<const volatile T[N]> : pf<T[N] > {};
 
-template <std::size_t N = 0>
-void replace_placeholders(std::string& /*fmt*/)
+template <std::size_t N>
+bool is_match(std::string& cfg)
 {
-    // Do Nothing.
+    if (cfg.empty()) return false;
+    size_t sep_found = cfg.find(':');
+    std::string num = cfg.substr(0, sep_found);
+    if (N == std::atoi(num.c_str()))
+    {
+        if (sep_found == std::string::npos)
+            cfg = "";
+        else
+            cfg = cfg.substr(sep_found + 1);
+        return true;
+    }
+    return false;
 }
 
 template <std::size_t N = 0, typename A, typename... T>
 void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 {
     using rep_t = typename std::decay<A>::type;
-    std::string phstr = '{' + std::to_string(N);
-    std::size_t found = 0;
+    size_t pos = 0;
+    bool is_empty = false;
     do
     {
-    next_loop:
-        found = fmt.find(phstr.c_str(), found);
-        if (found == std::string::npos)
-            break;
-        else
+        do
         {
-            if (found > 0)
+            pos = fmt.find('{', pos);
+            if (pos == std::string::npos) goto continue_replace;
+            if (fmt[++pos] == '{') ++pos;
+            else break;
+        } while (true);
+        size_t end = fmt.find('}', pos);
+        if (end == std::string::npos) break;
+        std::string cfg = fmt.substr(pos, end - pos);
+        // Removes blank characters. 
+        auto cfg_remove = [&cfg](char c)
+        {
+            size_t pos = 0;
+            do
             {
-                if (fmt[found - 1] == '\\')
-                {
-                    found += phstr.size();
-                    goto next_loop;
-                }
-            }
-            std::size_t start = found + phstr.size();
+                pos = cfg.find(c, pos);
+                if (pos == std::string::npos) break;
+                cfg.erase(pos, 1);
+            } while (true);
+        };
+        cfg_remove(' ');
+        cfg_remove('\t');
+        // Replaces the matching placeholder.
+        auto fmt_replace = [&]
+        {
             std::string buf("%");
-            auto buf_out = [&buf](const std::string& str)
-            {
-                buf = std::move(str);
-            };
-            switch (fmt[start])
-            {
-            case '}':
-                {
-                    buf += pf<rep_t>::val();
-                    capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
-                    fmt.replace(found, phstr.size() + 1, buf);
-                }
-                break;
-            case ':':
-                {
-                    start += 1;
-                    std::size_t brac = fmt.find('}', start);
-                    if (brac == std::string::npos || fmt[brac - 1] == '\\')
-                    {
-                        found = start;
-                        goto next_loop;
-                    }
-                    std::string cfg = fmt.substr(start, brac - start);
-                    buf += cfg + pf<rep_t>::val();
-                    capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
-                    fmt.replace(found, brac - found + 1, buf);
-                }
-                break;
-            default:
-                found = start;
-                goto next_loop;
-            }
+            auto buf_out = [&buf](const std::string& str) { buf = std::move(str); };
+            buf += cfg + pf<rep_t>::val();
+            capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
+            fmt.replace(pos - 1, end - pos + 2, buf);
+            pos += buf.size();
+        };
+        if (!is_empty && cfg.empty())
+        {
+            fmt_replace();
+            is_empty = true;
         }
+        else if (is_match<N>(cfg)) fmt_replace();
     } while (true);
+    // Recurs next argument.
+continue_replace:
     replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
+}
+
+template <std::size_t N = 0>
+void replace_placeholders(std::string& fmt)
+{
+    auto replace_bracket = [&fmt](const char* s)
+    {
+        size_t pos = 0;
+        do
+        {
+            pos = fmt.find(s, pos);
+            if (pos == std::string::npos) break;
+            fmt.replace(pos, 2, 1, s[0]);
+        } while (true);
+    };
+    replace_bracket("{{");
+    replace_bracket("}}");
 }
 
 } // namespace detail_output

@@ -29,15 +29,17 @@ TEST_METHOD(printf)
     EXPECT_STREQ("1234567 A\n", buf);
 }
 
+////////////////////////////////////////////////////////////////
+
+std::string buf;
+void out(const std::string& str)
+{
+    buf = str;
+    std::cout << buf << std::endl;
+}
+
 TEST_METHOD(output)
 {
-    std::string buf;
-    auto out = [&buf](const std::string& str)
-    {
-        buf = str;
-        std::cout << buf << std::endl;
-    };
-
     capo::output(out, "Hello, {0}!", "World");
     EXPECT_STREQ("Hello, World!", buf.c_str());
 
@@ -55,4 +57,31 @@ TEST_METHOD(output)
 
     capo::output(out, "{0}, {3}, {1}, {2}", 0, 1, 2, 3);
     EXPECT_STREQ("0, 3, 1, 2", buf.c_str());
+}
+
+TEST_METHOD(space)
+{
+    capo::output(out, "Hello, {0  }!", "World");
+    EXPECT_STREQ("Hello, World!", buf.c_str());
+
+    capo::output(out, "{ 0 } {0 \t : .1} { 0:  04. } { 0 :04.04}", 123.321);
+    EXPECT_STREQ("123.321000 123.3 0123 123.3210", buf.c_str());
+
+    capo::output(out, "{0}, {3}{2}{1}", 0, 1, 2, 3);
+    EXPECT_STREQ("0, 321", buf.c_str());
+}
+
+TEST_METHOD(no_placeholder)
+{
+    capo::output(out, "{}, {}, {}, {}", 0, 1, 2, 3);
+    EXPECT_STREQ("0, 1, 2, 3", buf.c_str());
+
+    capo::output(out, "{_}, {:}, { }, {\t}, {-}, { \t }, {gdgd}", 0, 1, 2, 3);
+    EXPECT_STREQ("0, 0, 0, 1, 0, 2, 0", buf.c_str());
+
+    capo::output(out, "{{{}, {}}}, {{{}}}, {}", 0, 1, 2, 3);
+    EXPECT_STREQ("{0, 1}, {2}, 3", buf.c_str());
+
+    capo::output(out, "{{}, {}}, {{}}, {}", 0, 1, 2, 3);
+    EXPECT_STREQ("{}, 0}, {}, 1", buf.c_str());
 }
