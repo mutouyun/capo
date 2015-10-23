@@ -78,6 +78,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
     bool is_empty = false;
     do
     {
+        // Finds brackets.
         do
         {
             pos = fmt.find('{', pos);
@@ -86,9 +87,9 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
             else break;
         } while (true);
         size_t end = fmt.find('}', pos);
-        if (end == std::string::npos) break;
+        if (end == std::string::npos) goto continue_replace;
         std::string cfg = fmt.substr(pos, end - pos);
-        // Removes blank characters. 
+        // Removes blank characters.
         auto cfg_remove = [&cfg](char c)
         {
             size_t pos = 0;
@@ -109,7 +110,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
             buf += cfg + pf<rep_t>::val();
             capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
             fmt.replace(pos - 1, end - pos + 2, buf);
-            pos += buf.size();
+            pos += buf.size() - 1;
         };
         if (!is_empty && cfg.empty())
         {
@@ -117,27 +118,53 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
             is_empty = true;
         }
         else if (is_match<N>(cfg)) fmt_replace();
+        else pos = end + 1;
     } while (true);
-    // Recurs next argument.
 continue_replace:
+    // Recurs next argument.
     replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
 }
 
 template <std::size_t N = 0>
 void replace_placeholders(std::string& fmt)
 {
-    auto replace_bracket = [&fmt](const char* s)
+    size_t unmatched_l = 0, unmatched_r = 0;
+    std::string tmp;
+    for (size_t i = 0; i < fmt.size();)
     {
-        size_t pos = 0;
-        do
+        auto enforce_matched = [&](char c) -> bool
         {
-            pos = fmt.find(s, pos);
-            if (pos == std::string::npos) break;
-            fmt.replace(pos, 2, 1, s[0]);
-        } while (true);
-    };
-    replace_bracket("{{");
-    replace_bracket("}}");
+            if (fmt[i] == c)
+            {
+                ++i;
+                return (i >= fmt.size() || fmt[i] != c);
+            }
+            return false;
+        };
+        if (enforce_matched('{')) { ++unmatched_l; continue; }
+        if (enforce_matched('}')) { ++unmatched_r; continue; }
+        if (unmatched_l == 0 && unmatched_r == 0)
+        {
+            tmp.push_back(fmt[i]);
+        }
+        ++i;
+    }
+    if (unmatched_l == unmatched_r)
+    {
+        if (unmatched_l == 0)
+        {
+            fmt = std::move(tmp);
+            return;
+        }
+        detail_printf::enforce("Invalid arguments's count");
+    }
+    else
+    {
+        std::string txt("Invalid format string: unmatched \'");
+        txt += (unmatched_l < unmatched_r) ? '}' : '{';
+        txt += "\' found";
+        detail_printf::enforce(std::move(txt));
+    }
 }
 
 } // namespace detail_output

@@ -73,12 +73,12 @@ private:
     }
 
 public:
-    fixed_pool(size_t init_expand = 1)
+    explicit fixed_pool(size_t init_expand = 1)
     {
         init(init_expand);
     }
 
-    fixed_pool(const alloc_policy& r_alc, size_t init_expand = 1)
+    explicit fixed_pool(const alloc_policy& r_alc, size_t init_expand = 1)
         : alloc_(r_alc)
     {
         init(init_expand);

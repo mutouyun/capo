@@ -140,18 +140,12 @@ private:
     }
 
 public:
-    variable_pool(void)
-    {
-        init();
-    }
+    variable_pool(void) { init(); }
 
     variable_pool(variable_pool&& rhs)            { this->swap(rhs); }
     variable_pool& operator=(variable_pool&& rhs) { this->swap(rhs); return (*this); }
 
-    ~variable_pool(void)
-    {
-        clear();
-    }
+    ~variable_pool(void) { clear(); }
 
 public:
     void swap(variable_pool& rhs)
