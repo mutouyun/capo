@@ -56,6 +56,12 @@ TEST_METHOD(output)
     capo::output(out, "{0}, {1}, {2}, {3}", 0, 1, 2, 3);
     EXPECT_STREQ("0, 1, 2, 3", buf.c_str());
 
+    capo::output(out, "{}, {}, {}, {}", 0, 1, 2, 3);
+    EXPECT_STREQ("0, 1, 2, 3", buf.c_str());
+
+    capo::output(out, "{1}, {}, {0}, {}", 1, 2);
+    EXPECT_STREQ("2, 1, 1, 2", buf.c_str());
+
     capo::output(out, "{0}, {3}, {1}, {2}", 0, 1, 2, 3);
     EXPECT_STREQ("0, 3, 1, 2", buf.c_str());
 }
