@@ -166,14 +166,14 @@ void check(const char* fmt, T1&& /*a1*/, T&&... args)
     enforce("Too few format specifiers");
 }
 
-template <typename F> CAPO_REQUIRE_(capo::is_closure<F>::value)
-    do_out(F&& out, const std::string& buf)
+template <typename F, CAPO_REQUIRE_(capo::is_closure<F>::value)>
+void do_out(F&& out, const std::string& buf)
 {
     out(buf);
 }
 
-template <typename F> CAPO_REQUIRE_(!capo::is_closure<F>::value)
-    do_out(F&& out, const std::string& buf)
+template <typename F, CAPO_REQUIRE_(!capo::is_closure<F>::value)>
+void do_out(F&& out, const std::string& buf)
 {
     out << buf;
 }

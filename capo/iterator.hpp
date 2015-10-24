@@ -100,8 +100,7 @@ private:
 public:
     iterator(void) {}
 
-    template <typename... P,
-              typename = CAPO_REQUIRE_(detail_iterator_::Convertible<T, P...>::value)>
+    template <typename... P, CAPO_REQUIRE_(detail_iterator_::Convertible<T, P...>::value)>
     iterator(P&&... args)
         : x_(detail_iterator_::forward<seq::value>(nullptr, std::forward<P>(args)...))
     {}

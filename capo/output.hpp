@@ -184,8 +184,8 @@ CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlyin
 /// Print data to output stream
 ////////////////////////////////////////////////////////////////
 
-template <typename F, typename... T> CAPO_REQUIRE_(detail_output::OutputPred<F>::value)
-    output(F&& out, const char* fmt, T&&... args)
+template <typename F, CAPO_REQUIRE_(detail_output::OutputPred<F>::value), typename... T>
+void output(F&& out, const char* fmt, T&&... args)
 {
     std::string buf(fmt);
     detail_output::replace_placeholders(buf, std::forward<T>(args)...);

@@ -61,7 +61,7 @@ struct slot_fn<void, F, void, P...> : slot_i<void, P...>
 {
     F f_;
 
-    template <typename F_, typename = CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
+    template <typename F_, CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }
@@ -83,7 +83,7 @@ struct slot_fn<void, F, R, P...> : slot_i<R, P...>
 {
     F f_;
 
-    template <typename F_, typename = CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
+    template <typename F_, CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
     slot_i* clone(void) const { return new slot_fn{ *this }; }

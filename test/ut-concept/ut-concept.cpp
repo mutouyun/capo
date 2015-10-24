@@ -25,7 +25,7 @@ CAPO_CONCEPT_INNER_TYPE_(foo_type);
 CAPO_CONCEPT_MEMBER_(bar_func, void (C::*)(int) const);
 
 template <typename T>
-CAPO_CONCEPT_(FooBarType, has_foo_type<T>::value || has_bar_func<T>::value);
+CAPO_CONCEPT_(FooBarType, has_foo_type<std::remove_reference_t<T>>::value || has_bar_func<std::remove_reference_t<T>>::value);
 
 #define TEST_METHOD(TEST_NAME) TEST(concept, TEST_NAME)
 
@@ -39,8 +39,10 @@ TEST_METHOD(has)
     EXPECT_EQ(true , has_bar_func<Bar>::value);
 }
 
-template <typename T> constexpr CAPO_REQUIRE_( FooBarType<T>::value, bool) check(T&&) { return true ; }
-template <typename T> constexpr CAPO_REQUIRE_(!FooBarType<T>::value, bool) check(T&&) { return false; }
+template <typename T, CAPO_REQUIRE_(FooBarType<T>::value)>
+constexpr auto check(T&&) -> bool { return true ; }
+template <typename T, CAPO_REQUIRE_(!FooBarType<T>::value)>
+constexpr auto check(T&&) -> bool { return false; }
 
 TEST_METHOD(is_concept)
 {
