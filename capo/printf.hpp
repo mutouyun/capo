@@ -167,15 +167,15 @@ void check(const char* fmt, T1&& /*a1*/, T&&... args)
 }
 
 template <typename F, CAPO_REQUIRE_(capo::is_closure<F>::value)>
-void do_out(F&& out, const std::string& buf)
+void do_out(F&& out, std::string&& buf)
 {
-    out(buf);
+    out(std::move(buf));
 }
 
 template <typename F, CAPO_REQUIRE_(!capo::is_closure<F>::value)>
-void do_out(F&& out, const std::string& buf)
+void do_out(F&& out, std::string&& buf)
 {
-    out << buf;
+    out << std::move(buf);
 }
 
 template <typename F>
@@ -189,11 +189,16 @@ int output(F&& out, const char* fmt, ...)
     buf.resize(n);
     n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
     if (n <= 0) goto exit_output;
-    do_out(std::forward<F>(out), buf);
+    do_out(std::forward<F>(out), std::move(buf));
 exit_output:
     va_end(args);
     return n;
 }
+
+CAPO_CONCEPT_TYPING_(can_shift_left, std::declval<T>() << std::declval<std::string>());
+
+template <typename T>
+CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlying<T>>::value);
 
 } // namespace detail_printf
 
@@ -201,7 +206,18 @@ exit_output:
 /// Print formatted data to output stream
 ////////////////////////////////////////////////////////////////
 
-template <typename F, typename... T>
+namespace use
+{
+    auto strout(std::string& buf)
+    {
+        return [&](std::string&& str)
+        {
+            buf = std::move(str);
+        };
+    }
+}
+
+template <typename F, typename... T, CAPO_REQUIRE_(detail_printf::OutputPred<F>::value)>
 int printf(F&& out, const char* fmt, T&&... args)
 {
     if (fmt == nullptr) return 0;

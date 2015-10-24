@@ -36,9 +36,9 @@ TEST_METHOD(printf)
 ////////////////////////////////////////////////////////////////
 
 std::string buf;
-void out(const std::string& str)
+void out(std::string&& str)
 {
-    buf = str;
+    buf = std::move(str);
     std::cout << buf << std::endl;
 }
 
@@ -104,4 +104,20 @@ TEST_METHOD(default_out)
     capo::output("Hello, {0}!\n", "World");
     capo::output((char*)"Hello, {0}!\n", "World");
     capo::output("{}, {}, {}, {}\n", "World", 0, 1, 2);
+}
+
+class Foo
+{
+public:
+    void operator()(std::string& buf)
+    {
+        capo::printf(capo::use::strout(buf), "Foo address: 0x%08x", 0x12345678/*(size_t)this*/);
+    }
+};
+
+TEST_METHOD(custom_type)
+{
+    Foo foo;
+    capo::output(out, "{}, {}, {}, {}", foo, 1, 2, 3);
+    EXPECT_STREQ("Foo address: 0x12345678, 1, 2, 3", buf.c_str());
 }
