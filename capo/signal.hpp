@@ -64,7 +64,7 @@ struct slot_fn<void, F, void, P...> : slot_i<void, P...>
     template <typename F_, CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
-    slot_i* clone(void) const { return new slot_fn{ *this }; }
+    slot_i<void, P...>* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
@@ -86,7 +86,7 @@ struct slot_fn<void, F, R, P...> : slot_i<R, P...>
     template <typename F_, CAPO_REQUIRE_(Different<slot_fn, F_>::value)>
     slot_fn(F_&& f) : f_(std::forward<F_>(f)) {}
 
-    slot_i* clone(void) const { return new slot_fn{ *this }; }
+    slot_i<R, P...>* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
@@ -109,7 +109,7 @@ struct slot_fn<C, F, void, P...> : slot_i<void, P...>
     template <class C_, typename F_>
     slot_fn(C_&& c, F_&& f) : c_(std::forward<C_>(c)), f_(std::forward<F_>(f)) {}
 
-    slot_i* clone(void) const { return new slot_fn{ *this }; }
+    slot_i<void, P...>* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     void forward(constant_seq<N...>, Tp&& tp)
@@ -132,7 +132,7 @@ struct slot_fn : slot_i<R, P...>
     template <class C_, typename F_>
     slot_fn(C_&& c, F_&& f) : c_(std::forward<C_>(c)), f_(std::forward<F_>(f)) {}
 
-    slot_i* clone(void) const { return new slot_fn{ *this }; }
+    slot_i<R, P...>* clone(void) const { return new slot_fn{ *this }; }
 
     template <int... N, typename Tp>
     R forward(constant_seq<N...>, Tp&& tp)
@@ -305,11 +305,10 @@ public:
     template <typename C, typename F>
     void disconnect(C&& receiver, F&& slot)
     {
-        using slot_t = slot_fn<typename std::remove_reference<C>::type,
-                               typename std::remove_reference<F>::type, R, P...>;
         for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = it->cast<slot_t>();
+            auto sp = it->template cast<slot_fn<typename std::remove_reference<C>::type,
+                                                typename std::remove_reference<F>::type, R, P...>>();
             if (sp == nullptr) continue;
             if ( (sp->c_ == std::forward<C>(receiver)) && 
                  (sp->f_ == std::forward<F>(slot)) )
@@ -323,10 +322,9 @@ public:
     template <typename F>
     void disconnect(F&& slot)
     {
-        using slot_t = slot_fn<void, typename std::remove_reference<F>::type, R, P...>;
         for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = it->cast<slot_t>();
+            auto sp = it->template cast<slot_fn<void, typename std::remove_reference<F>::type, R, P...>>();
             if (sp == nullptr) continue;
             if (sp->f_ == std::forward<F>(slot))
             {

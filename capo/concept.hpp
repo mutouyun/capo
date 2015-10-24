@@ -50,7 +50,7 @@
 #define CAPO_CONCEPT_TYPING_(NAME, ...)                             \
     struct NAME##_typing_checker__                                  \
     {                                                               \
-        template <typename T> static std::true_type  check(decltype(__VA_ARGS__)*); \
+        template <typename T> static std::true_type  check(typename std::remove_reference<decltype(__VA_ARGS__)>::type*); \
         template <typename T> static std::false_type check(...);    \
     };                                                              \
     template <typename T>                                           \

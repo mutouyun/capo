@@ -71,6 +71,48 @@ bool is_match(std::string& cfg)
     return false;
 }
 
+template <std::size_t N = 0>
+void replace_placeholders(std::string& fmt)
+{
+    size_t unmatched_l = 0, unmatched_r = 0;
+    std::string tmp;
+    for (size_t i = 0; i < fmt.size();)
+    {
+        auto enforce_matched = [&](char c) -> bool
+        {
+            if (fmt[i] == c)
+            {
+                ++i;
+                return (i >= fmt.size() || fmt[i] != c);
+            }
+            return false;
+        };
+        if (enforce_matched('{')) { ++unmatched_l; continue; }
+        if (enforce_matched('}')) { ++unmatched_r; continue; }
+        if (unmatched_l == 0 && unmatched_r == 0)
+        {
+            tmp.push_back(fmt[i]);
+        }
+        ++i;
+    }
+    if (unmatched_l == unmatched_r)
+    {
+        if (unmatched_l == 0)
+        {
+            fmt = std::move(tmp);
+            return;
+        }
+        detail_printf::enforce("Invalid arguments's count");
+    }
+    else
+    {
+        std::string txt("Invalid format string: unmatched \'");
+        txt += (unmatched_l < unmatched_r) ? '}' : '{';
+        txt += "\' found";
+        detail_printf::enforce(std::move(txt));
+    }
+}
+
 template <std::size_t N = 0, typename A, typename... T>
 void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 {
@@ -131,48 +173,6 @@ continue_replace:
     replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
 }
 
-template <std::size_t N = 0>
-void replace_placeholders(std::string& fmt)
-{
-    size_t unmatched_l = 0, unmatched_r = 0;
-    std::string tmp;
-    for (size_t i = 0; i < fmt.size();)
-    {
-        auto enforce_matched = [&](char c) -> bool
-        {
-            if (fmt[i] == c)
-            {
-                ++i;
-                return (i >= fmt.size() || fmt[i] != c);
-            }
-            return false;
-        };
-        if (enforce_matched('{')) { ++unmatched_l; continue; }
-        if (enforce_matched('}')) { ++unmatched_r; continue; }
-        if (unmatched_l == 0 && unmatched_r == 0)
-        {
-            tmp.push_back(fmt[i]);
-        }
-        ++i;
-    }
-    if (unmatched_l == unmatched_r)
-    {
-        if (unmatched_l == 0)
-        {
-            fmt = std::move(tmp);
-            return;
-        }
-        detail_printf::enforce("Invalid arguments's count");
-    }
-    else
-    {
-        std::string txt("Invalid format string: unmatched \'");
-        txt += (unmatched_l < unmatched_r) ? '}' : '{';
-        txt += "\' found";
-        detail_printf::enforce(std::move(txt));
-    }
-}
-
 CAPO_CONCEPT_TYPING_(can_shift_left, std::declval<T>() << std::declval<const std::string&>());
 
 template <typename T>
@@ -184,7 +184,7 @@ CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlyin
 /// Print data to output stream
 ////////////////////////////////////////////////////////////////
 
-template <typename F, CAPO_REQUIRE_(detail_output::OutputPred<F>::value), typename... T>
+template <typename F, typename... T, CAPO_REQUIRE_(detail_output::OutputPred<F>::value)>
 void output(F&& out, const char* fmt, T&&... args)
 {
     std::string buf(fmt);

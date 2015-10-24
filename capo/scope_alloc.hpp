@@ -89,6 +89,7 @@ class impl_<AllocP, BlockT, true> : public impl_<AllocP, BlockT, false>
     using base_t = impl_<AllocP, BlockT, false>;
 
 protected:
+    using base_t::alloc_;
     using base_t::list_;
 
 public:
