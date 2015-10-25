@@ -235,4 +235,10 @@ int printf(F&& out, const char* fmt, T&&... args)
     return detail_printf_::impl_(std::forward<F>(out), fmt, std::forward<T>(args)...);
 }
 
+template <typename... T>
+int printf(const char* fmt, T&&... args)
+{
+    return capo::printf(std::cout, fmt, std::forward<T>(args)...);
+}
+
 } // namespace capo

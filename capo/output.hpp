@@ -275,7 +275,7 @@ auto output(F&& out, const char* fmt, T&&... args)
 template <typename... T>
 auto output(const char* fmt, T&&... args)
 {
-    return output(std::cout, fmt, std::forward<T>(args)...);
+    return capo::output(std::cout, fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo
