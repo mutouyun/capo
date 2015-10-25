@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "capo/detect_plat.hpp"
 #include "capo/type_name.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/concept.hpp"
