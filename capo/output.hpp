@@ -9,11 +9,11 @@
 
 #include "capo/printf.hpp"
 
-#include <string>       // std::string
-#include <utility>      // std::forward
-#include <iostream>     // std::cout
-#include <cstdlib>      // std::atoi
-#include <cstddef>      // size_t
+#include <string>   // std::string
+#include <utility>  // std::forward
+#include <iostream> // std::cout
+#include <cstdlib>  // std::atoi
+#include <cstddef>  // size_t
 
 namespace capo {
 

@@ -189,7 +189,7 @@ inline bool is_specifier(char c)
 }
 
 template <typename F>
-int output(F&& out, const char* fmt, ...)
+int impl_(F&& out, const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
@@ -232,7 +232,7 @@ int printf(F&& out, const char* fmt, T&&... args)
 {
     if (fmt == nullptr) return 0;
     detail_printf_::check(fmt, std::forward<T>(args)...);
-    return detail_printf_::output(std::forward<F>(out), fmt, std::forward<T>(args)...);
+    return detail_printf_::impl_(std::forward<F>(out), fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo
