@@ -26,7 +26,7 @@ namespace capo {
 /// Perpare for type-safe printf
 ////////////////////////////////////////////////////////////////
 
-namespace detail_printf {
+namespace detail_printf_ {
 
 inline void enforce(std::string&& what)
 {
@@ -178,6 +178,17 @@ void do_out(F&& out, std::string&& buf)
     out << std::move(buf);
 }
 
+inline bool is_specifier(char c)
+{
+    static const char sps[] =
+    {
+        'd', 'i', 'u', 'o', 'x', 'X', 'f', 'F', 'e',
+        'E', 'g', 'G', 'a', 'A', 'c', 's', 'p', 'n'
+    };
+    for (char s : sps) if (s == c) return true;
+    return false;
+}
+
 template <typename F>
 int output(F&& out, const char* fmt, ...)
 {
@@ -200,7 +211,7 @@ CAPO_CONCEPT_TYPING_(can_shift_left, std::declval<T>() << std::declval<std::stri
 template <typename T>
 CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlying<T>>::value);
 
-} // namespace detail_printf
+} // namespace detail_printf_
 
 ////////////////////////////////////////////////////////////////
 /// Print formatted data to output stream
@@ -217,12 +228,12 @@ namespace use
     }
 }
 
-template <typename F, typename... T, CAPO_REQUIRE_(detail_printf::OutputPred<F>::value)>
+template <typename F, typename... T, CAPO_REQUIRE_(detail_printf_::OutputPred<F>::value)>
 int printf(F&& out, const char* fmt, T&&... args)
 {
     if (fmt == nullptr) return 0;
-    detail_printf::check(fmt, std::forward<T>(args)...);
-    return detail_printf::output(std::forward<F>(out), fmt, std::forward<T>(args)...);
+    detail_printf_::check(fmt, std::forward<T>(args)...);
+    return detail_printf_::output(std::forward<F>(out), fmt, std::forward<T>(args)...);
 }
 
 } // namespace capo

@@ -109,9 +109,10 @@ TEST_METHOD(default_out)
 class Foo
 {
 public:
-    void operator()(std::string& buf)
+    template <typename T>
+    void operator()(capo::follower<T>&& out) const
     {
-        capo::printf(capo::use::strout(buf), "Foo address: 0x%08x", 0x12345678/*(size_t)this*/);
+        out("Foo address: 0x{:08x}", 0x12345678/*(size_t)this*/);
     }
 };
 
@@ -120,4 +121,16 @@ TEST_METHOD(custom_type)
     Foo foo;
     capo::output(out, "{}, {}, {}, {}", foo, 1, 2, 3);
     EXPECT_STREQ("Foo address: 0x12345678, 1, 2, 3", buf.c_str());
+}
+
+TEST_METHOD(follower)
+{
+    capo::output("Hello, World!").ln();
+
+    Foo foo;
+    capo::output(out, "1 = {}, ", 1)
+                     ("2 = {}, ", 2)
+                     ("3 = {}"  , 3).ln()
+                     ("foo = {}", foo);
+    EXPECT_STREQ("1 = 1, 2 = 2, 3 = 3\nfoo = Foo address: 0x12345678", buf.c_str());
 }

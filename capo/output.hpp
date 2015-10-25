@@ -23,23 +23,27 @@ namespace capo {
 
 namespace detail_output {
 
+/*
+    Predefine pf struct for making a type to the suitable format string.
+*/
+
 template <typename T> struct pf                     : std::false_type { constexpr static const char* val(void) { return "s"  ; } };
-template <>           struct pf<char              > : std::true_type { constexpr static const char* val(void) { return "c"; } };
-template <>           struct pf<unsigned char     > : std::true_type { constexpr static const char* val(void) { return "c"; } };
-template <>           struct pf<wchar_t           > : std::true_type { constexpr static const char* val(void) { return "lc"; } };
-template <>           struct pf<short             > : std::true_type { constexpr static const char* val(void) { return "d"; } };
-template <>           struct pf<unsigned short    > : std::true_type { constexpr static const char* val(void) { return "u"; } };
-template <>           struct pf<int               > : std::true_type { constexpr static const char* val(void) { return "d"; } };
-template <>           struct pf<unsigned int      > : std::true_type { constexpr static const char* val(void) { return "u"; } };
-template <>           struct pf<long              > : std::true_type { constexpr static const char* val(void) { return "ld"; } };
-template <>           struct pf<unsigned long     > : std::true_type { constexpr static const char* val(void) { return "lu"; } };
-template <>           struct pf<long long         > : std::true_type { constexpr static const char* val(void) { return "lld"; } };
-template <>           struct pf<unsigned long long> : std::true_type { constexpr static const char* val(void) { return "llu"; } };
-template <>           struct pf<float             > : std::true_type { constexpr static const char* val(void) { return "f"; } };
-template <>           struct pf<double            > : std::true_type { constexpr static const char* val(void) { return "f"; } };
-template <>           struct pf<long double       > : std::true_type { constexpr static const char* val(void) { return "Lf"; } };
-template <>           struct pf<char*             > : std::true_type { constexpr static const char* val(void) { return "s"; } };
-template <>           struct pf<wchar_t*          > : std::true_type { constexpr static const char* val(void) { return "ls"; } };
+template <>           struct pf<char              > : std::true_type  { constexpr static const char* val(void) { return "c"  ; } };
+template <>           struct pf<unsigned char     > : std::true_type  { constexpr static const char* val(void) { return "c"  ; } };
+template <>           struct pf<wchar_t           > : std::true_type  { constexpr static const char* val(void) { return "lc" ; } };
+template <>           struct pf<short             > : std::true_type  { constexpr static const char* val(void) { return "d"  ; } };
+template <>           struct pf<unsigned short    > : std::true_type  { constexpr static const char* val(void) { return "u"  ; } };
+template <>           struct pf<int               > : std::true_type  { constexpr static const char* val(void) { return "d"  ; } };
+template <>           struct pf<unsigned int      > : std::true_type  { constexpr static const char* val(void) { return "u"  ; } };
+template <>           struct pf<long              > : std::true_type  { constexpr static const char* val(void) { return "ld" ; } };
+template <>           struct pf<unsigned long     > : std::true_type  { constexpr static const char* val(void) { return "lu" ; } };
+template <>           struct pf<long long         > : std::true_type  { constexpr static const char* val(void) { return "lld"; } };
+template <>           struct pf<unsigned long long> : std::true_type  { constexpr static const char* val(void) { return "llu"; } };
+template <>           struct pf<float             > : std::true_type  { constexpr static const char* val(void) { return "f"  ; } };
+template <>           struct pf<double            > : std::true_type  { constexpr static const char* val(void) { return "f"  ; } };
+template <>           struct pf<long double       > : std::true_type  { constexpr static const char* val(void) { return "Lf" ; } };
+template <>           struct pf<char*             > : std::true_type  { constexpr static const char* val(void) { return "s"  ; } };
+template <>           struct pf<wchar_t*          > : std::true_type  { constexpr static const char* val(void) { return "ls" ; } };
 template <>           struct pf<void*             > : std::true_type  { constexpr static const char* val(void) { return "p"  ; } };
 
 template <>                     struct pf<unsigned char*     > : pf<char*> {};
@@ -51,6 +55,52 @@ template <typename T, size_t N> struct pf<T[N]               > : pf<T*   > {};
 template <typename T, size_t N> struct pf<const T[N]         > : pf<T[N] > {};
 template <typename T, size_t N> struct pf<volatile T[N]      > : pf<T[N] > {};
 template <typename T, size_t N> struct pf<const volatile T[N]> : pf<T[N] > {};
+
+template <std::size_t N = 0>
+void replace_placeholders(std::string& fmt);
+
+template <std::size_t N = 0, typename A, typename... T>
+void replace_placeholders(std::string& fmt, A&& a, T&&... args);
+
+template <typename F>
+class impl_
+{
+    mutable std::string buf_;
+    F out_;
+
+public:
+    template <typename T, CAPO_REQUIRE_(Different<impl_, T>::value)>
+    impl_(T&& out) : out_(std::forward<T>(out)) {}
+
+    impl_(impl_&&)            = default;
+    impl_& operator=(impl_&&) = default;
+
+    ~impl_(void)
+    {
+        if (buf_.empty()) return;
+        typedef typename std::conditional<std::is_reference<F>::value, F, F&>::type out_t;
+        detail_printf_::do_out((out_t)out_, std::move(buf_));
+    }
+
+    template <typename... T>
+    const impl_& operator()(const char* fmt, T&&... args) const
+    {
+        std::string buf(fmt);
+        replace_placeholders(buf, std::forward<T>(args)...);
+        buf_ += std::move(buf);
+        return (*this);
+    }
+
+    const impl_& ln(void) const
+    {
+        buf_ += "\n";
+        return (*this);
+    }
+};
+
+/*
+    Judge the format flags is or not matching the number of argument.
+*/
 
 template <std::size_t N>
 bool is_match(std::string& cfg)
@@ -69,24 +119,44 @@ bool is_match(std::string& cfg)
     return false;
 }
 
+/*
+    Print the buffer on the basis of the argument.
+*/
+
 template <typename A>
 using rep_t = typename std::decay<A>::type;
 
 template <typename A, CAPO_REQUIRE_(pf<rep_t<A>>::value)>
-void printf_buffer(std::string& buf, const std::string& cfg, A&& a)
+void printf_buffer(std::string& buf, std::string&& cfg, A&& a)
 {
     auto buf_out = [&buf](std::string&& str) { buf = std::move(str); };
-    buf = "%" + cfg + pf<rep_t<A>>::val();
+    buf = "%";
+    if (cfg.empty())
+    {
+        buf += pf<rep_t<A>>::val();
+    }
+    else if (detail_printf_::is_specifier(cfg.back()))
+    {
+        buf += std::move(cfg);
+    }
+    else
+    {
+        buf += std::move(cfg) + pf<rep_t<A>>::val();
+    }
     capo::printf(buf_out, buf.c_str(), std::forward<A>(a));
 }
 
 template <typename A, CAPO_REQUIRE_(!pf<rep_t<A>>::value)>
-void printf_buffer(std::string& buf, const std::string& /*cfg*/, A&& a)
+void printf_buffer(std::string& buf, std::string&& /*cfg*/, A&& a)
 {
-    std::forward<A>(a)(buf);
+    std::forward<A>(a)(impl_<decltype(use::strout(buf))>{ use::strout(buf) });
 }
 
-template <std::size_t N = 0>
+/*
+    Replace the placeholders in sequence.
+*/
+
+template <std::size_t N>
 void replace_placeholders(std::string& fmt)
 {
     size_t unmatched_l = 0, unmatched_r = 0;
@@ -117,18 +187,18 @@ void replace_placeholders(std::string& fmt)
             fmt = std::move(tmp);
             return;
         }
-        detail_printf::enforce("Invalid arguments's count");
+        detail_printf_::enforce("Invalid arguments's count");
     }
     else
     {
         std::string txt("Invalid format string: unmatched \'");
         txt += (unmatched_l < unmatched_r) ? '}' : '{';
         txt += "\' found";
-        detail_printf::enforce(std::move(txt));
+        detail_printf_::enforce(std::move(txt));
     }
 }
 
-template <std::size_t N = 0, typename A, typename... T>
+template <std::size_t N, typename A, typename... T>
 void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 {
     size_t pos = 0;
@@ -163,7 +233,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
         auto fmt_replace = [&]
         {
             std::string buf;
-            printf_buffer(buf, cfg, std::forward<A>(a));
+            printf_buffer(buf, std::move(cfg), std::forward<A>(a));
             fmt.replace(pos - 1, end - pos + 2, buf);
             pos += buf.size() - 1;
             has_used = true;
@@ -179,7 +249,7 @@ void replace_placeholders(std::string& fmt, A&& a, T&&... args)
 continue_replace:
     if (!has_used)
     {
-        detail_printf::enforce("Argument never used");
+        detail_printf_::enforce("Argument never used");
     }
     // Recurs next argument.
     replace_placeholders<N + 1>(fmt, std::forward<T>(args)...);
@@ -191,16 +261,19 @@ continue_replace:
 /// Print data to output stream
 ////////////////////////////////////////////////////////////////
 
-template <typename F, typename... T, CAPO_REQUIRE_(detail_printf::OutputPred<F>::value)>
-void output(F&& out, const char* fmt, T&&... args)
+template <typename F>
+using follower = detail_output::impl_<F>;
+
+template <typename F, typename... T, CAPO_REQUIRE_(detail_printf_::OutputPred<F>::value)>
+auto output(F&& out, const char* fmt, T&&... args)
 {
-    std::string buf(fmt);
-    detail_output::replace_placeholders(buf, std::forward<T>(args)...);
-    detail_printf::do_out(std::forward<F>(out), std::move(buf));
+    follower<F> flw { std::forward<F>(out) };
+    flw(fmt, std::forward<T>(args)...);
+    return std::move(flw);
 }
 
 template <typename... T>
-void output(const char* fmt, T&&... args)
+auto output(const char* fmt, T&&... args)
 {
     return output(std::cout, fmt, std::forward<T>(args)...);
 }

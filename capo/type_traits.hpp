@@ -32,10 +32,11 @@ using underlying = typename std::remove_cv<typename std::remove_reference<T>::ty
 CAPO_CONCEPT_TYPING_(is_functor_object, &T::operator());
 
 template <typename T>
-CAPO_CONCEPT_(is_functor, is_functor_object<underlying<T>>::value);
+using is_functor = is_functor_object<underlying<T>>;
 
 template <typename T>
-CAPO_CONCEPT_(is_closure, is_functor<T>::value || std::is_function<typename std::remove_pointer<underlying<T>>::type>::value);
+using is_closure = std::integral_constant<bool, 
+     (is_functor<T>::value || std::is_function<typename std::remove_pointer<underlying<T>>::type>::value)>;
 
 /*
     Function type traits
@@ -143,6 +144,13 @@ template <typename F>
 struct function_traits
      : detail_function_traits_::impl_<typename std::decay<F>::type>
 {};
+
+/*
+    The concept for checking different underlying types
+*/
+
+template <typename T, typename U>
+CAPO_CONCEPT_(Different, !std::is_same<capo::underlying<T>, capo::underlying<U>>::value);
 
 ////////////////////////////////////////////////////////////////
 

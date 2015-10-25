@@ -36,11 +36,6 @@ template <typename F, typename... P>
 using suitable_size = 
     size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
-// The concept for checking different underlying types
-
-template <typename T, typename U>
-CAPO_CONCEPT_(Different, !std::is_same<capo::underlying<T>, capo::underlying<U>>::value);
-
 /*
     Define slot interface & the implementations
 */
