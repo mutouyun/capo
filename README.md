@@ -2,7 +2,9 @@
 
 C++标准库的轻量级拓展
 
-* 支持的编译器(C++14以上): msvc(14.0+), gcc(4.9.0+), clang(3.3.0+).
+[![Build Status](https://travis-ci.org/mutouyun/capo.svg?branch=master)](https://travis-ci.org/mutouyun/capo)
+
+* 支持的编译器(C++14以上): msvc(vc2015+), gcc(4.9.2+), clang(3.4.0+).
 * 每个功能都是独立的头文件(hpp), 除了Win下的thread_local_ptr之外, 不需要编译.
 
 ##

@@ -12,7 +12,8 @@ install:
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install g++-4.9; fi
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install gcc-4.9-multilib g++-4.9-multilib; fi
   - if [ "$CC" == "gcc" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9; fi
-  - $CXX --version
+  - export CX=$CXX
+  - $CX --version
 
 before_script:
   - sudo apt-get -qq install libgtest-dev
