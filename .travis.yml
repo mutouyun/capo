@@ -22,9 +22,9 @@ before_script:
   - sudo make
   - sudo cp *.a /usr/lib
   - cd ~
-  - ls -l
+  - ls -l ~/build
+  - ls -l ~/builds
 
 script:
-  - cd ./build
-  - make debug=1 && make
+  - cd ./build && make debug=1 && make
   - for filename in $( ls ./bin/debug/$CC); do ./bin/debug/$CC/$filename; done && for filename in $( ls ./bin/release/$CC); do ./bin/release/$CC/$filename; done
