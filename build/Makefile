@@ -29,7 +29,7 @@ else
 	RM = rm -r
 	LIB_DIR = $(os)-$(CX)
 	export THIRD_PATH =
-	export THIRD_LIB = /usr/lib/libgtest.a
+	export THIRD_LIB = -lgtest
 endif
 
 # Define workspace
