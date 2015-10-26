@@ -17,11 +17,12 @@ install:
 
 before_script:
   - sudo apt-get -qq install libgtest-dev
-  - sudo apt-get -qq install cmake
   - cd /usr/src/gtest
   - sudo cmake CMakeLists.txt
   - sudo make
   - sudo cp *.a /usr/lib
+  - cd ~
+  - ls -l
 
 script:
   - cd ./build
