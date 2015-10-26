@@ -59,7 +59,9 @@ private:
         }
 
         size_type x = static_cast<size_type>((end_val - begin_val) / step_val);
-        if (begin_val + (step_val * x) != end_val) ++x;
+        using c_t = typename std::common_type<typename std::remove_reference<T_>::type, 
+                                              typename std::remove_reference<U_>::type>::type;
+        if (static_cast<c_t>(begin_val + (step_val * x)) != static_cast<c_t>(end_val)) ++x;
         return x;
     }
 
@@ -82,7 +84,7 @@ public:
 
 template <typename T>
 auto range(T&& end)
-    -> detail_range::impl<typename std::common_type<T>::type>
+    -> detail_range::impl<typename std::common_type<typename std::remove_reference<T>::type>::type>
 {
     typename std::common_type<T>::type t {};
     return { static_cast<T&&>(t), std::forward<T>(end), 1 };
@@ -90,14 +92,15 @@ auto range(T&& end)
 
 template <typename T>
 auto range(T&& begin, T&& end)
-    -> detail_range::impl<typename std::common_type<T>::type>
+    -> detail_range::impl<typename std::common_type<typename std::remove_reference<T>::type>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), 1 };
 }
 
 template <typename T, typename U>
 auto range(T&& begin, T&& end, U&& step)
-    -> detail_range::impl<typename std::common_type<T, U>::type>
+    -> detail_range::impl<typename std::common_type<typename std::remove_reference<T>::type, 
+                                                    typename std::remove_reference<U>::type>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), std::forward<U>(step) };
 }
