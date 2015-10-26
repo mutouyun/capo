@@ -25,7 +25,8 @@ CAPO_CONCEPT_INNER_TYPE_(foo_type);
 CAPO_CONCEPT_MEMBER_(bar_func, void (C::*)(int) const);
 
 template <typename T>
-CAPO_CONCEPT_(FooBarType, has_foo_type<std::remove_reference_t<T>>::value || has_bar_func<std::remove_reference_t<T>>::value);
+CAPO_CONCEPT_(FooBarType, has_foo_type<typename std::remove_reference<T>::type>::value || 
+                          has_bar_func<typename std::remove_reference<T>::type>::value);
 
 #define TEST_METHOD(TEST_NAME) TEST(concept, TEST_NAME)
 
