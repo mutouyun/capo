@@ -22,8 +22,8 @@ namespace ut {
 #ifdef NDEBUG
 const size_t TestCycl = 10000;
 const size_t TestCont = 10000;
-const size_t TestSMin = 4;
-const size_t TestSMax = 4;
+const size_t TestSMin = sizeof(void*);
+const size_t TestSMax = sizeof(void*);
 #else
 const size_t TestCycl = 2;
 const size_t TestCont = 10000;
