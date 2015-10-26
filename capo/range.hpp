@@ -98,7 +98,7 @@ auto range(T&& begin, T&& end)
 
 template <typename T, typename U>
 auto range(T&& begin, T&& end, U&& step)
-    -> detail_range::impl<typename std::common_type<underlying<T>, underlying<U>>
+    -> detail_range::impl<typename std::common_type<underlying<T>, underlying<U>>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), std::forward<U>(step) };
 }
