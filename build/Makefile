@@ -1,12 +1,12 @@
 # Define exports
 
-export CC = gcc
-export CX = g++
-export LB = ar
+export CC ?= gcc
+export CX ?= g++
+export LB ?= ar
 
-export CFLAGS = -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++1y
-export LFLAGS = -Wl,-s
-export AFLAGS = -csr
+export CFLAGS ?= -pipe -frtti -Wall -Wextra -fexceptions -march=nocona -std=c++1y
+export LFLAGS ?= -Wl,-s
+export AFLAGS ?= -csr
 
 # Check os
 
@@ -30,8 +30,8 @@ endif
 
 # Define workspace
 
-export WORK_PATH  = $(CURDIR)/..
-export BUILD_PATH = $(CURDIR)
+export WORK_PATH  ?= $(CURDIR)/..
+export BUILD_PATH ?= $(CURDIR)
 export THIRD_PATH = $(WORK_PATH)/third
 export THIRD_LIB  =
 export TESTS_PATH = $(WORK_PATH)/test

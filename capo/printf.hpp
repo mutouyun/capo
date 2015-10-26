@@ -13,6 +13,7 @@
 
 #include <string>       // std::string
 #include <stdexcept>    // std::invalid_argument
+#include <iostream>     // std::cout
 #include <utility>      // std::forward, std::move
 #include <cstdint>      // intmax_t, uintmax_t
 #include <cstddef>      // size_t, ptrdiff_t
