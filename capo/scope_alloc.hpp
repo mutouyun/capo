@@ -93,7 +93,7 @@ protected:
     using base_t::list_;
 
 public:
-    using base_t::impl_;
+    using base_t::base_t;
     using base_t::alloc;
 
     template <typename F>
@@ -143,7 +143,7 @@ class scope_alloc final : public detail_scope_alloc_::impl_<AllocP, BlockT>
     using base_t = detail_scope_alloc_::impl_<AllocP, BlockT>;
 
 public:
-    using base_t::impl_;
+    using base_t::base_t;
     void swap(scope_alloc& rhs) { base_t::swap(rhs); }
 };
 
