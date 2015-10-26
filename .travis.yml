@@ -21,9 +21,7 @@ before_script:
   - sudo cmake CMakeLists.txt
   - sudo make
   - sudo cp *.a /usr/lib
-  - cd ~
-  - ls -l ~/build
-  - ls -l ~/builds
+  - cd ~/build/mutouyun/capo
 
 script:
   - cd ./build && make debug=1 && make
