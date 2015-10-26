@@ -164,18 +164,17 @@ void working_proc(size_t& alloced_size, const std::vector<size_t>* ix)
 #undef TEST_CYCLES__
 
 template <typename AllocT, size_t ThreadN, size_t IndexN>
-struct threads_t
-{
-    size_t      alloced_size_ = 0;
-    std::thread working_{ working_proc<test_alloc<AllocT>, ThreadN>, std::ref(alloced_size_), index[IndexN] };
-};
-
-template <typename AllocT, size_t ThreadN, size_t IndexN>
 void test_memory_pool(const char* name)
 {
     capo::output(std::cout, "{0} test: \t", name);
     is_not_started = true;
-    threads_t<AllocT, ThreadN, IndexN> threads[ThreadN];
+
+    auto wk_proc = &working_proc<test_alloc<AllocT>, ThreadN>;
+    struct {
+        size_t      alloced_size_ = 0;
+        std::thread working_ { wk_proc, std::ref(alloced_size_), index[IndexN] };
+    } threads[ThreadN];
+
     is_not_started = false;
     capo::stopwatch<> sw(true);
     for (auto& t : threads) t.working_.join();
