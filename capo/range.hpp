@@ -86,7 +86,7 @@ template <typename T>
 auto range(T&& end)
     -> detail_range::impl<typename std::common_type<typename std::remove_reference<T>::type>::type>
 {
-    typename std::common_type<T>::type t {};
+    typename std::common_type<typename std::remove_reference<T>::type>::type t {};
     return { static_cast<T&&>(t), std::forward<T>(end), 1 };
 }
 
