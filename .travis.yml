@@ -11,17 +11,18 @@ before_install:
 install:
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install g++-4.9; fi
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install gcc-4.9-multilib g++-4.9-multilib; fi
-  - if [ "$CC" == "gcc" ]; then export CC=gcc-4.9 CXX=g++-4.9; fi
-  - export CX=$CXX
-  - $CX --version
+  - if [ "$CC" == "gcc" ]; then sudo update-alternatives --remove-all gcc; fi
+  - if [ "$CC" == "gcc" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9; fi
+  - if [ "$CC" == "gcc" ]; then sudo update-alternatives --config gcc; fi
+  - $CXX --version
 
 before_script:
   - sudo apt-get -qq install libgtest-dev
-  - cd /usr/src/gtest
+  - pushd /usr/src/gtest
   - sudo cmake CMakeLists.txt
   - sudo make
   - sudo cp *.a /usr/lib
-  - cd ~/build/mutouyun/capo
+  - popd
 
 script:
   - cd ./build && make debug=1 && make
