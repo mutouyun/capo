@@ -4,18 +4,26 @@ compiler:
   - gcc
   - clang
 
-install:
+before_install:
   - if [ "$CC" == "gcc" ]; then sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; fi
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq update; fi
+
+install:
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install g++-4.9; fi
   - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install gcc-4.9-multilib g++-4.9-multilib; fi
   - if [ "$CC" == "gcc" ]; then export CC=gcc-4.9 CXX=g++-4.9; fi
   - export CX=$CXX
   - $CX --version
 
+before_script:
+  - sudo apt-get -qq install libgtest-dev
+  - sudo apt-get -qq install cmake
+  - cd /usr/src/gtest
+  - sudo cmake CMakeLists.txt
+  - sudo make
+  - sudo cp *.a /usr/lib
+
 script:
   - cd ./build
-  - make debug=1
-  - for filename in $( ls ./bin/debug/$CC); do ./bin/debug/$CC/$filename; done
-  - make
-  - for filename in $( ls ./bin/release/$CC); do ./bin/release/$CC/$filename; done
+  - make debug=1 && make
+  - for filename in $( ls ./bin/debug/$CC); do ./bin/debug/$CC/$filename; done && for filename in $( ls ./bin/release/$CC); do ./bin/release/$CC/$filename; done

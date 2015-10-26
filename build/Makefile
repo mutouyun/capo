@@ -20,33 +20,38 @@ ifeq ($(os), win)
 	MK = mkdir
 	RM = rmdir /s /q
 	LIB_DIR = $(os)$(bits)-$(CX)
+	export THIRD_PATH = $(WORK_PATH)/third
+	export THIRD_LIB =
 else
 	# linux or others
 	LFLAGS += -pthread
 	MK = mkdir -p
 	RM = rm -r
 	LIB_DIR = $(os)-$(CX)
+	export THIRD_PATH =
+	export THIRD_LIB = /usr/lib/libgtest.a
 endif
 
 # Define workspace
 
 export WORK_PATH  ?= $(CURDIR)/..
 export BUILD_PATH ?= $(CURDIR)
-export THIRD_PATH = $(WORK_PATH)/third
-export THIRD_LIB  =
 export TESTS_PATH = $(WORK_PATH)/test
-export INCPATH    = -I$(WORK_PATH) -I$(THIRD_PATH)
+export INCPATH    = -I$(WORK_PATH)
+ifneq ($(THIRD_PATH),)
+	INCPATH += -I$(THIRD_PATH)
+endif
 
 ifeq ($(debug), 0)
 	# release
 	CFLAGS += -O2 -DNDEBUG
 	CONFIG_DIR = release
-	THIRD_LIB += $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtest.a
+	THIRD_LIB ?= $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtest.a
 else
 	# debug
 	CFLAGS += -g
 	CONFIG_DIR = debug
-	THIRD_LIB += $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtestd.a
+	THIRD_LIB ?= $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtestd.a
 endif
 
 ifeq ($(bits), 32)
