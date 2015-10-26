@@ -136,4 +136,18 @@ TEST_METHOD(follower)
                      ("3 = {}"  , 3).ln()
                      ("foo = {}", foo);
     EXPECT_STREQ("1 = 1, 2 = 2, 3 = 3\nfoo = Foo address: 0x12345678", buf.c_str());
+
+    buf.clear();
+    {
+        auto flw = capo::output(out, "1 = {}", 1).ln();
+        flw("2 = {}", 2).ln();
+        EXPECT_STREQ("", buf.c_str());
+        flw();
+        EXPECT_STREQ("1 = 1\n2 = 2\n", buf.c_str());
+        flw("3 = {}", 3).ln();
+        EXPECT_STREQ("1 = 1\n2 = 2\n", buf.c_str());
+        flw.clear();
+        flw("4 = {}", 4).ln();
+    }
+    EXPECT_STREQ("4 = 4\n", buf.c_str());
 }

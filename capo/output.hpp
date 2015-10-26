@@ -75,26 +75,33 @@ public:
     impl_(impl_&&)            = default;
     impl_& operator=(impl_&&) = default;
 
-    ~impl_(void)
+    ~impl_(void) { (*this)(); }
+
+    void operator()(void)
     {
         if (buf_.empty()) return;
         typedef typename std::conditional<std::is_reference<F>::value, F, F&>::type out_t;
-        detail_printf_::do_out((out_t)out_, std::move(buf_));
+        detail_printf_::do_out(static_cast<out_t>(out_), std::move(buf_));
     }
 
     template <typename... T>
-    const impl_& operator()(const char* fmt, T&&... args) const
+    impl_&& operator()(const char* fmt, T&&... args)
     {
         std::string buf(fmt);
         replace_placeholders(buf, std::forward<T>(args)...);
         buf_ += std::move(buf);
-        return (*this);
+        return std::move(*this);
     }
 
-    const impl_& ln(void) const
+    impl_&& ln(void)
     {
         buf_ += "\n";
-        return (*this);
+        return std::move(*this);
+    }
+
+    void clear(void)
+    {
+        buf_.clear();
     }
 };
 
