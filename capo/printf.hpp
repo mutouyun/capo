@@ -189,6 +189,10 @@ inline bool is_specifier(char c)
     return false;
 }
 
+#if defined(__GNUC__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wformat-security"
+#endif/*__GNUC__*/
 template <typename F, typename... A>
 int impl_(F&& out, const char* fmt, A&&... args)
 {
@@ -198,11 +202,14 @@ int impl_(F&& out, const char* fmt, A&&... args)
     {
         buf.resize(n);
         n = ::snprintf(const_cast<char*>(buf.data()), n + 1, fmt, std::forward<A>(args)...);
-        if (n != buf.size()) return n;
+        if (n != static_cast<int>(buf.size())) return n;
     }
     do_out(std::forward<F>(out), std::move(buf));
     return n;
 }
+#if defined(__GNUC__)
+#   pragma GCC diagnostic pop
+#endif/*__GNUC__*/
 
 CAPO_CONCEPT_TYPING_(can_shift_left, std::declval<T>() << std::declval<std::string>());
 
