@@ -16,14 +16,33 @@
 
 ////////////////////////////////////////////////////////////////
 
+int printf_test(const char* fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    std::string buf;
+    int n = ::vsnprintf(nullptr, 0, fmt, args);
+    printf("XXXXXXXXXXXXXXXXX -- 1: %d\n", n);
+    if (n <= 0) goto exit_output;
+    buf.resize(n);
+    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
+    printf("XXXXXXXXXXXXXXXXX -- 2: %d, %s\n", n, buf.c_str());
+    if (n <= 0) goto exit_output;
+    std::cout << std::move(buf);
+exit_output:
+    va_end(args);
+    printf("XXXXXXXXXXXXXXXXX -- 3\n");
+    return n;
+}
+
 TEST_METHOD(printf)
 {
     char c = 'A';
     char buf[100];
 
-    ::printf("================ b\n");
+    printf_test("1234567%s%c\n", " 321 ", c);
+
     capo::printf("1234567%s%c\n", " ", c);
-    ::printf("================ e\n");
     capo::printf(std::cout, "1234567%s%c\n", " ", c);
     capo::printf([&buf](const std::string& str)
     {
@@ -152,4 +171,37 @@ TEST_METHOD(follower)
         flw("4 = {}", 4).ln();
     }
     EXPECT_STREQ("4 = 4\n", buf.c_str());
+}
+
+////////////////////////////////////////////////////////////////
+
+class Bar1
+{
+public:
+    explicit operator char*(void) const
+    {
+        return "I'm Bar1...";
+    }
+};
+
+class Bar2
+{
+public:
+    operator const char*(void) const
+    {
+        return "I'm Bar2...";
+    }
+};
+
+TEST_METHOD(string_object)
+{
+    std::string str = "Hello, World!";
+    capo::output(out, "{}", str);
+    EXPECT_STREQ("Hello, World!", buf.c_str());
+
+    capo::output(out, "{}", Bar1{});
+    EXPECT_STREQ("I'm Bar1...", buf.c_str());
+
+    capo::output(out, "{}", Bar2{});
+    EXPECT_STREQ("I'm Bar2...", buf.c_str());
 }
