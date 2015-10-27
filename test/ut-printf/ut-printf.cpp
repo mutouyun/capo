@@ -159,7 +159,7 @@ class Bar1
 public:
     explicit operator char*(void) const
     {
-        return "I'm Bar1...";
+        return (char*)"I'm Bar1...";
     }
 };
 

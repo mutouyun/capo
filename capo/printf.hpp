@@ -17,7 +17,7 @@
 #include <utility>      // std::forward, std::move
 #include <cstdint>      // intmax_t, uintmax_t
 #include <cstddef>      // size_t, ptrdiff_t
-#include <cstdio>       // vsnprintf
+#include <cstdio>       // snprintf
 #include <cstdarg>      // va_list, va_start, va_end
 
 namespace capo {
@@ -189,22 +189,18 @@ inline bool is_specifier(char c)
     return false;
 }
 
-template <typename F>
-int impl_(F&& out, const char* fmt, ...)
+template <typename F, typename... A>
+int impl_(F&& out, const char* fmt, A&&... args)
 {
-    va_list args, args2;
-    va_start(args, fmt);
-    va_start(args2, fmt);
     std::string buf;
-    int n = ::vsnprintf(nullptr, 0, fmt, args);
-    if (n <= 0) goto exit_output;
-    buf.resize(n);
-    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args2);
-    if (n <= 0) goto exit_output;
+    int n = ::snprintf(nullptr, 0, fmt, std::forward<A>(args)...);
+    if (n > 0)
+    {
+        buf.resize(n);
+        n = ::snprintf(const_cast<char*>(buf.data()), n + 1, fmt, std::forward<A>(args)...);
+        if (n != buf.size()) return n;
+    }
     do_out(std::forward<F>(out), std::move(buf));
-exit_output:
-    va_end(args2);
-    va_end(args);
     return n;
 }
 
@@ -230,18 +226,18 @@ namespace use
     }
 }
 
-template <typename F, typename... T, CAPO_REQUIRE_(detail_printf_::OutputPred<F>::value)>
-int printf(F&& out, const char* fmt, T&&... args)
+template <typename F, typename... A, CAPO_REQUIRE_(detail_printf_::OutputPred<F>::value)>
+int printf(F&& out, const char* fmt, A&&... args)
 {
     if (fmt == nullptr) return 0;
-    detail_printf_::check(fmt, std::forward<T>(args)...);
-    return detail_printf_::impl_(std::forward<F>(out), fmt, std::forward<T>(args)...);
+    detail_printf_::check(fmt, std::forward<A>(args)...);
+    return detail_printf_::impl_(std::forward<F>(out), fmt, std::forward<A>(args)...);
 }
 
-template <typename... T>
-int printf(const char* fmt, T&&... args)
+template <typename... A>
+int printf(const char* fmt, A&&... args)
 {
-    return capo::printf(std::cout, fmt, std::forward<T>(args)...);
+    return capo::printf(std::cout, fmt, std::forward<A>(args)...);
 }
 
 } // namespace capo

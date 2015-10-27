@@ -36,7 +36,7 @@ std::vector<size_t> index[3][2];
 
 void init(void)
 {
-    capo::output(std::cout, "Cycles:\t\t{0}\nContinuous:\t{1}\nAlloc Size:\t{2} - {3} bytes\n", 
+    capo::output(std::cout, "Test Cycles:\t{0}\nContinuous:\t{1}\nAlloc Size:\t{2} - {3} bytes\n", 
                  TestCycl, TestCont, TestSMin * sizeof(char), TestSMax * sizeof(char));
 
     capo::random<> rdm_sizes(TestSMin, TestSMax);
