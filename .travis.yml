@@ -24,5 +24,5 @@ before_script:
   - popd
 
 script:
-  - cd ./build && make bits=64 capo ut-main ut-printf
-  - ./bin/release/$CC/ut-printf
+  - cd ./build && make bits=64
+  - for filename in $( ls ./bin/release/$CC); do ./bin/release/$CC/$filename; done
