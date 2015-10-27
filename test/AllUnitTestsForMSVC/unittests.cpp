@@ -43,15 +43,6 @@ out_t expect_out(void) { return {}; }
 
 ////////////////////////////////////////////////////////////////
 
-#include "ut-assert/preparing.h"
-TEST_CLASS(ut_assert)
-{
-public:
-#include "ut-assert/cases.h"
-};
-
-////////////////////////////////////////////////////////////////
-
 #include "ut-concept/preparing.h"
 TEST_CLASS(ut_concept)
 {
@@ -102,15 +93,6 @@ TEST_CLASS(ut_max_min)
 {
 public:
 #include "ut-max_min/cases.h"
-};
-
-////////////////////////////////////////////////////////////////
-
-#include "ut-memory/preparing.h"
-TEST_CLASS(ut_memory)
-{
-public:
-#include "ut-memory/cases.h"
 };
 
 ////////////////////////////////////////////////////////////////

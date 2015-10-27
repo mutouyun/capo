@@ -29,6 +29,7 @@ TEST_METHOD(destruct)
 {
     using namespace ut_construct_;
 
+    capo::construct<Foo>(pfoo);
     capo::destruct<Foo>(pfoo);
     EXPECT_STREQ("destruct", g_str.c_str());
 
