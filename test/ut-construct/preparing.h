@@ -24,7 +24,7 @@ struct Foo
     }
     Foo(void)       { *str_ = "default"; }
     Foo(const Foo&) { *str_ = "copy"; }
-    Foo(Foo&&)      { *str_ = "move"; }
+    Foo(Foo&& rhs)  { *str_ = "move"; rhs.str_ = nullptr; }
     ~Foo(void)      { if (str_) *str_ = "destruct"; }
 };
 
