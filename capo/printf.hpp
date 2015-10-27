@@ -192,16 +192,18 @@ inline bool is_specifier(char c)
 template <typename F>
 int impl_(F&& out, const char* fmt, ...)
 {
-    va_list args;
+    va_list args, args2;
     va_start(args, fmt);
+    va_start(args2, fmt);
     std::string buf;
     int n = ::vsnprintf(nullptr, 0, fmt, args);
     if (n <= 0) goto exit_output;
     buf.resize(n);
-    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
+    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args2);
     if (n <= 0) goto exit_output;
     do_out(std::forward<F>(out), std::move(buf));
 exit_output:
+    va_end(args2);
     va_end(args);
     return n;
 }

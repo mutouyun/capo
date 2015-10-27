@@ -16,33 +16,10 @@
 
 ////////////////////////////////////////////////////////////////
 
-int printf_test(const char* fmt, ...)
-{
-    va_list args, args2;
-    va_start(args, fmt);
-    va_start(args2, fmt);
-    char* buf = nullptr;
-    int n = ::vsnprintf(nullptr, 0, fmt, args);
-    printf("XXXXXXXXXXXXXXXXX -- 1: %d\n", n);
-    if (n <= 0) goto exit_output;
-    buf = new char[++n];
-    n = ::vsnprintf(buf, n, fmt, args2);
-    printf("XXXXXXXXXXXXXXXXX -- 2: %d, %s\n", n, buf);
-    if (n <= 0) goto exit_output;
-    std::cout << buf;
-exit_output:
-    delete [] buf;
-    va_end(args);
-    printf("XXXXXXXXXXXXXXXXX -- 4\n");
-    return n;
-}
-
 TEST_METHOD(printf)
 {
     char c = 'A';
     char buf[100];
-
-    printf_test("1234567%s%c\n", " 321 ", c);
 
     capo::printf("1234567%s%c\n", " ", c);
     capo::printf(std::cout, "1234567%s%c\n", " ", c);
