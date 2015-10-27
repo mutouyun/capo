@@ -24,8 +24,8 @@ int printf_test(const char* fmt, ...)
     int n = ::vsnprintf(nullptr, 0, fmt, args);
     printf("XXXXXXXXXXXXXXXXX -- 1: %d\n", n);
     if (n <= 0) goto exit_output;
-    buf.resize(n);
-    n = ::vsnprintf(const_cast<char*>(buf.data()), n + 1, fmt, args);
+    buf.resize(++n);
+    n = ::vsnprintf(const_cast<char*>(buf.data()), n, fmt, args);
     printf("XXXXXXXXXXXXXXXXX -- 2: %d, %s\n", n, buf.c_str());
     if (n <= 0) goto exit_output;
     std::cout << std::move(buf);
