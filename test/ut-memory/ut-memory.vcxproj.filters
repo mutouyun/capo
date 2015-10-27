@@ -3,4 +3,8 @@
   <ItemGroup>
     <ClCompile Include="ut-memory.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="preparing.h" />
+    <ClInclude Include="cases.h" />
+  </ItemGroup>
 </Project>

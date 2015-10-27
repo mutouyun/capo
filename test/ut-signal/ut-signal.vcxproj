@@ -13,6 +13,10 @@
   <ItemGroup>
     <ClCompile Include="ut-signal.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cases.h" />
+    <ClInclude Include="preparing.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2B80C38D-2AD7-46E0-BF6F-6DB19195E985}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

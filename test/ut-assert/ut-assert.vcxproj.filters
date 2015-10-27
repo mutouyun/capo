@@ -3,4 +3,8 @@
   <ItemGroup>
     <ClCompile Include="ut-assert.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cases.h" />
+    <ClInclude Include="preparing.h" />
+  </ItemGroup>
 </Project>
