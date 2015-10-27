@@ -14,12 +14,6 @@ struct Foo
 {
     std::string* str_ = &g_str;
 
-    Foo(void)
-    {
-        str_  = nullptr;
-        g_str = "default";
-    }
-
     Foo(int x)
     {
         str_->clear();
@@ -28,7 +22,7 @@ struct Foo
             *str_ += str;
         }, "int %d", x);
     }
-
+    Foo(void)       { *str_ = "default"; }
     Foo(const Foo&) { *str_ = "copy"; }
     Foo(Foo&&)      { *str_ = "move"; }
     ~Foo(void)      { if (str_) *str_ = "destruct"; }
