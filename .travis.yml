@@ -27,4 +27,4 @@ before_script:
 
 script:
   - cd ./build && make bits=64
-  - ./bin/debug/$CC/ut-printf
+  - ./bin/release/$CC/ut-printf
