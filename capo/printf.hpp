@@ -232,13 +232,16 @@ template <typename F, typename... T, CAPO_REQUIRE_(detail_printf_::OutputPred<F>
 int printf(F&& out, const char* fmt, T&&... args)
 {
     if (fmt == nullptr) return 0;
+    ::printf("================ 2\n");
     detail_printf_::check(fmt, std::forward<T>(args)...);
+    ::printf("================ 3\n");
     return detail_printf_::impl_(std::forward<F>(out), fmt, std::forward<T>(args)...);
 }
 
 template <typename... T>
 int printf(const char* fmt, T&&... args)
 {
+    ::printf("================ 1\n");
     return capo::printf(std::cout, fmt, std::forward<T>(args)...);
 }
 

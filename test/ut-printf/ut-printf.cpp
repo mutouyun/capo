@@ -21,7 +21,9 @@ TEST_METHOD(printf)
     char c = 'A';
     char buf[100];
 
+    ::printf("================ b\n");
     capo::printf("1234567%s%c\n", " ", c);
+    ::printf("================ e\n");
     capo::printf(std::cout, "1234567%s%c\n", " ", c);
     capo::printf([&buf](const std::string& str)
     {

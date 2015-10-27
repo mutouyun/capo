@@ -231,14 +231,18 @@ TEST_METHOD(types_reverse)
 TEST_METHOD(types_select_if)
 {
     using t_t = types_select_if_t<types_t, is_large>;
-    EXPECT_EQ(type_name<const double>(), type_name<t_t>());
+    using r_t = std::conditional<is_large<const double, long*>::value, const double, long*>::type;
+    EXPECT_EQ(type_name<r_t>(), type_name<t_t>());
 }
 
 TEST_METHOD(types_sort_if)
 {
     {
         using t_t = types_sort_if_t<types_t, is_large>;
-        EXPECT_EQ((type_name<types<const double, long long, long*, float&, int, short, unsigned char>>()), type_name<t_t>());
+		using r_t = std::conditional<is_large<const double, long*>::value, 
+					types<const double, long long, long*, float&, int, short, unsigned char>, 
+					types<long*, const double, long long, float&, int, short, unsigned char>>::type;
+        EXPECT_EQ((type_name<r_t>()), type_name<t_t>());
     }
     {
         using t_t = types_sort_if_t<types<int>, is_large>;
