@@ -20,15 +20,15 @@ int printf_test(const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-    char* buf = nullptr;
+    char* buf = nullptr; const char * s = nullptr; char c = '\0';
     int n = ::vsnprintf(nullptr, 0, fmt, args);
     printf("XXXXXXXXXXXXXXXXX -- 1: %d\n", n);
     if (n <= 0) goto exit_output;
     buf = new char[++n];
     n = ::vsnprintf(buf, n, fmt, args);
     printf("XXXXXXXXXXXXXXXXX -- 2: %d, %s\n", n, buf);
-    auto s = va_arg(args, const char *);
-    auto c = va_arg(args, char);
+    s = va_arg(args, const char *);
+    c = va_arg(args, char);
     printf("XXXXXXXXXXXXXXXXX -- 3: {%s}, {%c}\n", s, c);
     if (n <= 0) goto exit_output;
     std::cout << buf;
