@@ -12,5 +12,4 @@ TEST_METHOD(spin_lock_ensure)
 
     std::cout << "capo::spin_lock: " << sec_1 << " ms" << std::endl;
     std::cout << "std::mutex:      " << sec_2 << " ms" << std::endl;
-    EXPECT_LT(sec_1, sec_2);
 }

@@ -18,19 +18,19 @@
 namespace ut_memory_ {
 
 #ifdef NDEBUG
-const size_t TestCycl = 10000;
-const size_t TestCont = 10000;
-const size_t TestSMin = sizeof(void*);
-const size_t TestSMax = sizeof(void*);
+const int TestCycl = 10000;
+const int TestCont = 10000;
+const int TestSMin = sizeof(void*);
+const int TestSMax = sizeof(void*);
 #else
-const size_t TestCycl = 2;
-const size_t TestCont = 10000;
-const size_t TestSMin = 256;
-const size_t TestSMax = 256;
+const int TestCycl = 2;
+const int TestCont = 10000;
+const int TestSMin = 256;
+const int TestSMax = 256;
 #endif
 
 std::vector<size_t> sizes(TestCont);
-std::vector<size_t> index[3][2];
+std::vector<int>    index[3][2];
 
 void init(void)
 {
@@ -38,19 +38,19 @@ void init(void)
                  TestCycl, TestCont, TestSMin * sizeof(char), TestSMax * sizeof(char));
 
     capo::random<> rdm_sizes(TestSMin, TestSMax);
-    for (size_t i = 0; i < TestCont; ++i) sizes[i] = rdm_sizes();
+    for (int i = 0; i < TestCont; ++i) sizes[i] = rdm_sizes();
 
     for (auto& ix : index)
     {
         ix[0].resize(TestCont);
         ix[1].resize(TestCont);
     }
-    for (size_t i = 0, n = TestCont - 1; i < TestCont; ++i, --n)
+    for (int i = 0, n = TestCont - 1; i < TestCont; ++i, --n)
         index[0][1][n] = index[0][0][i] = i;
-    for (size_t i = 0; i < TestCont; ++i)
+    for (int i = 0; i < TestCont; ++i)
         index[1][1][i] = index[1][0][i] = i;
     capo::random<> rdm_index(0, TestCont - 1);
-    for (size_t i = 0; i < TestCont; ++i)
+    for (int i = 0; i < TestCont; ++i)
         index[2][1][i] = index[2][0][i] = rdm_index();
 }
 
@@ -144,7 +144,7 @@ volatile bool is_not_started;
 } while(0)
 
 template <typename AllocT, size_t ThreadN>
-void working_proc(size_t& alloced_size, const std::vector<size_t>* ix)
+void working_proc(size_t& alloced_size, const std::vector<int>* ix)
 {
     static const size_t TEST_CYCL = (TestCycl / ThreadN / 2) - 1;
     void** ptrs = new void*[TestCont];

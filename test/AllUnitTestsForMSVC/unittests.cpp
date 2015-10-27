@@ -2,14 +2,42 @@
 #include "CppUnitTest.h"
 
 #include <iostream>
+#include <utility>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 ////////////////////////////////////////////////////////////////
 
-#define EXPECT_EQ(EXPECTED, ACTUAL)                 Assert::AreEqual(EXPECTED, ACTUAL); std::cout
-#define EXPECT_STREQ(EXPECTED, ACTUAL)              Assert::AreEqual(EXPECTED, ACTUAL); std::cout
-#define EXPECT_DOUBLE_EQ(EXPECTED, ACTUAL)          Assert::AreEqual((double)EXPECTED, (double)ACTUAL, 1e-8); std::cout
+struct out_t
+{
+    bool is_out_ = false;
+
+    ~out_t(void)
+    {
+        if (is_out_)
+            std::cout << std::endl;
+    }
+
+    out_t(void) = default;
+    out_t(out_t&& rhs) : is_out_(rhs.is_out_)
+    {
+        rhs.is_out_ = false;
+    }
+
+    template <typename T>
+    out_t& operator<<(T&& val)
+    {
+        is_out_ = true;
+        std::cout << std::forward<T>(val);
+        return (*this);
+    }
+};
+
+out_t expect_out(void) { return {}; }
+
+#define EXPECT_EQ(EXPECTED, ACTUAL)                 Assert::AreEqual(EXPECTED, ACTUAL); expect_out()
+#define EXPECT_STREQ(EXPECTED, ACTUAL)              Assert::AreEqual(EXPECTED, ACTUAL); expect_out()
+#define EXPECT_DOUBLE_EQ(EXPECTED, ACTUAL)          Assert::AreEqual((double)EXPECTED, (double)ACTUAL, 1e-8); expect_out()
 #define EXPECT_THROW(STATEMENT, EXPECTED_EXCEPTION) Assert::ExpectException<EXPECTED_EXCEPTION>([&]{ STATEMENT; })
 #define EXPECT_LT(VAL1, VAL2)                       Assert::IsTrue((VAL1) < (VAL2))
 
