@@ -26,5 +26,5 @@ before_script:
   - popd
 
 script:
-  - cd ./build && make bits=64
+  - cd ./build && make bits=64 capo ut-main ut-printf
   - ./bin/release/$CC/ut-printf
