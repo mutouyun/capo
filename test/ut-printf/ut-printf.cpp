@@ -18,22 +18,16 @@
 
 int printf_test(const char* fmt, ...)
 {
-    va_list args, args2, args3;
+    va_list args, args2;
     va_start(args, fmt);
     va_start(args2, fmt);
-    char* buf = nullptr; const char * s = nullptr; char c = '\0';
-    s = va_arg(args2, const char *);
-    c = va_arg(args2, char);
-    printf("XXXXXXXXXXXXXXXXX -- 0: {%s}, {%c}\n", s, c);
+    char* buf = nullptr;
     int n = ::vsnprintf(nullptr, 0, fmt, args);
     printf("XXXXXXXXXXXXXXXXX -- 1: %d\n", n);
     if (n <= 0) goto exit_output;
     buf = new char[++n];
-    n = ::vsnprintf(buf, n, fmt, args);
+    n = ::vsnprintf(buf, n, fmt, args2);
     printf("XXXXXXXXXXXXXXXXX -- 2: %d, %s\n", n, buf);
-    s = va_arg(args, const char *);
-    c = va_arg(args, char);
-    printf("XXXXXXXXXXXXXXXXX -- 3: {%s}, {%c}\n", s, c);
     if (n <= 0) goto exit_output;
     std::cout << buf;
 exit_output:
