@@ -38,7 +38,7 @@ struct arithmetic
     template <typename T> static void at(T& a1, size_t n)
     {
         CAPO_ASSERT_(n);
-        a1 += D * (n - 1);
+        a1 += D * static_cast<T>(n - 1);
     }
 };
 

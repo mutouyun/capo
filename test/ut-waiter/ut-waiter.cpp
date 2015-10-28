@@ -45,7 +45,7 @@ TEST_METHOD(waiter)
     std::thread threads[10];
     for (auto i : capo::range(capo::countof(threads)))
     {
-        threads[i] = std::thread(test_proc, i + 1);
+        threads[i] = std::thread(test_proc, static_cast<unsigned>(i + 1));
     }
 
     // test for notify

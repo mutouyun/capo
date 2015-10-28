@@ -21,7 +21,7 @@ capo::random<>  rdm(100, 2000);
 bool            warehouse[10] = { false };
 int             counter = 0;
 capo::spin_lock warehouse_lock, random_lock;
-capo::semaphore producer_sema(capo::countof(warehouse));
+capo::semaphore producer_sema(static_cast<long>(capo::countof(warehouse)));
 capo::semaphore consumer_sema;
 bool            is_done = false;
 
@@ -111,7 +111,7 @@ TEST_METHOD(semaphore)
     std::thread producer_threads[2];
     for (auto i : capo::range(capo::countof(producer_threads)))
     {
-        producer_threads[i] = std::thread(producer, i + 1);
+        producer_threads[i] = std::thread(producer, static_cast<unsigned>(i + 1));
     }
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
@@ -119,7 +119,7 @@ TEST_METHOD(semaphore)
     std::thread consumer_threads[10];
     for (auto i : capo::range(capo::countof(consumer_threads)))
     {
-        consumer_threads[i] = std::thread(consumer, i + 1);
+        consumer_threads[i] = std::thread(consumer, static_cast<unsigned>(i + 1));
     }
     std::this_thread::sleep_for(std::chrono::seconds(10));
 
@@ -129,8 +129,8 @@ TEST_METHOD(semaphore)
         std::cout << "Works are over..." << std::endl;
     }
     is_done = true;
-    producer_sema.post(capo::countof(producer_threads));
+    producer_sema.post(static_cast<long>(capo::countof(producer_threads)));
     for (auto& th : producer_threads) th.join();
-    consumer_sema.post(capo::countof(consumer_threads));
+    consumer_sema.post(static_cast<long>(capo::countof(consumer_threads)));
     for (auto& th : consumer_threads) th.join();
 }
