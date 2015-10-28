@@ -26,3 +26,8 @@ before_script:
 script:
   - cd ./build && make bits=64
   - for filename in $( ls ./bin/release/$CC); do ./bin/release/$CC/$filename; done
+
+notifications:
+  slack:
+    on_success: never
+    on_failure: never
