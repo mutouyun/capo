@@ -16,10 +16,7 @@ public:
 
     Foo(void) = default;
 
-    template <typename T, CAPO_REQUIRE_(std::is_floating_point<T>::value)>
-    Foo(T x) : x_(x) {}
-
-    template <typename T, CAPO_REQUIRE_(std::is_integral<T>::value)>
+    template <typename T, CAPO_REQUIRE_(std::is_arithmetic<T>::value)>
     Foo(T x) : x_(static_cast<double>(x)) {}
 
     explicit operator double(void) const { return x_; }
