@@ -83,22 +83,22 @@ public:
 
 template <typename T>
 auto range(T&& end)
-    -> detail_range::impl<typename std::common_type<underlying<T>>::type>
+    -> detail_range::impl<typename std::decay<typename std::common_type<T>::type>::type>
 {
-    typename std::common_type<underlying<T>>::type t {};
+    typename std::decay<typename std::common_type<T>::type>::type t {};
     return { static_cast<T&&>(t), std::forward<T>(end), 1 };
 }
 
 template <typename T>
 auto range(T&& begin, T&& end)
-    -> detail_range::impl<typename std::common_type<underlying<T>>::type>
+    -> detail_range::impl<typename std::decay<typename std::common_type<T>::type>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), 1 };
 }
 
 template <typename T, typename U>
 auto range(T&& begin, T&& end, U&& step)
-    -> detail_range::impl<typename std::common_type<underlying<T>, underlying<U>>::type>
+    -> detail_range::impl<typename std::decay<typename std::common_type<T, U>::type>::type>
 {
     return { std::forward<T>(begin), std::forward<T>(end), std::forward<U>(step) };
 }
