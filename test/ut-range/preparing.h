@@ -16,8 +16,11 @@ public:
 
     Foo(void) = default;
 
-    template <typename T, CAPO_REQUIRE_(std::is_arithmetic<capo::underlying<T>>::value)>
-    Foo(T&& x) : x_(static_cast<double>(std::forward<T>(x))) {}
+    template <typename T, CAPO_REQUIRE_(std::is_floating_point<T>::value)>
+    Foo(T x) : x_(x) {}
+
+    template <typename T, CAPO_REQUIRE_(std::is_integral<T>::value)>
+    Foo(T x) : x_(static_cast<double>(x)) {}
 
     explicit operator double(void) const { return x_; }
     explicit operator size_t(void) const { return static_cast<size_t>(x_); }
