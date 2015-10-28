@@ -16,8 +16,12 @@ public:
 
     Foo(void) = default;
 
+#if defined(__clang__)
+    Foo(double x) : x_(x) {}
+#else/*!__clang__*/
     template <typename T, CAPO_REQUIRE_(std::is_arithmetic<T>::value)>
     Foo(T x) : x_(static_cast<double>(x)) {}
+#endif/*__clang__*/
 
     explicit operator double(void) const { return x_; }
     explicit operator size_t(void) const { return static_cast<size_t>(x_); }
