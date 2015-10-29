@@ -1,3 +1,10 @@
+# Check windows, for fixing GNU Make exception:
+# See: http://win-builds.org/bugs/index.php?do=details&task_id=113
+
+ifeq ($(os), win)
+	SHELL = C:/Windows/system32/cmd.exe
+endif
+
 # Build rules
 
 all: $(BUILD_RULES)
