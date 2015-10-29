@@ -19,6 +19,7 @@ ifeq ($(os), win)
 	LFLAGS += -Wl,-subsystem,console -mthreads
 	MK = mkdir
 	RM = rmdir /s /q
+	SHELL = C:/Windows/system32/cmd.exe
 	LIB_DIR = $(os)$(bits)-$(CX)
 	export THIRD_PATH = $(WORK_PATH)/third
 	export THIRD_LIB =
