@@ -19,9 +19,13 @@ ifeq ($(os), win)
 	LFLAGS += -Wl,-subsystem,console -mthreads
 	MK = mkdir
 	RM = rmdir /s /q
-	LIB_DIR = $(os)$(bits)-$(CX)
+	LIB_DIR = mingw$(bits)
 	export THIRD_PATH = $(WORK_PATH)/third
-	export THIRD_LIB =
+    ifeq ($(debug), 0)
+        export THIRD_LIB = $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtest.a
+    else
+        export THIRD_LIB = $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtestd.a
+	endif
 else
 	# linux or others
 	LFLAGS += -pthread
@@ -46,12 +50,10 @@ ifeq ($(debug), 0)
 	# release
 	CFLAGS += -O2 -DNDEBUG
 	CONFIG_DIR = release
-	THIRD_LIB ?= $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtest.a
 else
 	# debug
 	CFLAGS += -g
 	CONFIG_DIR = debug
-	THIRD_LIB ?= $(THIRD_PATH)/gtest/lib/$(LIB_DIR)/gtestd.a
 endif
 
 ifeq ($(bits), 32)
