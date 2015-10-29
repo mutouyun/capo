@@ -10,16 +10,15 @@ export AFLAGS ?= -csr
 
 # Check os
 
-os    = linux
-debug = 0
-bits  = 32
+export os    = linux
+export debug = 0
+export bits  = 32
 
 ifeq ($(os), win)
 	# windows
 	LFLAGS += -Wl,-subsystem,console -mthreads
 	MK = mkdir
 	RM = rmdir /s /q
-	SHELL = C:/Windows/system32/cmd.exe
 	LIB_DIR = $(os)$(bits)-$(CX)
 	export THIRD_PATH = $(WORK_PATH)/third
 	export THIRD_LIB =
