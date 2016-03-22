@@ -18,7 +18,6 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    utility.optional                - Just like boost::optional
     utility.any                     - Just like boost::any
     string.string                   - std::string的功能拓展
     proofing.trace                  - 调试输出
