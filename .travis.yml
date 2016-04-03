@@ -9,13 +9,11 @@ before_install:
   - sudo apt-get -qq update
 
 install:
-  - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install g++-4.9; fi
-  - if [ "$CC" == "gcc" ]; then sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9; fi
-  - if [ "$CC" == "clang" ]; then sudo apt-get -qq install g++-4.8; fi
+  - if [ "$CC" == "gcc" ]; then sudo apt-get -qq install g++-4.9; sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9; fi
+  - if [ "$CC" == "clang" ]; then sudo apt-get -qq install g++-4.8; sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8; fi
   - export CX=$CXX
   - $CX --version
   - gcc --version
-  - make --version
 
 before_script:
   - sudo apt-get -qq install libgtest-dev
