@@ -1,14 +1,40 @@
 language: cpp
 
-compiler: 
-  - g++
-  - clang++
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.9']
+      env:
+        - COMPILER=g++-4.9
+        - COMP=gcc
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.4']
+          packages: ['clang-3.4', 'g++-4.8']
+      env:
+        - COMPILER=clang++-3.4
+        - COMP=clang
+
+    - os: osx
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.9
+        - COMP=gcc
+
+    - os: osx
+      compiler: clang
+      env:
+        - COMPILER=clang++ V='Apple LLVM 6.0' # Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn)
+        - COMP=clang
 
 install:
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo apt-get -qq update
-  - if [ "$CXX" = "g++" ]; then sudo apt-get -qq install g++-4.9; export CXX="g++-4.9" CC="gcc-4.9"; fi
-  - if [ "$CXX" = "clang++" ]; then sudo apt-get -qq install clang-3.4 g++-4.8; fi
   - export CX=$CXX
   - $CX --version
 
