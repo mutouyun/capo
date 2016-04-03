@@ -14,6 +14,8 @@ install:
   - if [ "$CC" == "clang" ]; then sudo apt-get -qq install g++-4.8; fi
   - export CX=$CXX
   - $CX --version
+  - gcc --version
+  - make --version
 
 before_script:
   - sudo apt-get -qq install libgtest-dev
