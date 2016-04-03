@@ -1,8 +1,8 @@
 language: cpp
 
 compiler: 
-  - gcc
-  - clang
+  - g++
+  - clang++
 
 addons:
     apt:
