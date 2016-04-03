@@ -16,8 +16,8 @@ addons:
 
 install:
   - $CXX -v
-  - if [ "$CXX" = "g++" ]; echo "g++"; then export CXX="g++-5" CC="gcc-5"; fi
-  - if [ "$CXX" = "clang++" ]; echo "clang++"; then export CXX="clang++-3.7" CC="clang-3.7"; fi
+  - if [ "$CXX" = "g++" ]; then echo "g++"; export CXX="g++-5" CC="gcc-5"; fi
+  - if [ "$CXX" = "clang++" ]; then echo "clang++"; export CXX="clang++-3.7" CC="clang-3.7"; fi
   - export CX=$CXX
   - $CX --version
 
