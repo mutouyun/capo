@@ -11,7 +11,7 @@ matrix:
       env:
         - CXX=g++-4.9
         - CX=g++-4.9
-        - CC=gcc
+        - CC=gcc-4.9
 
     - os: linux
       compiler: clang
@@ -20,8 +20,8 @@ matrix:
           sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.4']
           packages: ['clang-3.4', 'g++-4.8']
       env:
-        - CXX=clang++-3.4
-        - CX=clang++-3.4
+        - CXX=clang++
+        - CX=clang++
         - CC=clang
 
 install:
