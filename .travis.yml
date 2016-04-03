@@ -9,8 +9,9 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-4.9']
       env:
-        - COMPILER=g++-4.9
-        - COMP=gcc
+        - CXX=g++-4.9
+        - CX=g++-4.9
+        - CC=gcc
 
     - os: linux
       compiler: clang
@@ -19,23 +20,11 @@ matrix:
           sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.4']
           packages: ['clang-3.4', 'g++-4.8']
       env:
-        - COMPILER=clang++-3.4
-        - COMP=clang
-
-    - os: osx
-      compiler: gcc
-      env:
-        - COMPILER=g++-4.9
-        - COMP=gcc
-
-    - os: osx
-      compiler: clang
-      env:
-        - COMPILER=clang++ V='Apple LLVM 6.0' # Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn)
-        - COMP=clang
+        - CXX=clang++-3.4
+        - CX=clang++-3.4
+        - CC=clang
 
 install:
-  - export CX=$CXX
   - $CX --version
 
 before_script:
