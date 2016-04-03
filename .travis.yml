@@ -4,17 +4,13 @@ compiler:
   - clang++
 
 addons:
-    apt:
-        sources:
-            - llvm-toolchain-precise
-            - ubuntu-toolchain-r-test
-        packages:
-            - clang-3.7
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
 
 install:
-  - ls -l /usr/bin
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-  - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get -qq install g++-4.9; export CXX="g++-4.9" CC="gcc-4.9"; fi
+  - if [ "$CXX" = "clang++" ]; then sudo apt-get -qq install g++-4.8; fi
   - export CX=$CXX
   - $CX --version
 
