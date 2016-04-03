@@ -1,7 +1,6 @@
 language: cpp
 
 compiler: 
-  - g++
   - clang++
 
 addons:
@@ -11,8 +10,6 @@ addons:
             - ubuntu-toolchain-r-test
         packages:
             - clang-3.7
-            - g++-5
-            - gcc-5
 
 install:
   - ls -l /usr/bin
