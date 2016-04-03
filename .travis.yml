@@ -3,12 +3,9 @@ language: cpp
 compiler: 
   - clang++
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-
 install:
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -qq update
   - if [ "$CXX" = "g++" ]; then sudo apt-get -qq install g++-4.9; export CXX="g++-4.9" CC="gcc-4.9"; fi
   - if [ "$CXX" = "clang++" ]; then sudo apt-get -qq install g++-4.8; fi
   - export CX=$CXX
