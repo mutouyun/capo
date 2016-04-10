@@ -18,7 +18,6 @@ C++标准库的轻量级拓展
 
 ### ToDoList
 
-    utility.any                     - Just like boost::any
     string.string                   - std::string的功能拓展
     proofing.trace                  - 调试输出
     thread.blocking_queue           - 多线程下的blocking_queue
