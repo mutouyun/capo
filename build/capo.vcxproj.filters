@@ -199,5 +199,8 @@
     <ClInclude Include="..\capo\trackable.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\any.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
