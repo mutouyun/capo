@@ -17,5 +17,5 @@ TEST_METHOD(any_cast)
     capo::any any_i = 123;
     EXPECT_THROW(capo::any_cast<double>(any_i), std::bad_cast);
     EXPECT_EQ(capo::any_cast<int>(any_i), 123);
-    EXPECT_EQ(capo::any_cast<double>(&any_i), nullptr);
+    EXPECT_EQ(capo::any_cast<double>(&any_i), (double*)nullptr);
 }
