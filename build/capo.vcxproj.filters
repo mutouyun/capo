@@ -202,5 +202,8 @@
     <ClInclude Include="..\capo\any.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\cmdline.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
