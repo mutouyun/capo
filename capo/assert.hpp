@@ -4,7 +4,7 @@
 
     Modified from <<Enhancing Assertions>>
     (http://www.drdobbs.com/cpp/enhancing-assertions/184403745)
-    Modified by : mutouyun (http://darkc.at)
+    Modified by : mutouyun (http://orzz.org)
 
     Copyright by Andrei Alexandrescu and John Torjo, August 01, 2003
 */

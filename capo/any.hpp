@@ -3,7 +3,7 @@
     Code covered by the MIT License
 
     Modified from The Boost Library
-    Modified by : mutouyun (http://darkc.at)
+    Modified by : mutouyun (http://orzz.org)
 
     Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.
 */
