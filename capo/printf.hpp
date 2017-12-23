@@ -46,7 +46,7 @@ inline void enforce(void)
 }
 
 template <typename T>
-void enforce_argument(const char* fmt)
+inline void enforce_argument(const char* fmt)
 {
     using t_t = typename std::decay<T>::type;
     enum class length_t
@@ -145,7 +145,7 @@ void enforce_argument(const char* fmt)
     enforce("Has no specifier");
 }
 
-void check(const char* fmt)
+inline void check(const char* fmt)
 {
     for (; *fmt; ++fmt)
     {
@@ -155,7 +155,7 @@ void check(const char* fmt)
 }
 
 template <typename T1, typename... T>
-void check(const char* fmt, T1&& /*a1*/, T&&... args)
+inline void check(const char* fmt, T1&& /*a1*/, T&&... args)
 {
     for (; *fmt; ++fmt)
     {
@@ -167,13 +167,13 @@ void check(const char* fmt, T1&& /*a1*/, T&&... args)
 }
 
 template <typename F, CAPO_REQUIRE_(capo::is_closure<F>::value)>
-void do_out(F&& out, std::string&& buf)
+inline void do_out(F&& out, std::string&& buf)
 {
     out(std::move(buf));
 }
 
 template <typename F, CAPO_REQUIRE_(!capo::is_closure<F>::value)>
-void do_out(F&& out, std::string&& buf)
+inline void do_out(F&& out, std::string&& buf)
 {
     out << std::move(buf);
 }
@@ -194,7 +194,7 @@ inline bool is_specifier(char c)
 #   pragma GCC diagnostic ignored "-Wformat-security"
 #endif/*__GNUC__*/
 template <typename F, typename... A>
-int impl_(F&& out, const char* fmt, A&&... args)
+inline int impl_(F&& out, const char* fmt, A&&... args)
 {
     std::string buf;
     int n = ::snprintf(nullptr, 0, fmt, std::forward<A>(args)...);
@@ -224,7 +224,7 @@ CAPO_CONCEPT_(OutputPred, capo::is_closure<T>::value || can_shift_left<underlyin
 
 namespace use
 {
-    auto strout(std::string& buf)
+    inline auto strout(std::string& buf)
     {
         return [&](std::string&& str)
         {
@@ -234,7 +234,7 @@ namespace use
 }
 
 template <typename F, typename... A, CAPO_REQUIRE_(detail_printf_::OutputPred<F>::value)>
-int printf(F&& out, const char* fmt, A&&... args)
+inline int printf(F&& out, const char* fmt, A&&... args)
 {
     if (fmt == nullptr) return 0;
     detail_printf_::check(fmt, std::forward<A>(args)...);
@@ -242,7 +242,7 @@ int printf(F&& out, const char* fmt, A&&... args)
 }
 
 template <typename... A>
-int printf(const char* fmt, A&&... args)
+inline int printf(const char* fmt, A&&... args)
 {
     return capo::printf(std::cout, fmt, std::forward<A>(args)...);
 }
