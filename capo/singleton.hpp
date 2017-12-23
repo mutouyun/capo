@@ -19,6 +19,19 @@ namespace use {
 /// Global(thread-shared) singleton policy
 ////////////////////////////////////////////////////////////////
 
+namespace detail_single_shared {
+
+template <typename T>
+struct single_creator
+{
+    T inst;
+
+    template <typename... P>
+    single_creator(P&&... args) : inst(std::forward<P>(args)...) {}
+};
+
+} // namespace detail_single_shared
+
 template <typename T>
 struct single_shared
 {
@@ -28,17 +41,11 @@ public:
         If control enters the declaration concurrently while the variable is being initialized,
         the concurrent execution shall wait for completion of the initialization.
     */
-    static T& instance(void)
+    template <typename... P>
+    static T& instance(P&&... args)
     {
-        static T ir;
-        return ir;
-    }
-
-    template <typename P1, typename... P>
-    static T& instance(P1&& a1, P&&... args)
-    {
-        static T ir(std::forward<P1>(a1), std::forward<P>(args)...);
-        return ir;
+        static detail_single_shared::single_creator<T> creator { std::forward<P>(args)... };
+        return creator.inst;
     }
 };
 
