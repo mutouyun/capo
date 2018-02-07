@@ -6,8 +6,13 @@ matrix:
       compiler: gcc
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.9']
+          sources:
+            - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
+          packages:
+            - g++-4.9
+            - cmake-data
+            - cmake
       env:
         - CXX=g++-4.9
         - CX=g++-4.9
@@ -17,8 +22,14 @@ matrix:
       compiler: clang
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['clang-3.4', 'g++-4.8']
+          sources:
+            - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
+          packages:
+            - clang-3.4
+            - g++-4.8
+            - cmake-data
+            - cmake
       env:
         - CXX=clang++
         - CX=clang++
