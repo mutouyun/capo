@@ -9,11 +9,29 @@
 
 #include "capo/thread_local_ptr.hpp"
 #include "capo/assert.hpp"
+#include "capo/unused.hpp"
 
 #include <utility>  // std::forward
 
 namespace capo {
 namespace use {
+
+template <typename T, template <typename> class CreatorT>
+struct single
+{
+public:
+    template <typename... P>
+    static T& instance(P&&... args)
+    {
+        /*
+            <Remarks> ISO/IEC 14882-2011 (The C++11 Standard), §6.7.4:
+            If control enters the declaration concurrently while the variable is being initialized,
+            the concurrent execution shall wait for completion of the initialization.
+        */
+        static CreatorT<T> CAPO_UNUSED_ creator { std::forward<P>(args)... };
+        return (*CreatorT<T>::InstPtr_);
+    }
+};
 
 ////////////////////////////////////////////////////////////////
 /// Global(thread-shared) singleton policy
@@ -24,42 +42,47 @@ namespace detail_single_shared {
 template <typename T>
 struct single_creator
 {
-    T inst;
+    static T* InstPtr_;
 
-    template <typename... P>
-    single_creator(P&&... args) : inst(std::forward<P>(args)...) {}
+    single_creator(void)
+    {
+        if (InstPtr_ != nullptr) return;
+        static T inst;
+        InstPtr_ = &inst;
+    }
+
+    template <typename P1, typename... P>
+    single_creator(P1&& a1, P&&... args)
+    {
+        if (InstPtr_ != nullptr) return;
+        static T inst(std::forward<P1>(a1), std::forward<P>(args)...);
+        InstPtr_ = &inst;
+    }
 };
+
+template <typename T>
+T* single_creator<T>::InstPtr_ = nullptr;
 
 } // namespace detail_single_shared
 
 template <typename T>
-struct single_shared
-{
-public:
-    /*
-        <Remarks> ISO/IEC 14882-2011 (The C++11 Standard), §6.7.4:
-        If control enters the declaration concurrently while the variable is being initialized,
-        the concurrent execution shall wait for completion of the initialization.
-    */
-    template <typename... P>
-    static T& instance(P&&... args)
-    {
-        static detail_single_shared::single_creator<T> creator { std::forward<P>(args)... };
-        return creator.inst;
-    }
-};
+using single_shared = single<T, detail_single_shared::single_creator>;
 
 ////////////////////////////////////////////////////////////////
 /// Thread-local singleton policy
 ////////////////////////////////////////////////////////////////
 
+namespace detail_single_local {
+
 template <typename T>
-struct single_local
+struct single_creator
 {
-public:
+    static T* InstPtr_;
+
     template <typename... P>
-    static T& instance(P&&... args)
+    single_creator(P&&... args)
     {
+        if (InstPtr_ != nullptr) return;
         /*
             Did not use thread_local, cause thread_local's performance is unfavorable.
             See: https://gcc.gnu.org/gcc-4.8/changes.html#cxx
@@ -72,9 +95,17 @@ public:
         T* pi = tls_ptr;
         if (pi == nullptr) pi = tls_ptr = new T(std::forward<P>(args)...);
         CAPO_ASSERT_(pi != nullptr);
-        return (*pi);
+        InstPtr_ = pi;
     }
 };
+
+template <typename T>
+T* single_creator<T>::InstPtr_ = nullptr;
+
+} // namespace detail_single_local
+
+template <typename T>
+using single_local = single<T, detail_single_local::single_creator>;
 
 } // namespace use
 
