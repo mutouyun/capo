@@ -138,6 +138,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-cmdline", "..\test\ut-cm
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-singleton", "..\test\ut-singleton\ut-singleton.vcxproj", "{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0D0420E0-5C76-4F0E-BC54-101D6FB674A9} = {0D0420E0-5C76-4F0E-BC54-101D6FB674A9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
