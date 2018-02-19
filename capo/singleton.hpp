@@ -8,6 +8,7 @@
 #pragma once
 
 #include "capo/thread_local_ptr.hpp"
+#include "capo/scope_guard.hpp"
 #include "capo/assert.hpp"
 #include "capo/unused.hpp"
 
@@ -44,19 +45,12 @@ struct single_creator
 {
     static T* InstPtr_;
 
-    single_creator(void)
+    template <typename... P>
+    single_creator(P&&... args)
     {
         if (InstPtr_ != nullptr) return;
-        static T inst;
-        InstPtr_ = &inst;
-    }
-
-    template <typename P1, typename... P>
-    single_creator(P1&& a1, P&&... args)
-    {
-        if (InstPtr_ != nullptr) return;
-        static T inst(std::forward<P1>(a1), std::forward<P>(args)...);
-        InstPtr_ = &inst;
+        InstPtr_ = new T(std::forward<P>(args)...);
+        static CAPO_SCOPE_GUARD_ = []{ delete InstPtr_; };
     }
 };
 

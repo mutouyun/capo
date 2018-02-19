@@ -19,32 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{EA5326DF-EB5D-4877-B2EA-DC7F0D57F484}</ProjectGuid>
-    <RootNamespace>capo</RootNamespace>
+    <ProjectGuid>{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ut-singleton</RootNamespace>
+    <ProjectName>ut-singleton</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -67,135 +69,107 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Configuration)\$(ProjectName)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Configuration)\$(ProjectName)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Configuration)\$(ProjectName)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)tmp\$(Configuration)\$(ProjectName)\$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\third;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)..\third\gtest\lib\msvc32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtestd.lib;ut-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\third;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)..\third\gtest\lib\msvc64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtestd.lib;ut-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\third;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)..\third\gtest\lib\msvc32</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtest.lib;ut-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\;$(SolutionDir)..\third;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OutDir);$(SolutionDir)..\third\gtest\lib\msvc64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtest.lib;ut-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\thread_local_ptr.cpp" />
+    <ClCompile Include="ut-singleton.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\capo\any.hpp" />
-    <ClInclude Include="..\capo\assert.hpp" />
-    <ClInclude Include="..\capo\cmdline.hpp" />
-    <ClInclude Include="..\capo\concept.hpp" />
-    <ClInclude Include="..\capo\constant_array.hpp" />
-    <ClInclude Include="..\capo\construct.hpp" />
-    <ClInclude Include="..\capo\countof.hpp" />
-    <ClInclude Include="..\capo\deque.hpp" />
-    <ClInclude Include="..\capo\detect_plat.hpp" />
-    <ClInclude Include="..\capo\file.hpp" />
-    <ClInclude Include="..\capo\force_inline.hpp" />
-    <ClInclude Include="..\capo\forward_list.hpp" />
-    <ClInclude Include="..\capo\func_decl.hpp" />
-    <ClInclude Include="..\capo\hash_map.hpp" />
-    <ClInclude Include="..\capo\hash_set.hpp" />
-    <ClInclude Include="..\capo\inherit.hpp" />
-    <ClInclude Include="..\capo\iterator.hpp" />
-    <ClInclude Include="..\capo\list.hpp" />
-    <ClInclude Include="..\capo\make.hpp" />
-    <ClInclude Include="..\capo\map.hpp" />
-    <ClInclude Include="..\capo\max_min.hpp" />
-    <ClInclude Include="..\capo\memory.hpp" />
-    <ClInclude Include="..\capo\noncopyable.hpp" />
-    <ClInclude Include="..\capo\operator.hpp" />
-    <ClInclude Include="..\capo\output.hpp" />
-    <ClInclude Include="..\capo\preprocessor.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_arg.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_count.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_functions.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_macros.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_mult.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_nest.hpp" />
-    <ClInclude Include="..\capo\preprocessor\pp_repeat.hpp" />
-    <ClInclude Include="..\capo\printf.hpp" />
-    <ClInclude Include="..\capo\queue.hpp" />
-    <ClInclude Include="..\capo\random.hpp" />
-    <ClInclude Include="..\capo\range.hpp" />
-    <ClInclude Include="..\capo\scope_guard.hpp" />
-    <ClInclude Include="..\capo\semaphore.hpp" />
-    <ClInclude Include="..\capo\sequence.hpp" />
-    <ClInclude Include="..\capo\set.hpp" />
-    <ClInclude Include="..\capo\signal.hpp" />
-    <ClInclude Include="..\capo\singleton.hpp" />
-    <ClInclude Include="..\capo\spin_lock.hpp" />
-    <ClInclude Include="..\capo\stack.hpp" />
-    <ClInclude Include="..\capo\standard_alloc.hpp" />
-    <ClInclude Include="..\capo\stopwatch.hpp" />
-    <ClInclude Include="..\capo\thread_local_ptr.hpp" />
-    <ClInclude Include="..\capo\thread_wrapper.hpp" />
-    <ClInclude Include="..\capo\trackable.hpp" />
-    <ClInclude Include="..\capo\tuple.hpp" />
-    <ClInclude Include="..\capo\types_to_seq.hpp" />
-    <ClInclude Include="..\capo\type_list.hpp" />
-    <ClInclude Include="..\capo\type_name.hpp" />
-    <ClInclude Include="..\capo\type_traits.hpp" />
-    <ClInclude Include="..\capo\unused.hpp" />
-    <ClInclude Include="..\capo\vector.hpp" />
-    <ClInclude Include="..\capo\waiter.hpp" />
+    <ClInclude Include="cases.h" />
+    <ClInclude Include="preparing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

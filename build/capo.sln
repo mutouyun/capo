@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EDB881C2-2347-49F0-B2E3-A7170A1F1A51}"
 EndProject
@@ -136,6 +136,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-cmdline", "..\test\ut-cm
 	ProjectSection(ProjectDependencies) = postProject
 		{0D0420E0-5C76-4F0E-BC54-101D6FB674A9} = {0D0420E0-5C76-4F0E-BC54-101D6FB674A9}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ut-singleton", "..\test\ut-singleton\ut-singleton.vcxproj", "{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -361,6 +363,14 @@ Global
 		{D676B7E1-3DF1-40AA-9221-5D9E48F7949D}.Release|Win32.Build.0 = Release|Win32
 		{D676B7E1-3DF1-40AA-9221-5D9E48F7949D}.Release|x64.ActiveCfg = Release|x64
 		{D676B7E1-3DF1-40AA-9221-5D9E48F7949D}.Release|x64.Build.0 = Release|x64
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Debug|Win32.Build.0 = Debug|Win32
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Debug|x64.ActiveCfg = Debug|x64
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Debug|x64.Build.0 = Debug|x64
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Release|Win32.ActiveCfg = Release|Win32
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Release|Win32.Build.0 = Release|Win32
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Release|x64.ActiveCfg = Release|x64
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -392,5 +402,6 @@ Global
 		{A7BFE514-CEF5-4E14-8108-AB1818E8F44D} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 		{7E49264E-DA52-4BEB-8238-A2E5A2CA988E} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 		{D676B7E1-3DF1-40AA-9221-5D9E48F7949D} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
+		{683FC8BB-DFEB-48D1-B3F2-DD145C3BA99E} = {EDB881C2-2347-49F0-B2E3-A7170A1F1A51}
 	EndGlobalSection
 EndGlobal
