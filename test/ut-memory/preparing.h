@@ -6,10 +6,7 @@
 #include "capo/assert.hpp"
 #include "capo/unused.hpp"
 #include "capo/type_name.hpp"
-#include "capo/memory/standard_alloc.hpp"
-#include "capo/memory/fixed_pool.hpp"
-#include "capo/memory/variable_pool.hpp"
-#include "capo/memory/scope_alloc.hpp"
+#include "capo/memory.hpp"
 
 #include <vector>
 #include <thread>
