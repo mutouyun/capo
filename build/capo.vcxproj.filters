@@ -205,5 +205,8 @@
     <ClInclude Include="..\capo\cmdline.hpp">
       <Filter>capo</Filter>
     </ClInclude>
+    <ClInclude Include="..\capo\memory.hpp">
+      <Filter>capo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

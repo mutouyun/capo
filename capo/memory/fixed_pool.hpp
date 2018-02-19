@@ -9,9 +9,9 @@
 
 #include "capo/sequence.hpp"
 #include "capo/assert.hpp"
-#include "capo/alloc_concept.hpp"
-#include "capo/allocator.hpp"
-#include "capo/scope_alloc.hpp"
+#include "capo/memory/alloc_concept.hpp"
+#include "capo/memory/allocator.hpp"
+#include "capo/memory/scope_alloc.hpp"
 #include "capo/unused.hpp"
 
 #include <utility>  // std::swap

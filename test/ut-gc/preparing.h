@@ -1,6 +1,6 @@
 #pragma once
 
-#include "capo/scope_alloc.hpp"
+#include "capo/memory/scope_alloc.hpp"
 
 namespace ut_gc_ {
 

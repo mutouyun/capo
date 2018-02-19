@@ -162,6 +162,7 @@
     <ClInclude Include="..\capo\make.hpp" />
     <ClInclude Include="..\capo\map.hpp" />
     <ClInclude Include="..\capo\max_min.hpp" />
+    <ClInclude Include="..\capo\memory.hpp" />
     <ClInclude Include="..\capo\noncopyable.hpp" />
     <ClInclude Include="..\capo\operator.hpp" />
     <ClInclude Include="..\capo\output.hpp" />

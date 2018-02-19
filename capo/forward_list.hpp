@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "capo/allocator.hpp"
+#include "capo/memory/allocator.hpp"
 
 #include <forward_list> // std::forward_list
 

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "capo/allocator.hpp"
+#include "capo/memory/allocator.hpp"
 
 #include <vector> // std::vector
 

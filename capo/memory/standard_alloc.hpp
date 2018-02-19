@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "capo/alloc_concept.hpp"
+#include "capo/memory/alloc_concept.hpp"
 
 #include <new>      // placement new
 #include <memory>   // std::allocator

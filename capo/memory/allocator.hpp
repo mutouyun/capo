@@ -8,7 +8,7 @@
 #pragma once
 
 #include "capo/construct.hpp"
-#include "capo/standard_alloc.hpp"
+#include "capo/memory/standard_alloc.hpp"
 
 #include <utility>  // std::move, std::forward
 #include <new>      // std::bad_alloc

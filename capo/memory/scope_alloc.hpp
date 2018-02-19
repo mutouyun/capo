@@ -8,9 +8,9 @@
 #pragma once
 
 #include "capo/concept.hpp"
-#include "capo/alloc_concept.hpp"
 #include "capo/construct.hpp"
-#include "capo/allocator.hpp"
+#include "capo/memory/alloc_concept.hpp"
+#include "capo/memory/allocator.hpp"
 
 #include <functional>   // std::function
 #include <utility>      // std::forward, std::swap
