@@ -7,3 +7,20 @@ TEST_METHOD(double_create)
     auto* p2 = &capo::singleton<XXX>();
     EXPECT_EQ((size_t)p1, (size_t)p2);
 }
+
+TEST_METHOD(multi_thread)
+{
+    using namespace ut_singleton_;
+    std::future<XXX*> p[10];
+    for (size_t i = 0; i < capo::countof(p); ++i)
+    {
+        p[i] = std::async(std::launch::async, [i]
+        {
+            return &capo::singleton<XXX>(i);
+        });
+    }
+    for (size_t i = 1; i < capo::countof(p); ++i)
+    {
+        printf("%p\n", p[i].get());
+    }
+}
