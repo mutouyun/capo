@@ -19,8 +19,9 @@ TEST_METHOD(multi_thread)
             return &capo::singleton<XXX>(i);
         });
     }
+    auto* p0 = p[0].get();
     for (size_t i = 1; i < capo::countof(p); ++i)
     {
-        printf("%p\n", p[i].get());
+        EXPECT_EQ((size_t)p0, (size_t)p[i].get());
     }
 }
