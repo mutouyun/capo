@@ -36,6 +36,14 @@ template <typename F, typename... P>
 using suitable_size = 
     size_to_seq<min_number<std::tuple_size<typename traits<void(P...), F>::parameters>::value, sizeof...(P)>::value>;
 
+// Get storable type for slot_fn
+
+template <typename T>
+using storable_t = typename std::remove_reference<
+                   typename std::decay<
+                   typename std::remove_reference<
+                   T>::type>::type>::type;
+
 /*
     Define slot interface & the implementations
 */
@@ -281,8 +289,7 @@ public:
     template <typename C, typename F>
     void connect(C&& receiver, F&& slot)
     {
-        slots_.emplace_back(new slot_fn<typename std::remove_reference<C>::type, 
-                                        typename std::remove_reference<F>::type, R, P...>
+        slots_.emplace_back(new slot_fn<storable_t<C>, storable_t<F>, R, P...>
         {
             std::forward<C>(receiver), std::forward<F>(slot)
         });
@@ -291,7 +298,7 @@ public:
     template <typename F>
     void connect(F&& slot)
     {
-        slots_.emplace_back(new slot_fn<void, typename std::remove_reference<F>::type, R, P...>
+        slots_.emplace_back(new slot_fn<void, storable_t<F>, R, P...>
         {
             std::forward<F>(slot)
         });
@@ -302,8 +309,7 @@ public:
     {
         for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = it->template cast<slot_fn<typename std::remove_reference<C>::type,
-                                                typename std::remove_reference<F>::type, R, P...>>();
+            auto sp = it->template cast<slot_fn<storable_t<C>, storable_t<F>, R, P...>>();
             if (sp == nullptr) continue;
             if ( (sp->c_ == std::forward<C>(receiver)) && 
                  (sp->f_ == std::forward<F>(slot)) )
@@ -319,7 +325,7 @@ public:
     {
         for (auto it = slots_.begin(); it != slots_.end(); ++it)
         {
-            auto sp = it->template cast<slot_fn<void, typename std::remove_reference<F>::type, R, P...>>();
+            auto sp = it->template cast<slot_fn<void, storable_t<F>, R, P...>>();
             if (sp == nullptr) continue;
             if (sp->f_ == std::forward<F>(slot))
             {
