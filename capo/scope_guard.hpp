@@ -9,6 +9,7 @@
 
 #include "capo/noncopyable.hpp"
 #include "capo/unused.hpp"
+#include "capo/make.hpp"
 
 #include <utility>      // std::forward, std::move
 #include <algorithm>    // std::swap
@@ -62,8 +63,21 @@ public:
     }
 };
 
+namespace detail_scope_guard {
+
+struct helper
+{
+    template <typename F>
+    auto operator=(F&& destructor) -> decltype(capo::make<scope_guard>(std::forward<F>(destructor)))
+    {
+        return capo::make<scope_guard>(std::forward<F>(destructor));
+    }
+};
+
+} // namespace detail_scope_guard
+
 #define CAPO_SCOPE_GUARD_V_(L)  CAPO_UNUSED_ scope_guard_##L##__
-#define CAPO_SCOPE_GUARD_L_(L)  capo::scope_guard<> CAPO_SCOPE_GUARD_V_(L)
+#define CAPO_SCOPE_GUARD_L_(L)  auto CAPO_SCOPE_GUARD_V_(L) = capo::detail_scope_guard::helper{}
 
 /*
     Do things like this:
