@@ -8,7 +8,6 @@
 #pragma once
 
 #include "capo/thread_local_ptr.hpp"
-#include "capo/scope_guard.hpp"
 #include "capo/assert.hpp"
 #include "capo/unused.hpp"
 
@@ -50,7 +49,11 @@ struct single_creator
     {
         if (InstPtr_ != nullptr) return;
         InstPtr_ = new T(std::forward<P>(args)...);
-        static CAPO_SCOPE_GUARD_ = []{ delete InstPtr_; };
+    }
+
+    ~single_creator(void)
+    {
+        delete InstPtr_;
     }
 };
 
