@@ -43,7 +43,12 @@ public:
 
     ~scope_guard(void)
     {
-        do_exit();
+        try { do_exit(); }
+        /*
+            In the realm of exceptions, it is fundamental that you can do nothing
+            if your "undo/recover" action fails.
+        */
+        catch(...) { /* Do nothing */ }
     }
 
     void dismiss(void) const noexcept
@@ -51,14 +56,13 @@ public:
         dismiss_ = true;
     }
 
-    void do_exit(void) noexcept
+    void do_exit(void)
     {
-        if (!dismiss_) try { dismiss_ = true; destructor_(); }
-        /*
-            In the realm of exceptions, it is fundamental that you can do nothing
-            if your "undo/recover" action fails.
-        */
-        catch(...) { /* Do nothing */ }
+        if (!dismiss_)
+        {
+            dismiss_ = true;
+            destructor_();
+        }
     }
 
     void swap(scope_guard& rhs)
