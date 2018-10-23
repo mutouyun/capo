@@ -105,6 +105,30 @@ public:
     }
 };
 
+template <>
+class impl_<void>
+{
+public:
+    impl_(void)               = default;
+    impl_(impl_&&)            = default;
+    impl_& operator=(impl_&&) = default;
+
+    void operator()(void) {}
+
+    template <typename... T>
+    impl_&& operator()(const char* /*fmt*/, T&&... /*args*/)
+    {
+        return std::move(*this);
+    }
+
+    impl_&& ln(void)
+    {
+        return std::move(*this);
+    }
+
+    void clear(void) {}
+};
+
 /*
     Judge the format flags is or not matching the number of argument.
 */
@@ -134,6 +158,11 @@ template <typename A>
 using rep_t = typename std::decay<A>::type;
 
 CAPO_CONCEPT_TYPING_(can_cast_str, static_cast<const char*>(std::declval<T&&>()));
+
+inline void printf_buffer(std::string& buf, std::string&& /*cfg*/, bool a)
+{
+    capo::printf(use::strout(buf), "%s", (a ? "true" : "false"));
+}
 
 template <typename A, CAPO_REQUIRE_(pf<rep_t<A>>::value)>
 void printf_buffer(std::string& buf, std::string&& cfg, A&& a)
