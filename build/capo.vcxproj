@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EA5326DF-EB5D-4877-B2EA-DC7F0D57F484}</ProjectGuid>
     <RootNamespace>capo</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -138,28 +138,27 @@
     <ClCompile Include="..\src\thread_local_ptr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\capo\any.hpp" />
     <ClInclude Include="..\capo\assert.hpp" />
     <ClInclude Include="..\capo\cmdline.hpp" />
     <ClInclude Include="..\capo\concept.hpp" />
     <ClInclude Include="..\capo\constant_array.hpp" />
     <ClInclude Include="..\capo\construct.hpp" />
     <ClInclude Include="..\capo\countof.hpp" />
-    <ClInclude Include="..\capo\deque.hpp" />
     <ClInclude Include="..\capo\detect_plat.hpp" />
     <ClInclude Include="..\capo\file.hpp" />
     <ClInclude Include="..\capo\force_inline.hpp" />
-    <ClInclude Include="..\capo\forward_list.hpp" />
     <ClInclude Include="..\capo\func_decl.hpp" />
-    <ClInclude Include="..\capo\hash_map.hpp" />
-    <ClInclude Include="..\capo\hash_set.hpp" />
     <ClInclude Include="..\capo\inherit.hpp" />
     <ClInclude Include="..\capo\iterator.hpp" />
-    <ClInclude Include="..\capo\list.hpp" />
     <ClInclude Include="..\capo\make.hpp" />
-    <ClInclude Include="..\capo\map.hpp" />
     <ClInclude Include="..\capo\max_min.hpp" />
     <ClInclude Include="..\capo\memory.hpp" />
+    <ClInclude Include="..\capo\memory\allocator.hpp" />
+    <ClInclude Include="..\capo\memory\alloc_concept.hpp" />
+    <ClInclude Include="..\capo\memory\fixed_pool.hpp" />
+    <ClInclude Include="..\capo\memory\scope_alloc.hpp" />
+    <ClInclude Include="..\capo\memory\standard_alloc.hpp" />
+    <ClInclude Include="..\capo\memory\variable_pool.hpp" />
     <ClInclude Include="..\capo\noncopyable.hpp" />
     <ClInclude Include="..\capo\operator.hpp" />
     <ClInclude Include="..\capo\output.hpp" />
@@ -178,12 +177,9 @@
     <ClInclude Include="..\capo\scope_guard.hpp" />
     <ClInclude Include="..\capo\semaphore.hpp" />
     <ClInclude Include="..\capo\sequence.hpp" />
-    <ClInclude Include="..\capo\set.hpp" />
     <ClInclude Include="..\capo\signal.hpp" />
     <ClInclude Include="..\capo\singleton.hpp" />
     <ClInclude Include="..\capo\spin_lock.hpp" />
-    <ClInclude Include="..\capo\stack.hpp" />
-    <ClInclude Include="..\capo\standard_alloc.hpp" />
     <ClInclude Include="..\capo\stopwatch.hpp" />
     <ClInclude Include="..\capo\thread_local_ptr.hpp" />
     <ClInclude Include="..\capo\thread_wrapper.hpp" />
@@ -194,7 +190,6 @@
     <ClInclude Include="..\capo\type_name.hpp" />
     <ClInclude Include="..\capo\type_traits.hpp" />
     <ClInclude Include="..\capo\unused.hpp" />
-    <ClInclude Include="..\capo\vector.hpp" />
     <ClInclude Include="..\capo\waiter.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

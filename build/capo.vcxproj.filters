@@ -12,6 +12,9 @@
     <Filter Include="capo\preprocessor">
       <UniqueIdentifier>{8ccd5a63-66ff-4c9d-8a47-14b0000b52ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="capo\memory">
+      <UniqueIdentifier>{5b4942fb-7719-4259-955e-894ef16668ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\thread_local_ptr.cpp">
@@ -31,9 +34,6 @@
     <ClInclude Include="..\capo\countof.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\deque.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\detect_plat.hpp">
       <Filter>capo</Filter>
     </ClInclude>
@@ -43,28 +43,13 @@
     <ClInclude Include="..\capo\force_inline.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\forward_list.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\hash_map.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\hash_set.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\inherit.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\iterator.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\list.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\make.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\map.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\max_min.hpp">
@@ -100,16 +85,10 @@
     <ClInclude Include="..\capo\sequence.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\set.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\singleton.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\spin_lock.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\stack.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\stopwatch.hpp">
@@ -131,9 +110,6 @@
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\unused.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\vector.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\waiter.hpp">
@@ -175,16 +151,10 @@
     <ClInclude Include="..\capo\construct.hpp">
       <Filter>capo</Filter>
     </ClInclude>
-    <ClInclude Include="..\capo\standard_alloc.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
     <ClInclude Include="..\capo\tuple.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\trackable.hpp">
-      <Filter>capo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\capo\any.hpp">
       <Filter>capo</Filter>
     </ClInclude>
     <ClInclude Include="..\capo\cmdline.hpp">
@@ -192,6 +162,24 @@
     </ClInclude>
     <ClInclude Include="..\capo\memory.hpp">
       <Filter>capo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\allocator.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\alloc_concept.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\fixed_pool.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\scope_alloc.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\standard_alloc.hpp">
+      <Filter>capo\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\capo\memory\variable_pool.hpp">
+      <Filter>capo\memory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
