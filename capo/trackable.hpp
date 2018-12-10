@@ -8,7 +8,8 @@
 #pragma once
 
 #include "capo/singleton.hpp"
-#include "capo/list.hpp"
+
+#include <list> // std::list
 
 namespace capo {
 
@@ -18,7 +19,7 @@ template <typename T, template <typename...> class SingleT = capo::use::single_s
 class trackable
 {
 public:
-    using list_t = capo::list<T*>;
+    using list_t = std::list<T*>;
 
     static list_t& list(void)
     {

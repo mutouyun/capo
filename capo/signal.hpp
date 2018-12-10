@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "capo/vector.hpp"
 #include "capo/type_traits.hpp"
 #include "capo/types_to_seq.hpp"
 #include "capo/max_min.hpp"
@@ -16,6 +15,7 @@
 #include <functional>   // std::function
 #include <utility>      // std::forward, std::move
 #include <cstddef>      // size_t
+#include <vector>       // std::vector
 
 namespace capo {
 namespace detail_signal_ {
@@ -232,7 +232,7 @@ class signal_b;
 template <typename R, typename... P>
 class signal_b<R(P...)>
 {
-    using slots_t = capo::vector<slot<R, P...>>;
+    using slots_t = std::vector<slot<R, P...>>;
 
 public:
     using value_type             = typename slots_t::value_type;
@@ -378,7 +378,7 @@ public:
 template <typename R, typename... P>
 class signal<R(P...)> : public detail_signal_::signal_b<R(P...)>
 {
-    std::function<R(capo::vector<R>&)> combiner_;
+    std::function<R(std::vector<R>&)> combiner_;
 
 public:
     signal(void)          = default;
@@ -397,11 +397,11 @@ public:
         combiner_.swap(rhs.combiner_);
     }
 
-    explicit signal(std::function<R(capo::vector<R>&)> f)
+    explicit signal(std::function<R(std::vector<R>&)> f)
         : combiner_(std::move(f))
     {}
 
-    void combiner(std::function<R(capo::vector<R>&)> f)
+    void combiner(std::function<R(std::vector<R>&)> f)
     {
         combiner_ = std::move(f);
     }
@@ -410,7 +410,7 @@ public:
     R operator()(A&&... args) const
     {
         if (this->slots_.empty()) return {};
-        capo::vector<R> results;
+        std::vector<R> results;
         for (auto& sp : this->slots_)
         {
             if (!sp) continue;

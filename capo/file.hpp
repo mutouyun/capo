@@ -10,7 +10,6 @@
 #include "capo/detect_plat.hpp"
 #include "capo/noncopyable.hpp"
 #include "capo/force_inline.hpp"
-#include "capo/vector.hpp"
 
 #include <cstdio>       // std::fopen, ...
 #include <ios>          // std::ios_base, std::streamoff
@@ -18,6 +17,7 @@
 #include <cstring>      // std::memcpy
 #include <algorithm>    // std::min
 #include <iterator>     // std::advance, std::next, std::distance
+#include <vector>       // std::vector
 
 #if defined(CAPO_OS_WIN_)
 #   include <io.h>      // ::_get_osfhandle
@@ -36,7 +36,7 @@ struct file : capo::noncopyable
 {
     using off_type  = std::streamoff;
     using size_type = std::streamsize;
-    using buf_type  = capo::vector<unsigned char>;
+    using buf_type  = std::vector<unsigned char>;
 
     enum : off_type { OutOfRange = -1 };
 
@@ -62,19 +62,19 @@ struct file : capo::noncopyable
 
     virtual ~file(void) {}
 
-	virtual bool close(void) = 0;
-	virtual bool clear(void) = 0;
-	virtual file::size_type read(buf_type* buff) = 0;
-	virtual file::size_type write(const buf_type& buff) = 0;
+    virtual bool close(void) = 0;
+    virtual bool clear(void) = 0;
+    virtual file::size_type read(buf_type* buff) = 0;
+    virtual file::size_type write(const buf_type& buff) = 0;
 
-	virtual bool seek(file::off_type off, std::ios_base::seekdir way = std::ios_base::cur) = 0;
-	virtual file::off_type  tell(void) = 0;
-	virtual file::size_type size(void) = 0;
+    virtual bool seek(file::off_type off, std::ios_base::seekdir way = std::ios_base::cur) = 0;
+    virtual file::off_type  tell(void) = 0;
+    virtual file::size_type size(void) = 0;
 
     virtual bool set_size(file::size_type size) = 0;
-	virtual bool flush(void) = 0;
-	virtual bool eof(void) = 0;
-	virtual bool error(void) = 0;
+    virtual bool flush(void) = 0;
+    virtual bool eof(void) = 0;
+    virtual bool error(void) = 0;
 
     void clone(file& rhs)
     {
@@ -276,7 +276,7 @@ public:
 
     file::size_type read(buf_type* buff)
     {
-		if (error() || eof()) return 0;
+        if (error() || eof()) return 0;
         if (buff == nullptr || buff->empty()) return 0;
         std::size_t s = (std::min)(buff->size(), (std::size_t)(size() - tell()));
         std::memcpy(buff->data(), &(*position_), s);

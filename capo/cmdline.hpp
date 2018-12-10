@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include "capo/list.hpp"
 #include "capo/output.hpp"
 
 #include <string>       // std::string
 #include <functional>   // std::function
 #include <iostream>     // std::cout
 #include <utility>      // std::forward
+#include <vector>       // std::vector
 
 namespace capo {
 namespace cmdline {
@@ -31,7 +31,7 @@ struct option
     std::function<handle_t> handle_;
 };
 
-using options = capo::list<option>;
+using options = std::vector<option>;
 
 class parser
 {
@@ -118,7 +118,7 @@ public:
                 const std::function<handle_t>& hd_;
                 std::string cm_;
             };
-            capo::list<ST_opt> exec_list;
+            std::vector<ST_opt> exec_list;
             size_t c_nec = 0;
             for (int i = 1; i < argc; ++i)
             {
