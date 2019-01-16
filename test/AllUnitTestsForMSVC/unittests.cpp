@@ -187,15 +187,6 @@ public:
 
 ////////////////////////////////////////////////////////////////
 
-#include "ut-any/preparing.h"
-TEST_CLASS(ut_any)
-{
-public:
-#include "ut-any/cases.h"
-};
-
-////////////////////////////////////////////////////////////////
-
 #include "ut-cmdline/preparing.h"
 TEST_CLASS(ut_cmdline)
 {
