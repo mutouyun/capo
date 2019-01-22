@@ -151,15 +151,6 @@ public:
         });
     }
 
-    template <typename... A>
-    thread_local_ptr(bool auto_set, A&&... args) : thread_local_ptr()
-    {
-        if (auto_set)
-        {
-            CAPO_THREAD_LOCAL_SET(key_, new T(std::forward<A>(args)...));
-        }
-    }
-
     ~thread_local_ptr(void)
     {
         CAPO_THREAD_LOCAL_DELETE(key_);

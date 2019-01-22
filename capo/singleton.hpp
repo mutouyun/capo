@@ -8,9 +8,10 @@
 #pragma once
 
 #include "capo/thread_local_ptr.hpp"
-#include "capo/assert.hpp"
 #include "capo/unused.hpp"
 
+#include <atomic>   // std::atomic
+#include <mutex>    // std::unique_lock, std::mutex
 #include <utility>  // std::forward
 
 namespace capo {
@@ -23,13 +24,8 @@ public:
     template <typename... P>
     static T& instance(P&&... args)
     {
-        /*
-            <Remarks> ISO/IEC 14882-2011 (The C++11 Standard), §6.7.4:
-            If control enters the declaration concurrently while the variable is being initialized,
-            the concurrent execution shall wait for completion of the initialization.
-        */
         static CreatorT<T> CAPO_UNUSED_ creator { std::forward<P>(args)... };
-        return (*CreatorT<T>::InstPtr_);
+        return (*CreatorT<T>::get());
     }
 };
 
@@ -42,23 +38,36 @@ namespace detail_single_shared {
 template <typename T>
 struct single_creator
 {
-    static T* InstPtr_;
+    static std::atomic<T*> InstPtr_;
+    static std::mutex InstLock_;
 
     template <typename... P>
     single_creator(P&&... args)
     {
-        if (InstPtr_ != nullptr) return;
-        InstPtr_ = new T(std::forward<P>(args)...);
+        // DCLP: https://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/
+        if (InstPtr_.load(std::memory_order_acquire) == nullptr)
+        {
+            std::unique_lock<std::mutex> CAPO_UNUSED_ guard { InstLock_ };
+            if (InstPtr_.load(std::memory_order_relaxed) == nullptr)
+            {
+                InstPtr_ .store(new T(std::forward<P>(args)...), std::memory_order_release);
+            }
+        }
     }
 
     ~single_creator(void)
     {
-        delete InstPtr_;
+        delete InstPtr_.load(std::memory_order_relaxed);
+    }
+
+    static T* get(void)
+    {
+        return InstPtr_.load(std::memory_order_relaxed);
     }
 };
 
-template <typename T>
-T* single_creator<T>::InstPtr_ = nullptr;
+template <typename T> std::atomic<T*> single_creator<T>::InstPtr_ { nullptr };
+template <typename T> std::mutex single_creator<T>::InstLock_;
 
 } // namespace detail_single_shared
 
@@ -74,30 +83,33 @@ namespace detail_single_local {
 template <typename T>
 struct single_creator
 {
-    static T* InstPtr_;
+    /*
+        Did not use thread_local, cause thread_local's performance is unfavorable.
+        See: https://gcc.gnu.org/gcc-4.8/changes.html#cxx
+             https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55812
+
+        And the construction on first usage/destruction on thread exit does not work properly.
+        See: https://connect.microsoft.com/VisualStudio/Feedback/Details/955546
+    */
+    static thread_local_ptr<T> InstPtr_;
 
     template <typename... P>
     single_creator(P&&... args)
     {
-        if (InstPtr_ != nullptr) return;
-        /*
-            Did not use thread_local, cause thread_local's performance is unfavorable.
-            See: https://gcc.gnu.org/gcc-4.8/changes.html#cxx
-                 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55812
+        if (static_cast<T*>(InstPtr_) == nullptr)
+        {
+            InstPtr_ = new T(std::forward<P>(args)...);
+        }
+    }
 
-            And the construction on first usage/destruction on thread exit does not work properly.
-            See: https://connect.microsoft.com/VisualStudio/Feedback/Details/955546
-        */
-        static thread_local_ptr<T> tls_ptr;
-        T* pi = tls_ptr;
-        if (pi == nullptr) pi = tls_ptr = new T(std::forward<P>(args)...);
-        CAPO_ASSERT_(pi != nullptr);
-        InstPtr_ = pi;
+    static T* get(void)
+    {
+        return static_cast<T*>(InstPtr_);
     }
 };
 
 template <typename T>
-T* single_creator<T>::InstPtr_ = nullptr;
+thread_local_ptr<T> single_creator<T>::InstPtr_;
 
 } // namespace detail_single_local
 
