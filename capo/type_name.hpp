@@ -12,7 +12,6 @@
 #include <typeinfo>     // typeid
 #include <sstream>      // std::ostringstream, std::string
 #include <type_traits>  // std::is_array
-#include <utility>      // std::move
 
 #if defined(__GNUC__)
 #   include <cxxabi.h>  // abi::__cxa_demangle
@@ -316,7 +315,7 @@ inline std::string type_name(void)
 {
     std::string str;
     detail_type_name::check<T> { str };
-    return std::move(str);
+    return str;
 }
 
 } // namespace capo
