@@ -8,6 +8,7 @@
 #pragma once
 
 #include "capo/thread_local_ptr.hpp"
+#include "capo/scope_guard.hpp"
 #include "capo/unused.hpp"
 
 #include <atomic>   // std::atomic
@@ -51,13 +52,10 @@ struct single_creator
             if (InstPtr_.load(std::memory_order_relaxed) == nullptr)
             {
                 InstPtr_ .store(new T(std::forward<P>(args)...), std::memory_order_release);
+                // This guard would only be constructed once.
+                static CAPO_SCOPE_GUARD_ = []{ delete InstPtr_.load(std::memory_order_relaxed); };
             }
         }
-    }
-
-    ~single_creator(void)
-    {
-        delete InstPtr_.load(std::memory_order_relaxed);
     }
 
     static T* get(void)
